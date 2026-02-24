@@ -5,7 +5,7 @@ import { CarePlans } from "@/components/care-plans";
 
 export default function PricingPage() {
   return (
-    <div className="py-12">
+    <div className="mx-auto w-full max-w-6xl px-6 pt-28 py-12">
       <SectionHeading
         eyebrow="Pricing"
         title="Transparent pricing"
@@ -27,7 +27,7 @@ export default function PricingPage() {
         </div>
       </div>
 
-      <div className="mt-24 rounded-3xl border border-white/[0.06] bg-gradient-to-br from-[#12001f] via-black to-black p-10">
+      <div className="relative mt-24 rounded-3xl border border-white/[0.06] bg-gradient-to-br from-[#12001f] via-black to-black p-10 overflow-hidden">
         <div className="pointer-events-none absolute -left-20 -top-20 h-[300px] w-[300px] rounded-full bg-fuchsia-500/10 blur-[80px]" />
         <h3 className="text-2xl font-semibold">Need something custom?</h3>
         <p className="mt-3 max-w-2xl text-zinc-400">

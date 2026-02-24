@@ -38,7 +38,7 @@ export function PricingFull() {
         <Card className="p-6">
           <div className="text-lg font-semibold">Starter Launch</div>
           <div className="mt-3 text-4xl font-bold tracking-tight">$499</div>
-          <div className="mt-1 text-sm text-zinc-500">
+          <div className="mt-1 text-sm text-zinc-400">
             1–3 pages. Fast launch.
           </div>
           <Link
@@ -58,7 +58,7 @@ export function PricingFull() {
             </span>
           </div>
           <div className="mt-3 text-4xl font-bold tracking-tight">$699</div>
-          <div className="mt-1 text-sm text-zinc-500">
+          <div className="mt-1 text-sm text-zinc-400">
             Booking + chatbot + social proof.
           </div>
           <Link
@@ -72,7 +72,7 @@ export function PricingFull() {
         <Card className="p-6">
           <div className="text-lg font-semibold">Smart AI Website</div>
           <div className="mt-3 text-4xl font-bold tracking-tight">$999+</div>
-          <div className="mt-1 text-sm text-zinc-500">
+          <div className="mt-1 text-sm text-zinc-400">
             Payments + integrations + automation.
           </div>
           <Link
