@@ -9,7 +9,7 @@ const plans = [
     price: "$49",
     period: "/mo",
     desc: "Light support for simple sites",
-    items: ["2 revisions/month", "Minor content updates", "72-hour response"],
+    items: ["3 revisions/month", "Minor content updates", "72-hour response"],
     highlight: false,
   },
   {
@@ -18,7 +18,7 @@ const plans = [
     period: "/mo",
     desc: "Best for most businesses",
     items: [
-      "Up to 8 revisions/month",
+      "Up to 9 revisions/month",
       "Priority queue",
       "Performance checks",
       "Monthly report",
