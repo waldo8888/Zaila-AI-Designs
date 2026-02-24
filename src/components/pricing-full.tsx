@@ -22,7 +22,7 @@ function Check({ ok }: { ok: boolean }) {
       className={[
         "inline-flex h-6 w-6 items-center justify-center rounded-full text-xs",
         ok
-          ? "bg-fuchsia-500/20 text-fuchsia-300"
+          ? "bg-emerald-500/20 text-emerald-400"
           : "bg-white/5 text-zinc-600",
       ].join(" ")}
     >
@@ -114,7 +114,7 @@ export function PricingFull() {
             </tbody>
           </table>
         </div>
-        <div className="mt-4 text-xs text-zinc-600">
+        <div className="mt-4 text-xs text-zinc-400">
           Add-ons available anytime: payments, mini store, streaming, advanced
           API integrations.
         </div>

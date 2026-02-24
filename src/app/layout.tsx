@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://zailaai.com"),
+  metadataBase: new URL("https://zailai.com"),
   title: "Zaila AI Designs — AI-Powered Websites",
   description:
     "AI-powered business websites and automation for Hamilton small businesses. Launch fast, grow smarter.",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     title: "Zaila AI Designs — AI-Powered Websites",
     description:
       "AI-powered business websites and automation for Hamilton small businesses. Launch fast, grow smarter.",
-    url: "https://zailaai.com",
+    url: "https://zailai.com",
     siteName: "Zaila AI Designs",
     images: [
       {

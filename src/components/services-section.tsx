@@ -139,7 +139,7 @@ export function ServicesSection() {
         <motion.div
           initial={{ opacity: 1 }}
           style={{ opacity: useTransform(scrollYProgress, [0, 0.15], [1, 0]) }}
-          className="absolute bottom-28 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 text-zinc-500"
+          className="absolute bottom-28 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 text-zinc-400"
         >
           <span className="text-[11px] uppercase tracking-[0.2em]">Scroll to explore</span>
           <motion.svg
@@ -159,7 +159,7 @@ export function ServicesSection() {
               className="absolute inset-y-0 left-0 right-0 origin-left bg-gradient-to-r from-fuchsia-500 to-violet-500"
             />
           </div>
-          <div className="mt-4 flex justify-between text-[12px] text-zinc-600">
+          <div className="mt-4 flex justify-between text-[12px] text-zinc-500">
             <span>01</span>
             <span>0{services.length}</span>
           </div>

@@ -103,7 +103,7 @@ export function Hero() {
       >
         <button
           onClick={() => smoothScrollTo("story")}
-          className="group flex flex-col items-center gap-4 text-zinc-600 transition-colors hover:text-zinc-400"
+          className="group flex flex-col items-center gap-4 text-zinc-500 transition-colors hover:text-zinc-300"
         >
           <span className="text-[10px] uppercase tracking-[0.3em]">Scroll</span>
           <motion.div

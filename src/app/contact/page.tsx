@@ -50,7 +50,7 @@ export default function ContactPage() {
             <input
               name="business"
               required
-              className="rounded-xl border border-white/[0.08] bg-black/60 px-4 py-3.5 text-sm text-zinc-100 outline-none transition-colors placeholder:text-zinc-600 focus:border-fuchsia-400/40"
+              className="rounded-xl border border-white/[0.08] bg-black/60 px-4 py-3.5 text-sm text-zinc-100 outline-none transition-colors placeholder:text-zinc-500 focus:border-fuchsia-400/40"
               placeholder="e.g., The Pool Hall"
             />
           </div>
@@ -61,7 +61,7 @@ export default function ContactPage() {
               type="email"
               name="email"
               required
-              className="rounded-xl border border-white/[0.08] bg-black/60 px-4 py-3.5 text-sm text-zinc-100 outline-none transition-colors placeholder:text-zinc-600 focus:border-fuchsia-400/40"
+              className="rounded-xl border border-white/[0.08] bg-black/60 px-4 py-3.5 text-sm text-zinc-100 outline-none transition-colors placeholder:text-zinc-500 focus:border-fuchsia-400/40"
               placeholder="you@business.com"
             />
           </div>
@@ -74,7 +74,7 @@ export default function ContactPage() {
               rows={5}
               name="message"
               required
-              className="rounded-xl border border-white/[0.08] bg-black/60 px-4 py-3.5 text-sm text-zinc-100 outline-none transition-colors placeholder:text-zinc-600 focus:border-fuchsia-400/40"
+              className="rounded-xl border border-white/[0.08] bg-black/60 px-4 py-3.5 text-sm text-zinc-100 outline-none transition-colors placeholder:text-zinc-500 focus:border-fuchsia-400/40"
               placeholder="Pages, booking, payments, chatbot, streaming, etc."
             />
           </div>

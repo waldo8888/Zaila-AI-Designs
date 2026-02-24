@@ -77,7 +77,7 @@ export function ContactSection() {
             <p className="max-w-xl mx-auto text-[18px] leading-[1.8] text-zinc-400">
               Tell us what you need — we&apos;ll respond with a simple plan and a clear price. No contracts, no surprises.
             </p>
-            <p className="mt-4 text-[14px] text-zinc-500">
+            <p className="mt-4 text-[14px] text-zinc-400">
               Or email us directly at{" "}
               <a href="mailto:zailaaidesigns@gmail.com" className="text-fuchsia-400/80 hover:text-fuchsia-400 transition-colors">
                 zailaaidesigns@gmail.com
@@ -217,7 +217,7 @@ export function ContactSection() {
                       className={`absolute left-0 transition-all duration-300 ${
                         isFieldActive("name")
                           ? "top-0 text-[11px] text-fuchsia-400"
-                          : "top-4 text-[14px] text-zinc-500"
+                          : "top-4 text-[14px] text-zinc-400"
                       }`}
                     >
                       Name
@@ -241,7 +241,7 @@ export function ContactSection() {
                       className={`absolute left-0 transition-all duration-300 ${
                         isFieldActive("email")
                           ? "top-0 text-[11px] text-fuchsia-400"
-                          : "top-4 text-[14px] text-zinc-500"
+                          : "top-4 text-[14px] text-zinc-400"
                       }`}
                     >
                       Email
@@ -260,7 +260,7 @@ export function ContactSection() {
 
                   {/* Project type */}
                   <div className="relative">
-                    <label className="block text-[11px] uppercase tracking-[0.2em] text-zinc-500 mb-4">
+                    <label className="block text-[11px] uppercase tracking-[0.2em] text-zinc-400 mb-4">
                       Project Type
                     </label>
                     <div className="flex flex-wrap gap-2">
@@ -282,7 +282,7 @@ export function ContactSection() {
                       className={`absolute left-0 transition-all duration-300 ${
                         isFieldActive("message")
                           ? "top-0 text-[11px] text-fuchsia-400"
-                          : "top-4 text-[14px] text-zinc-500"
+                          : "top-4 text-[14px] text-zinc-400"
                       }`}
                     >
                       Tell us about your project

@@ -84,13 +84,13 @@ export function CarePlans() {
               <span className="text-3xl font-bold tracking-tight">
                 {p.price}
               </span>
-              <span className="text-sm text-zinc-500">{p.period}</span>
+              <span className="text-sm text-zinc-400">{p.period}</span>
             </div>
-            <div className="mt-1 text-sm text-zinc-500">{p.desc}</div>
+            <div className="mt-1 text-sm text-zinc-400">{p.desc}</div>
             <ul className="mt-4 space-y-2 text-sm">
               {p.items.map((x) => (
                 <li key={x} className="flex items-start gap-3">
-                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-fuchsia-400" />
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
                   <span className="text-zinc-300">{x}</span>
                 </li>
               ))}
