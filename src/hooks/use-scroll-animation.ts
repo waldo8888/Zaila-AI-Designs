@@ -142,17 +142,21 @@ export function useTextReveal(delay = 0) {
 }
 
 // Smooth scroll to element (uses Lenis if available, falls back to native)
-export function smoothScrollTo(elementId: string) {
-  const element = document.getElementById(elementId);
-  if (!element) return;
+import { useSmoothScroll } from "@/components/smooth-scroll";
 
-  // Access Lenis instance from the global scope if available
-  const lenis = (window as unknown as { __lenis?: { scrollTo: (target: HTMLElement, options?: { offset?: number }) => void } }).__lenis;
-  if (lenis) {
-    lenis.scrollTo(element, { offset: 0 });
-  } else {
-    element.scrollIntoView({ behavior: "smooth" });
-  }
+export function useSmoothScrollTo() {
+  const lenis = useSmoothScroll();
+
+  return useCallback((elementId: string) => {
+    const element = document.getElementById(elementId);
+    if (!element) return;
+
+    if (lenis) {
+      lenis.scrollTo(element, { offset: 0 });
+    } else {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [lenis]);
 }
 
 // Get scroll direction

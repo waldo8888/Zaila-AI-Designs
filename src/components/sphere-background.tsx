@@ -105,13 +105,15 @@ export function SphereBackground() {
     // Bring camera a bit closer, or scale up shapes. We'll adjust camera and shape scale.
     camera.position.z = 4.5;
 
+    const currentPixelRatio = Math.min(window.devicePixelRatio, 2);
+
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,
       powerPreference: "high-performance" // Ensure smooth performance with more particles
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Bump pixel ratio cap slightly if available
+    renderer.setPixelRatio(currentPixelRatio); // Bump pixel ratio cap slightly if available
     container.appendChild(renderer.domElement);
 
     // Make shapes significantly larger
@@ -142,7 +144,7 @@ export function SphereBackground() {
       uniforms: {
         uTime: { value: 0 },
         uMorph: { value: 0 },
-        uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
+        uPixelRatio: { value: currentPixelRatio },
         uColor1: { value: new THREE.Color("#c084fc") }, // Lighter purple for core
         uColor2: { value: new THREE.Color("#e879f9") }, // Vibrant fuchsia
         uColor3: { value: new THREE.Color("#6d28d9") }, // Deep violet for contrast
@@ -337,9 +339,18 @@ export function SphereBackground() {
     const clock = new THREE.Clock();
     let animationId: number;
 
+    let baseRotationY = 0;
+    let baseTimeX = 0;
+    let dustTimeY = 0;
+
     function animate() {
       animationId = requestAnimationFrame(animate);
       const elapsed = clock.getElapsedTime();
+      const delta = clock.getDelta();
+
+      baseRotationY += delta * 0.05;
+      baseTimeX += delta * 0.02;
+      dustTimeY += delta * 0.02;
 
       // Slightly faster Lerp for scroll to feel responsive
       scrollY += (targetScroll - scrollY) * 0.08;
@@ -359,10 +370,10 @@ export function SphereBackground() {
       particles.position.x = startX - (scrollProgress * startX);
 
       // The key MAZE effect: Highly visible rotation tied to scroll
-      // Using scrollProgress bounds the end-state so it doesn't spin uncontrollably at the bottom
-      particles.rotation.y = elapsed * 0.05 + scrollProgress * Math.PI * 2.0;
+      // Using delta for frame-rate independence
+      particles.rotation.y = baseRotationY + scrollProgress * Math.PI * 2.0;
       // Tilt backward to slope away from camera
-      particles.rotation.x = Math.sin(elapsed * 0.02) * 0.1 + scrollProgress * 1.55;
+      particles.rotation.x = Math.sin(baseTimeX) * 0.1 + scrollProgress * 1.55;
       particles.rotation.z = scrollProgress * 0.2;
 
       // Lift up the terrain so it sits right behind the footer instead of dipping below the screen
@@ -370,7 +381,7 @@ export function SphereBackground() {
       particles.position.z = -(scrollProgress * 3.5);
 
       // Dust also reacts to scroll
-      dust.rotation.y = elapsed * 0.02 + scrollProgress * Math.PI;
+      dust.rotation.y = dustTimeY + scrollProgress * Math.PI;
       dust.position.y = -(scrollProgress * 2.0);
 
       renderer.render(scene, camera);

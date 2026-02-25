@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
+import { useSmoothScroll } from "@/components/smooth-scroll";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -15,23 +16,22 @@ export function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const isHome = pathname === "/";
+  const lenis = useSmoothScroll();
 
   // Lock body scroll when mobile menu is open
   useEffect(() => {
     if (mobileOpen) {
       document.body.style.overflow = "hidden";
       // Pause Lenis while menu is open
-      const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
       lenis?.stop();
     } else {
       document.body.style.overflow = "";
-      const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
       lenis?.start();
     }
     return () => {
       document.body.style.overflow = "";
     };
-  }, [mobileOpen]);
+  }, [mobileOpen, lenis]);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = lastScrollY.current;
@@ -56,7 +56,6 @@ export function Navbar() {
     if (isHome) {
       const el = document.getElementById(id);
       if (!el) return;
-      const lenis = (window as unknown as { __lenis?: { scrollTo: (target: HTMLElement, options?: { offset?: number }) => void } }).__lenis;
       if (lenis) {
         lenis.scrollTo(el, { offset: 0 });
       } else {
@@ -81,8 +80,8 @@ export function Navbar() {
         animate={{ y: hidden ? -100 : 0 }}
         transition={{ duration: 0.3, ease: [0.25, 0.1, 0, 1] }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
-            ? "py-3"
-            : "py-5"
+          ? "py-3"
+          : "py-5"
           }`}
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6">
@@ -110,44 +109,13 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
             className={`hidden md:flex items-center gap-1 rounded-full px-2 py-1.5 transition-all duration-500 ${scrolled
-                ? "bg-white/[0.03] backdrop-blur-2xl border border-white/[0.06]"
-                : "bg-transparent"
+              ? "bg-white/[0.03] backdrop-blur-2xl border border-white/[0.06]"
+              : "bg-transparent"
               }`}
           >
-            {navItems.map((item, i) =>
-              "href" in item && item.href ? (
-                <motion.div
-                  key={item.label}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 + i * 0.05 }}
-                >
-                  <Link
-                    href={item.href}
-                    className="group relative px-5 py-2 text-[13px] text-zinc-400 transition-colors hover:text-white"
-                  >
-                    <span className="relative z-10">{item.label}</span>
-                  </Link>
-                </motion.div>
-              ) : (
-                <motion.button
-                  key={item.label}
-                  onClick={() => handleNav(item.id!)}
-                  className="group relative px-5 py-2 text-[13px] text-zinc-400 transition-colors hover:text-white"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 + i * 0.05 }}
-                >
-                  <span className="relative z-10">{item.label}</span>
-                  <motion.div
-                    className="absolute inset-0 rounded-full bg-white/[0.06] opacity-0 group-hover:opacity-100 transition-opacity"
-                    layoutId="nav-hover"
-                  />
-                </motion.button>
-              )
-            )}
+            {navItems.map((item, i) => (
+              <DesktopNavItem key={item.label} item={item} i={i} handleNav={handleNav} />
+            ))}
           </motion.nav>
 
           {/* CTA Button */}
@@ -220,37 +188,9 @@ export function Navbar() {
                 height={84}
                 className="h-20 md:h-24 w-auto object-contain drop-shadow-[0_0_12px_rgba(217,70,239,0.3)] mb-4"
               />
-              {navItems.map((item, i) =>
-                "href" in item && item.href ? (
-                  <motion.div
-                    key={item.label}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ delay: 0.1 + i * 0.05 }}
-                  >
-                    <Link
-                      href={item.href}
-                      onClick={() => setMobileOpen(false)}
-                      className="text-[32px] font-semibold text-white tracking-tight"
-                    >
-                      {item.label}
-                    </Link>
-                  </motion.div>
-                ) : (
-                  <motion.button
-                    key={item.label}
-                    onClick={() => handleNav(item.id!)}
-                    className="text-[32px] font-semibold text-white tracking-tight"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ delay: 0.1 + i * 0.05 }}
-                  >
-                    {item.label}
-                  </motion.button>
-                )
-              )}
+              {navItems.map((item, i) => (
+                <MobileNavItem key={item.label} item={item} i={i} handleNav={handleNav} setMobileOpen={setMobileOpen} />
+              ))}
               <motion.button
                 onClick={() => handleNav("contact")}
                 className="mt-8 rounded-full bg-white px-10 py-4 text-[16px] font-medium text-black"
@@ -266,5 +206,74 @@ export function Navbar() {
         )}
       </AnimatePresence>
     </>
+  );
+}
+
+function DesktopNavItem({ item, i, handleNav }: { item: any; i: number; handleNav: (id: string) => void }) {
+  if ("href" in item && item.href) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 + i * 0.05 }}
+      >
+        <Link
+          href={item.href}
+          className="group relative px-5 py-2 text-[13px] text-zinc-400 transition-colors hover:text-white"
+        >
+          <span className="relative z-10">{item.label}</span>
+        </Link>
+      </motion.div>
+    );
+  }
+  return (
+    <motion.button
+      onClick={() => handleNav(item.id!)}
+      className="group relative px-5 py-2 text-[13px] text-zinc-400 transition-colors hover:text-white"
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.3 + i * 0.05 }}
+    >
+      <span className="relative z-10">{item.label}</span>
+      <motion.div
+        className="absolute inset-0 rounded-full bg-white/[0.06] opacity-0 group-hover:opacity-100 transition-opacity"
+        layoutId="nav-hover"
+      />
+    </motion.button>
+  );
+}
+
+function MobileNavItem({ item, i, handleNav, setMobileOpen }: { item: any; i: number; handleNav: (id: string) => void; setMobileOpen: (v: boolean) => void }) {
+  if ("href" in item && item.href) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ delay: 0.1 + i * 0.05 }}
+      >
+        <Link
+          href={item.href}
+          onClick={() => setMobileOpen(false)}
+          className="text-[32px] font-semibold text-white tracking-tight"
+        >
+          {item.label}
+        </Link>
+      </motion.div>
+    );
+  }
+  return (
+    <motion.button
+      onClick={() => handleNav(item.id!)}
+      className="text-[32px] font-semibold text-white tracking-tight"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ delay: 0.1 + i * 0.05 }}
+    >
+      {item.label}
+    </motion.button>
   );
 }

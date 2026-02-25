@@ -6,6 +6,7 @@ import { Navbar } from "@/components/navbar-new";
 import { FooterNew } from "@/components/footer-new";
 import { SphereBackground } from "@/components/sphere-background";
 import { SmoothScroll } from "@/components/smooth-scroll";
+import { CustomCursor } from "@/components/custom-cursor";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -63,6 +64,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} min-h-dvh bg-black text-zinc-100 antialiased`}
       >
         <SmoothScroll>
+          <CustomCursor />
           <SphereBackground />
           <Navbar />
           <main className="relative z-10">{children}</main>

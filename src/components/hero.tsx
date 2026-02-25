@@ -2,13 +2,14 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useSyncExternalStore } from "react";
-import { smoothScrollTo } from "@/hooks/use-scroll-animation";
+import { useSmoothScrollTo } from "@/hooks/use-scroll-animation";
 
 const subscribe = () => () => { };
 
 export function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const mounted = useSyncExternalStore(subscribe, () => true, () => false);
+  const scrollTo = useSmoothScrollTo();
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -85,7 +86,7 @@ export function Hero() {
           transition={{ duration: 1.2, delay: 0.9, ease: [0.25, 0.1, 0, 1] }}
         >
           <button
-            onClick={() => smoothScrollTo("contact")}
+            onClick={() => scrollTo("contact")}
             className="group relative overflow-hidden rounded-full bg-white px-10 py-4 text-[15px] font-medium text-black transition-all duration-500 hover:shadow-[0_20px_60px_-15px_rgba(255,255,255,0.3)]"
           >
             <span className="relative z-10">Start a Project</span>
@@ -102,7 +103,7 @@ export function Hero() {
         transition={{ duration: 1.5, delay: 2 }}
       >
         <button
-          onClick={() => smoothScrollTo("story")}
+          onClick={() => scrollTo("story")}
           className="group flex flex-col items-center gap-4 text-zinc-500 transition-colors hover:text-zinc-300"
         >
           <span className="text-[10px] uppercase tracking-[0.3em]">Scroll</span>
