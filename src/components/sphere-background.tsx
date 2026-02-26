@@ -94,6 +94,10 @@ export function SphereBackground() {
     // Increased particle count for a denser, more massive feel
     const PARTICLE_COUNT = 15000;
 
+    // Mouse tracking
+    const mouse = { x: 0, y: 0 };
+    const targetMouse = { x: 0, y: 0 };
+
     // Scene setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
@@ -145,6 +149,8 @@ export function SphereBackground() {
         uTime: { value: 0 },
         uMorph: { value: 0 },
         uPixelRatio: { value: currentPixelRatio },
+        uMouse: { value: new THREE.Vector3(0, 0, 0) }, // Mouse position in particle local space
+        uMouseInfluence: { value: 0 }, // Fades in when mouse is active
         uColor1: { value: new THREE.Color("#c084fc") }, // Lighter purple for core
         uColor2: { value: new THREE.Color("#e879f9") }, // Vibrant fuchsia
         uColor3: { value: new THREE.Color("#6d28d9") }, // Deep violet for contrast
@@ -155,21 +161,24 @@ export function SphereBackground() {
         attribute vec3 aTarget3;
         attribute vec3 aTarget4;
         attribute float aRandom;
-        
+
         uniform float uTime;
         uniform float uMorph;
         uniform float uPixelRatio;
-        
+        uniform vec3 uMouse; // Mouse position in particle local space
+        uniform float uMouseInfluence;
+
         varying float vAlpha;
         varying float vColorMix;
         varying vec3 vPos;
-        
+        varying float vMouseProximity;
+
         // Smooth step between shapes
         vec3 getShapePosition(float morph) {
           vec3 pos;
-          
+
           if (morph < 1.0) {
-            pos = mix(position, aTarget1, smoothstep(0.0, 1.0, morph)); // changed to smoothstep for fluid transitions
+            pos = mix(position, aTarget1, smoothstep(0.0, 1.0, morph));
           } else if (morph < 2.0) {
             pos = mix(aTarget1, aTarget2, smoothstep(0.0, 1.0, morph - 1.0));
           } else if (morph < 3.0) {
@@ -177,37 +186,61 @@ export function SphereBackground() {
           } else {
             pos = mix(aTarget3, aTarget4, smoothstep(0.0, 1.0, morph - 3.0));
           }
-          
+
           return pos;
         }
-        
+
         void main() {
           // Add per-particle delay to morphing for organic feel
           float particleDelay = aRandom * 0.4;
           float adjustedMorph = max(uMorph - particleDelay, 0.0);
-          
+
           vec3 pos = getShapePosition(adjustedMorph);
           vPos = pos;
-          
+
           // Subtle floating motion, tied slightly to morph progress
           float floatSpeed = 0.5 + aRandom * 0.5;
           pos.x += sin(uTime * floatSpeed + aRandom * 6.28) * 0.05;
           pos.y += cos(uTime * floatSpeed * 0.7 + aRandom * 6.28) * 0.05;
           pos.z += sin(uTime * floatSpeed * 0.5 + aRandom * 3.14) * 0.05;
-          
+
+          // Mouse interaction - repulsion effect
+          // uMouse is already in particle local space (calculated in JS)
+          vec3 toMouse = pos - uMouse;
+          float distToMouse = length(toMouse.xy);
+
+          // Repulsion radius and strength
+          float repulsionRadius = 1.5;
+          float repulsionStrength = 0.8;
+
+          // Calculate repulsion (particles push away from mouse)
+          float repulsion = smoothstep(repulsionRadius, 0.0, distToMouse);
+          vec3 repulsionDir = normalize(toMouse + vec3(0.001)); // Prevent division by zero
+          pos += repulsionDir * repulsion * repulsionStrength * uMouseInfluence;
+
+          // Add slight z-push for depth effect near mouse
+          pos.z += repulsion * 0.5 * uMouseInfluence;
+
+          // Store mouse proximity for fragment shader glow
+          vMouseProximity = repulsion * uMouseInfluence;
+
           vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-          
+
           // Size attenuation - increased base size for strong glow
-          float size = (20.0 + aRandom * 25.0) * uPixelRatio;
+          // Particles near mouse get slightly larger
+          float mouseSize = 1.0 + vMouseProximity * 0.5;
+          float size = (20.0 + aRandom * 25.0) * uPixelRatio * mouseSize;
           gl_PointSize = size * (1.0 / -mvPosition.z);
           gl_Position = projectionMatrix * mvPosition;
-          
+
           // Alpha based on distance from center (core is bright, edges fade)
-          // Increased threshold to 8.0 so the large terrain remains highly visible
           float dist = length(pos);
           vAlpha = 0.5 + 0.5 * (1.0 - smoothstep(0.0, 8.0, dist));
-          vAlpha *= 0.6 + aRandom * 0.4; // Slightly more cohesive alpha
-          
+          vAlpha *= 0.6 + aRandom * 0.4;
+
+          // Boost alpha near mouse for glow effect
+          vAlpha += vMouseProximity * 0.3;
+
           // Color variation based on position and randomness
           vColorMix = fract(aRandom + sin(pos.y * 2.0 + uTime) * 0.1);
         }
@@ -218,31 +251,39 @@ export function SphereBackground() {
         uniform vec3 uColor3;
         uniform float uTime;
         uniform float uMorph;
-        
+
         varying float vAlpha;
         varying float vColorMix;
         varying vec3 vPos;
-        
+        varying float vMouseProximity;
+
         void main() {
           // Soft circular particle with a sharper core
           float d = length(gl_PointCoord - vec2(0.5));
           if (d > 0.5) discard;
-          
+
           // Create a glow effect (bright center, soft falloff)
           float glow = 1.0 - (d * 2.0);
           float core = pow(glow, 3.0);
           float halo = pow(glow, 1.5) * 0.5;
           float strength = core + halo;
-          
+
+          // Boost glow near mouse
+          strength += vMouseProximity * 0.4;
+
           // Color shifts as shape morphs
           vec3 baseColor = mix(uColor1, uColor2, vColorMix);
           // Add depth color based on local position
           float depthMix = smoothstep(-2.0, 2.0, vPos.z);
           vec3 finalColor = mix(baseColor, uColor3, depthMix * 0.7);
-          
+
+          // Shift toward brighter/whiter color near mouse for energy effect
+          vec3 mouseHighlight = vec3(1.0, 0.9, 1.0);
+          finalColor = mix(finalColor, mouseHighlight, vMouseProximity * 0.4);
+
           // Subtle shimmer
           float shimmer = sin(uTime * 3.0 + vColorMix * 20.0) * 0.15 + 0.85;
-          
+
           gl_FragColor = vec4(finalColor, strength * vAlpha * shimmer);
         }
       `,
@@ -320,6 +361,30 @@ export function SphereBackground() {
     // Trigger initial calculation
     handleScroll();
 
+    // Mouse tracking (window-level to not block other interactions)
+    let mouseActive = false;
+    let mouseTimeout: ReturnType<typeof setTimeout>;
+
+    function handleMouseMove(event: MouseEvent) {
+      // Normalize mouse position to -1 to 1
+      targetMouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      targetMouse.y = -((event.clientY / window.innerHeight) * 2 - 1);
+      mouseActive = true;
+
+      // Reset timeout for mouse inactivity
+      clearTimeout(mouseTimeout);
+      mouseTimeout = setTimeout(() => {
+        mouseActive = false;
+      }, 2000);
+    }
+
+    function handleMouseLeave() {
+      mouseActive = false;
+    }
+
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    document.addEventListener("mouseleave", handleMouseLeave);
+
     function handleResize() {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
@@ -342,6 +407,12 @@ export function SphereBackground() {
     let baseRotationY = 0;
     let baseTimeX = 0;
     let dustTimeY = 0;
+    let currentMouseInfluence = 0;
+
+    // Reusable vectors for mouse unprojection
+    const mouseWorldPos = new THREE.Vector3();
+    const mouseLocalPos = new THREE.Vector3();
+    const inverseMatrix = new THREE.Matrix4();
 
     function animate() {
       animationId = requestAnimationFrame(animate);
@@ -355,7 +426,36 @@ export function SphereBackground() {
       // Slightly faster Lerp for scroll to feel responsive
       scrollY += (targetScroll - scrollY) * 0.08;
 
+      // Smooth mouse position interpolation
+      mouse.x += (targetMouse.x - mouse.x) * 0.08;
+      mouse.y += (targetMouse.y - mouse.y) * 0.08;
+
+      // Fade mouse influence in/out
+      const targetInfluence = mouseActive ? 1.0 : 0.0;
+      currentMouseInfluence += (targetInfluence - currentMouseInfluence) * 0.05;
+
+      // Calculate mouse position in particle local space
+      // First, unproject from NDC to world space at z=0 plane
+      // Using FOV geometry: at camera.position.z with FOV 45deg,
+      // the visible half-height at z=0 is camera.position.z * tan(FOV/2)
+      const fovRad = (camera.fov * Math.PI) / 180;
+      const halfHeight = camera.position.z * Math.tan(fovRad / 2);
+      const halfWidth = halfHeight * camera.aspect;
+
+      mouseWorldPos.set(
+        mouse.x * halfWidth,
+        mouse.y * halfHeight,
+        0
+      );
+
+      // Transform to particle local space (account for position and rotation)
+      particles.updateMatrixWorld();
+      inverseMatrix.copy(particles.matrixWorld).invert();
+      mouseLocalPos.copy(mouseWorldPos).applyMatrix4(inverseMatrix);
+
       material.uniforms.uTime.value = elapsed;
+      material.uniforms.uMouse.value.copy(mouseLocalPos);
+      material.uniforms.uMouseInfluence.value = currentMouseInfluence;
 
       const maxScroll = Math.max(document.body.scrollHeight - window.innerHeight, 1);
       const scrollProgress = scrollY / maxScroll;
@@ -371,9 +471,13 @@ export function SphereBackground() {
 
       // The key MAZE effect: Highly visible rotation tied to scroll
       // Using delta for frame-rate independence
-      particles.rotation.y = baseRotationY + scrollProgress * Math.PI * 2.0;
+      // Add mouse-based rotation for interactive tilt
+      const mouseRotationX = mouse.y * 0.15 * currentMouseInfluence;
+      const mouseRotationY = mouse.x * 0.2 * currentMouseInfluence;
+
+      particles.rotation.y = baseRotationY + scrollProgress * Math.PI * 2.0 + mouseRotationY;
       // Tilt backward to slope away from camera
-      particles.rotation.x = Math.sin(baseTimeX) * 0.1 + scrollProgress * 1.55;
+      particles.rotation.x = Math.sin(baseTimeX) * 0.1 + scrollProgress * 1.55 + mouseRotationX;
       particles.rotation.z = scrollProgress * 0.2;
 
       // Lift up the terrain so it sits right behind the footer instead of dipping below the screen
@@ -391,8 +495,11 @@ export function SphereBackground() {
 
     return () => {
       cancelAnimationFrame(animationId);
+      clearTimeout(mouseTimeout);
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleResize);
+      window.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseleave", handleMouseLeave);
       renderer.dispose();
       geometry.dispose();
       material.dispose();
@@ -411,7 +518,7 @@ export function SphereBackground() {
       aria-hidden="true"
       style={{
         // Add radial gradient under the canvas to make dark colors pop and hide hard edges
-        background: 'radial-gradient(circle at center, #0f0b18 0%, #000000 100%)'
+        background: 'radial-gradient(circle at center, #0f0b18 0%, #000000 100%)',
       }}
     />
   );

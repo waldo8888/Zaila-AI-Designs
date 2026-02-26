@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { ServicesNetwork } from "./services-network";
 
 const services = [
   {
@@ -228,21 +229,17 @@ function ServiceCard({
             </div>
           </div>
 
-          {/* Right - Visual */}
-          <div className="hidden md:block">
+          {/* Right - Neural Network Visual */}
+          <div>
             <div
-              className={`aspect-square rounded-3xl bg-gradient-to-br ${service.gradient} backdrop-blur-xl border border-white/[0.05] flex flex-col items-center justify-center gap-6 relative overflow-hidden`}
+              className="aspect-[4/3] md:aspect-square rounded-3xl border border-white/[0.05] relative overflow-hidden isolate"
+              style={{ backgroundColor: "#0a0a12" }}
             >
-              {/* Decorative grid lines */}
-              <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px]" />
-              </div>
-              <div className={`relative ${service.iconColor}`}>
-                {service.icon}
-              </div>
-              <span className="relative text-[14px] font-medium text-white/40 uppercase tracking-[0.2em]">
-                {service.title}
-              </span>
+              {/* Subtle gradient overlay */}
+              <div
+                className={`absolute inset-0 bg-gradient-to-br ${service.gradient} pointer-events-none`}
+              />
+              <ServicesNetwork activeNodeIndex={index} />
             </div>
           </div>
         </div>
