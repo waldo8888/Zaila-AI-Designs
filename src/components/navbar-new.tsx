@@ -69,7 +69,8 @@ export function Navbar() {
   const navItems = [
     { label: "Services", id: "services" },
     { label: "Process", id: "process" },
-    { label: "Work", id: "testimonials" },
+    { label: "Work", href: "/growth-stories" },
+    { label: "Blog", href: "/blog" },
     { label: "Pricing", href: "/pricing" },
   ];
 

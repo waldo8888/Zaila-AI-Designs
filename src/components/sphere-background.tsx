@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import * as THREE from "three";
 
 // Shape generators — each returns Float32Array of xyz positions
@@ -86,13 +87,17 @@ function generatePlane(count: number, size: number): Float32Array {
 
 export function SphereBackground() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+
+  // Reduce particle budget on subpages for smooth performance
+  const isHomepage = pathname === "/";
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    // Increased particle count for a denser, more massive feel
-    const PARTICLE_COUNT = 15000;
+    const PARTICLE_COUNT = isHomepage ? 12000 : 6000;
+    const DUST_COUNT = isHomepage ? 1000 : 1000;
 
     // Mouse tracking
     const mouse = { x: 0, y: 0 };
@@ -109,12 +114,12 @@ export function SphereBackground() {
     // Bring camera a bit closer, or scale up shapes. We'll adjust camera and shape scale.
     camera.position.z = 4.5;
 
-    const currentPixelRatio = Math.min(window.devicePixelRatio, 2);
+    const currentPixelRatio = Math.min(window.devicePixelRatio, 1.5);
 
     const renderer = new THREE.WebGLRenderer({
-      antialias: true,
+      antialias: false,
       alpha: true,
-      powerPreference: "high-performance" // Ensure smooth performance with more particles
+      powerPreference: "high-performance"
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(currentPixelRatio); // Bump pixel ratio cap slightly if available
@@ -235,11 +240,11 @@ export function SphereBackground() {
 
           // Alpha based on distance from center (core is bright, edges fade)
           float dist = length(pos);
-          vAlpha = 0.5 + 0.5 * (1.0 - smoothstep(0.0, 8.0, dist));
-          vAlpha *= 0.6 + aRandom * 0.4;
+          vAlpha = 0.35 + 0.35 * (1.0 - smoothstep(0.0, 8.0, dist));
+          vAlpha *= 0.4 + aRandom * 0.3;
 
           // Boost alpha near mouse for glow effect
-          vAlpha += vMouseProximity * 0.3;
+          vAlpha += vMouseProximity * 0.2;
 
           // Color variation based on position and randomness
           vColorMix = fract(aRandom + sin(pos.y * 2.0 + uTime) * 0.1);
@@ -284,7 +289,8 @@ export function SphereBackground() {
           // Subtle shimmer
           float shimmer = sin(uTime * 3.0 + vColorMix * 20.0) * 0.15 + 0.85;
 
-          gl_FragColor = vec4(finalColor, strength * vAlpha * shimmer);
+          // Dim overall output so text in the foreground stays readable
+          gl_FragColor = vec4(finalColor * 0.9, strength * vAlpha * shimmer * 0.9);
         }
       `,
       transparent: true,
@@ -298,7 +304,7 @@ export function SphereBackground() {
     scene.add(particles);
 
     // Dust layer
-    const dustCount = 3000;
+    const dustCount = DUST_COUNT;
     const dustGeometry = new THREE.BufferGeometry();
     const dustPositions = new Float32Array(dustCount * 3);
     for (let i = 0; i < dustCount; i++) {
@@ -329,7 +335,7 @@ export function SphereBackground() {
           gl_PointSize = (4.0 + sin(uTime * 2.0 + position.x) * 2.0) * uPixelRatio * (1.0 / -mvPosition.z);
           gl_Position = projectionMatrix * mvPosition;
           
-          vAlpha = 0.15 + 0.1 * sin(uTime + position.x * 5.0);
+          vAlpha = 0.08 + 0.06 * sin(uTime + position.x * 5.0);
         }
       `,
       fragmentShader: `
@@ -509,7 +515,7 @@ export function SphereBackground() {
         container.removeChild(renderer.domElement);
       }
     };
-  }, []);
+  }, [isHomepage]);
 
   return (
     <div
@@ -519,6 +525,8 @@ export function SphereBackground() {
       style={{
         // Add radial gradient under the canvas to make dark colors pop and hide hard edges
         background: 'radial-gradient(circle at center, #0f0b18 0%, #000000 100%)',
+        // Soften particles so foreground text is easier to read
+        filter: 'blur(1px) brightness(0.92)',
       }}
     />
   );

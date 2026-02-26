@@ -167,6 +167,28 @@ export function ContactSection() {
                 <span className="text-[15px]">Hamilton, Ontario</span>
               </div>
             </div>
+
+            {/* Performance trust badges */}
+            <div className="mt-8 grid grid-cols-3 gap-3">
+              {[
+                { icon: "⚡", value: "99", label: "Performance" },
+                { icon: "🔒", value: "A+", label: "Security" },
+                { icon: "📱", value: "100", label: "Mobile" },
+              ].map((badge) => (
+                <div
+                  key={badge.label}
+                  className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 text-center"
+                >
+                  <span className="text-sm">{badge.icon}</span>
+                  <div className="text-lg font-bold text-white leading-none mt-1">
+                    {badge.value}
+                  </div>
+                  <div className="text-[9px] text-zinc-500 uppercase tracking-wider mt-0.5">
+                    {badge.label}
+                  </div>
+                </div>
+              ))}
+            </div>
           </motion.div>
 
           {/* Right - Form */}

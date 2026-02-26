@@ -4,6 +4,9 @@ import { useState } from "react";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { submitContactForm } from "@/app/actions";
 
+// Metadata is exported from a separate layout since this is a client component
+// See contact/layout.tsx
+
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);

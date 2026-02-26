@@ -61,17 +61,28 @@ export function FooterNew() {
                 {[
                   { label: "Services", id: "services" },
                   { label: "Process", id: "process" },
-                  { label: "Work", id: "testimonials" },
+                  { label: "Work", href: "/growth-stories" },
+                  { label: "Blog", href: "/blog" },
                   { label: "Contact", id: "contact" },
-                ].map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => scrollTo(item.id)}
-                    className="block text-[13px] text-zinc-400 hover:text-white transition-colors"
-                  >
-                    {item.label}
-                  </button>
-                ))}
+                ].map((item) =>
+                  "href" in item && item.href ? (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      className="block text-[13px] text-zinc-400 hover:text-white transition-colors"
+                    >
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <button
+                      key={item.label}
+                      onClick={() => scrollTo((item as { id: string }).id)}
+                      className="block text-[13px] text-zinc-400 hover:text-white transition-colors"
+                    >
+                      {item.label}
+                    </button>
+                  )
+                )}
               </nav>
             </div>
 

@@ -228,6 +228,11 @@ body {
   }
 }
 
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 .blur-in {
   animation: blur-in 1s cubic-bezier(0.25, 0.1, 0, 1) forwards;
 }

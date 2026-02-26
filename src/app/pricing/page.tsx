@@ -1,7 +1,21 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { PricingFull } from "@/components/pricing-full";
 import { CarePlans } from "@/components/care-plans";
+
+export const metadata: Metadata = {
+  title: "Pricing — AI Websites from $499 | Zaila AI Designs",
+  description:
+    "Transparent pricing for AI-powered websites. Starter from $499, Growth from $699, Smart AI from $999. Monthly growth plans from $49/mo. No contracts.",
+  alternates: { canonical: "https://zailai.com/pricing" },
+  openGraph: {
+    title: "Pricing — AI Websites from $499 | Zaila AI Designs",
+    description:
+      "Transparent pricing for AI-powered websites. No hidden fees, no contracts. Launch in days.",
+    url: "https://zailai.com/pricing",
+  },
+};
 
 export default function PricingPage() {
   return (

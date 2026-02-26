@@ -7,6 +7,8 @@ import { FooterNew } from "@/components/footer-new";
 import { SphereBackground } from "@/components/sphere-background";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { CustomCursor } from "@/components/custom-cursor";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -51,6 +53,60 @@ export const metadata: Metadata = {
       "AI-powered business websites and automation for Hamilton small businesses. Launch fast, grow smarter.",
     images: ["/logo.png"],
   },
+  alternates: {
+    canonical: "https://zailai.com",
+  },
+  keywords: [
+    "AI web design",
+    "AI website builder",
+    "Hamilton web design",
+    "small business websites",
+    "AI chatbot",
+    "website automation",
+    "Next.js agency",
+    "fast website launch",
+  ],
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://zailai.com/#website",
+      url: "https://zailai.com",
+      name: "Zaila AI Designs",
+      description:
+        "AI-powered business websites and automation for Hamilton small businesses.",
+      publisher: { "@id": "https://zailai.com/#business" },
+    },
+    {
+      "@type": "LocalBusiness",
+      "@id": "https://zailai.com/#business",
+      name: "Zaila AI Designs",
+      url: "https://zailai.com",
+      email: "zailaaidesigns@gmail.com",
+      description:
+        "AI-powered web design and automation agency serving Hamilton and Ontario small businesses. Websites that launch in days, not months.",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Hamilton",
+        addressRegion: "ON",
+        addressCountry: "CA",
+      },
+      areaServed: [
+        { "@type": "City", name: "Hamilton" },
+        { "@type": "AdministrativeArea", name: "Ontario" },
+      ],
+      priceRange: "$$",
+      serviceType: [
+        "Web Design",
+        "AI Chatbot Development",
+        "Website Automation",
+        "SEO Optimization",
+      ],
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -60,6 +116,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} min-h-dvh bg-black text-zinc-100 antialiased`}
       >
@@ -70,6 +132,8 @@ export default function RootLayout({
           <main className="relative z-10">{children}</main>
           <FooterNew />
         </SmoothScroll>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
