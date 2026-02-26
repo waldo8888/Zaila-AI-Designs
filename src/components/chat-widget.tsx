@@ -476,7 +476,7 @@ export function ChatWidget() {
         }
       `}</style>
 
-      <div className="fixed bottom-20 left-4 md:bottom-6 md:left-6 z-[9999] flex flex-col items-start gap-3" style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}>
+      <div className="fixed bottom-6 left-6 z-[9999] flex flex-col items-start gap-3">
         {/* Chat panel */}
         <AnimatePresence>
           {open && (
@@ -486,7 +486,7 @@ export function ChatWidget() {
               exit={{ opacity: 0, y: 20, scale: 0.95 }}
               transition={{ duration: 0.3, ease: [0.25, 0.1, 0, 1] }}
               className="w-[360px] max-w-[calc(100vw-3rem)] rounded-2xl border border-white/[0.08] bg-[#0a0a0a]/95 backdrop-blur-xl shadow-2xl overflow-hidden flex flex-col"
-              style={{ maxHeight: "min(520px, calc(100dvh - 120px))" }}
+              style={{ maxHeight: "min(520px, 70vh)" }}
             >
               {/* Header */}
               <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-white/[0.02]">
