@@ -9,6 +9,7 @@ import { SmoothScroll } from "@/components/smooth-scroll";
 import { CustomCursor } from "@/components/custom-cursor";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { ChatWidget } from "@/components/chat-widget";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -134,6 +135,7 @@ export default function RootLayout({
         </SmoothScroll>
         <Analytics />
         <SpeedInsights />
+        <ChatWidget />
       </body>
     </html>
   );
