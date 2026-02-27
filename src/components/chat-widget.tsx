@@ -43,6 +43,7 @@ const TREE: Record<string, TreeNode> = {
     options: [
       { label: "Yes, let's chat!", next: "capture_name" },
       { label: "Tell me about pricing", next: "pricing" },
+      { label: "Start over", next: "start" },
     ],
   },
   web_design: {
@@ -51,6 +52,7 @@ const TREE: Record<string, TreeNode> = {
     options: [
       { label: "I'd love a custom design", next: "capture_name" },
       { label: "What's the timeline?", next: "timeline" },
+      { label: "Start over", next: "start" },
     ],
   },
   web_seo: {
@@ -59,6 +61,7 @@ const TREE: Record<string, TreeNode> = {
     options: [
       { label: "Let's get started", next: "capture_name" },
       { label: "What about pricing?", next: "pricing" },
+      { label: "Start over", next: "start" },
     ],
   },
   web_all: {
@@ -67,6 +70,7 @@ const TREE: Record<string, TreeNode> = {
     options: [
       { label: "Absolutely!", next: "capture_name" },
       { label: "How long does it take?", next: "timeline" },
+      { label: "Start over", next: "start" },
     ],
   },
 
@@ -82,10 +86,11 @@ const TREE: Record<string, TreeNode> = {
   },
   chat_support: {
     message:
-      "A support chatbot can answer FAQs, route complex issues, and reduce your support load by up to 70%. We train it on your actual business data.",
+      "A support chatbot can answer FAQs, route complex issues, and free up your time for higher-value work. We train it on your actual business data.",
     options: [
       { label: "That sounds perfect", next: "capture_name" },
       { label: "What does it cost?", next: "pricing" },
+      { label: "Start over", next: "start" },
     ],
   },
   chat_leads: {
@@ -94,6 +99,7 @@ const TREE: Record<string, TreeNode> = {
     options: [
       { label: "I want one!", next: "capture_name" },
       { label: "Show me pricing", next: "pricing" },
+      { label: "Start over", next: "start" },
     ],
   },
   chat_how: {
@@ -108,16 +114,25 @@ const TREE: Record<string, TreeNode> = {
   /* --- Pricing branch --- */
   pricing: {
     message:
-      "We have plans starting at $500/month with no massive upfront cost. Every plan includes hosting, maintenance, and priority support. Want the details?",
+      "Our websites start at $499 one-time — no subscriptions required. Optional monthly care plans from $49/mo keep your site fresh and supported. Want the details?",
     options: [
-      { label: "View full pricing page", next: "pricing_link" },
+      { label: "See pricing breakdown", next: "pricing_breakdown" },
       { label: "Get a custom quote", next: "capture_name" },
       { label: "What's included?", next: "whats_included" },
     ],
   },
+  pricing_breakdown: {
+    message:
+      "Here's how it works:\n\n• Starter: $499 (1-3 pages)\n• Growth: $699 (chatbot + booking)\n• Smart: $999+ (payments + automation)\n\nOptional Care Plans: $49–$399/mo for updates and support.",
+    options: [
+      { label: "Get a custom quote", next: "capture_name" },
+      { label: "What's the timeline?", next: "timeline" },
+      { label: "Back to start", next: "start" },
+    ],
+  },
   pricing_link: {
     message:
-      "Head over to zailai.com/pricing for the full breakdown. Or I can get you a custom quote tailored to your needs — just say the word!",
+      "Check out our pricing page for the full breakdown. Or I can get you a custom quote tailored to your needs — just say the word!",
     options: [
       { label: "Get me a custom quote", next: "capture_name" },
       { label: "Back to start", next: "start" },
@@ -125,20 +140,33 @@ const TREE: Record<string, TreeNode> = {
   },
   whats_included: {
     message:
-      "Every plan includes: custom design, mobile-first development, SEO optimisation, performance tuning, analytics, hosting, SSL, and ongoing support. No hidden fees.",
+      "All sites include: custom design, mobile-first dev, SEO, performance tuning, hosting, and SSL. Analytics included from Growth tier up. Ongoing support available via Care Plans ($49–$199/mo).",
     options: [
       { label: "Let's do it", next: "capture_name" },
-      { label: "I have more questions", next: "capture_name" },
+      { label: "See our work", next: "portfolio" },
+      { label: "Back to start", next: "start" },
     ],
   },
 
   /* --- Timeline --- */
   timeline: {
     message:
-      "Most websites launch within 2–4 weeks. Chatbot integrations can be set up in as little as 1 week. We move fast without cutting corners.",
+      "Most websites launch within 2–4 days. We work fast — Day 1 is discovery, Days 2-3 are build, and Day 4 you're live. Chatbots can be added during the build sprint.",
     options: [
       { label: "That works for me", next: "capture_name" },
+      { label: "See our work", next: "portfolio" },
       { label: "Back to options", next: "start" },
+    ],
+  },
+
+  /* --- Portfolio / See our work --- */
+  portfolio: {
+    message:
+      "We've helped businesses across Hamilton and Ontario launch fast, beautiful websites. Check out our Growth Stories page to see real results — or let's chat about your project!",
+    options: [
+      { label: "Let's chat!", next: "capture_name" },
+      { label: "Tell me about pricing", next: "pricing" },
+      { label: "Back to start", next: "start" },
     ],
   },
 
@@ -149,12 +177,13 @@ const TREE: Record<string, TreeNode> = {
     options: [
       { label: "Tell me about your services", next: "website" },
       { label: "Show me pricing", next: "pricing" },
+      { label: "See your work", next: "portfolio" },
       { label: "I'll look around", next: "bye_browse" },
     ],
   },
   bye_browse: {
     message:
-      "Enjoy exploring! Click my icon any time if you need help. We're always here. ✨",
+      "Enjoy exploring! Click my icon any time if you need help. We're always here.",
     options: [{ label: "Start over", next: "start" }],
   },
 
@@ -177,13 +206,16 @@ const TREE: Record<string, TreeNode> = {
   },
   captured: {
     message:
-      "You're all set! 🎉 Our team will reach out within 24 hours with a custom plan for you. In the meantime, feel free to explore the site!",
-    options: [{ label: "Back to start", next: "start" }],
+      "You're all set! Our team will reach out within 24 hours with a custom plan for you. In the meantime, feel free to explore the site!",
+    options: [
+      { label: "See your work", next: "portfolio" },
+      { label: "Start over", next: "start" },
+    ],
   },
 };
 
 /* ================================================================
-   ANIMATED AVATAR (SVG turbulence + glow)
+   ANIMATED AVATAR (SVG turbulence + glow) - Living, breathing AI
    ================================================================ */
 
 type AvatarState = "idle" | "thinking" | "typing";
@@ -198,28 +230,38 @@ function AnimatedAvatar({
   onClick?: () => void;
 }) {
   const filterId = "zaila-distort";
+  const glowFilterId = "zaila-glow";
 
   const config = {
     idle: {
-      baseFrequency: 0.015,
-      scale: 3,
-      glowColor: "rgba(168,85,247,0.35)",
-      glowSize: size * 0.18,
-      animDur: "3s",
+      baseFrequency: 0.012,
+      scale: 2,
+      glowColor: "rgba(168,85,247,0.4)",
+      glowColorAlt: "rgba(232,121,249,0.3)",
+      glowSize: size * 0.2,
+      animDur: "4s",
+      breatheDur: "3.5s",
+      floatDur: "6s",
     },
     thinking: {
-      baseFrequency: 0.04,
-      scale: 8,
-      glowColor: "rgba(99,102,241,0.5)",
-      glowSize: size * 0.25,
-      animDur: "0.7s",
+      baseFrequency: 0.035,
+      scale: 6,
+      glowColor: "rgba(99,102,241,0.6)",
+      glowColorAlt: "rgba(168,85,247,0.5)",
+      glowSize: size * 0.3,
+      animDur: "0.6s",
+      breatheDur: "1s",
+      floatDur: "2s",
     },
     typing: {
-      baseFrequency: 0.025,
-      scale: 5,
-      glowColor: "rgba(232,121,249,0.45)",
-      glowSize: size * 0.22,
-      animDur: "1.2s",
+      baseFrequency: 0.02,
+      scale: 4,
+      glowColor: "rgba(232,121,249,0.55)",
+      glowColorAlt: "rgba(251,146,60,0.4)",
+      glowSize: size * 0.28,
+      animDur: "0.8s",
+      breatheDur: "0.6s",
+      floatDur: "3s",
     },
   }[state];
 
@@ -227,38 +269,90 @@ function AnimatedAvatar({
     <button
       onClick={onClick}
       className="relative cursor-pointer group"
-      style={{ width: size, height: size }}
+      style={{
+        width: size + 20,
+        height: size + 20,
+        // Breathing + floating animation on the container
+        animation: `avatar-breathe ${config.breatheDur} ease-in-out infinite, avatar-float ${config.floatDur} ease-in-out infinite`,
+      }}
       aria-label="Toggle chat"
     >
-      {/* Pulsing glow rings */}
-      {[0, 1, 2].map((i) => (
+      {/* Energy particles floating around */}
+      {[...Array(6)].map((_, i) => (
         <span
-          key={i}
-          className="absolute inset-0 rounded-full pointer-events-none"
+          key={`particle-${i}`}
+          className="absolute rounded-full pointer-events-none"
           style={{
-            border: `1.5px solid ${config.glowColor}`,
-            animation: `chat-pulse ${parseFloat(config.animDur) + i * 0.5}s ease-in-out infinite`,
-            animationDelay: `${i * 0.3}s`,
-            opacity: 0.3 - i * 0.08,
+            width: 3 + (i % 3),
+            height: 3 + (i % 3),
+            background: i % 2 === 0 ? config.glowColor : config.glowColorAlt,
+            left: '50%',
+            top: '50%',
+            animation: `avatar-orbit ${3 + i * 0.7}s linear infinite`,
+            animationDelay: `${i * -0.5}s`,
+            transformOrigin: `${(size / 2) + 5 + i * 4}px 0px`,
+            filter: 'blur(0.5px)',
+            opacity: 0.7,
           }}
         />
       ))}
 
-      {/* Spinning halo */}
+      {/* Outer aura - breathing glow */}
       <span
-        className="absolute -inset-[3px] rounded-full pointer-events-none"
+        className="absolute rounded-full pointer-events-none"
         style={{
-          background: `conic-gradient(from 0deg, transparent 60%, ${config.glowColor} 80%, transparent 100%)`,
-          animation: `spin ${parseFloat(config.animDur) * 2}s linear infinite`,
-          filter: `blur(${size * 0.04}px)`,
+          inset: -8,
+          background: `radial-gradient(circle, ${config.glowColor} 0%, transparent 70%)`,
+          animation: `avatar-aura ${config.breatheDur} ease-in-out infinite`,
+          filter: `blur(${size * 0.08}px)`,
         }}
       />
 
-      {/* Glow backdrop */}
+      {/* Pulsing glow rings */}
+      {[0, 1, 2].map((i) => (
+        <span
+          key={i}
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            inset: 10 - i * 2,
+            border: `1.5px solid ${i % 2 === 0 ? config.glowColor : config.glowColorAlt}`,
+            animation: `chat-pulse ${parseFloat(config.animDur) + i * 0.5}s ease-in-out ${i * 0.3}s infinite`,
+            opacity: 0.4 - i * 0.1,
+          }}
+        />
+      ))}
+
+      {/* Spinning halo - dual layer */}
       <span
-        className="absolute inset-0 rounded-full pointer-events-none transition-all duration-700"
+        className="absolute rounded-full pointer-events-none"
         style={{
-          boxShadow: `0 0 ${config.glowSize}px ${config.glowSize / 2}px ${config.glowColor}`,
+          inset: 7,
+          background: `conic-gradient(from 0deg, transparent 40%, ${config.glowColor} 50%, transparent 60%, transparent 90%, ${config.glowColorAlt} 95%, transparent 100%)`,
+          animation: `spin ${parseFloat(config.animDur) * 1.5}s linear infinite`,
+          filter: `blur(${size * 0.03}px)`,
+        }}
+      />
+      <span
+        className="absolute rounded-full pointer-events-none"
+        style={{
+          inset: 8,
+          background: `conic-gradient(from 180deg, transparent 50%, ${config.glowColorAlt} 60%, transparent 70%)`,
+          animation: `spin ${parseFloat(config.animDur) * 2.5}s linear infinite reverse`,
+          filter: `blur(${size * 0.025}px)`,
+          opacity: 0.6,
+        }}
+      />
+
+      {/* Inner glow backdrop - breathing */}
+      <span
+        className="absolute rounded-full pointer-events-none transition-all duration-500"
+        style={{
+          inset: 10,
+          boxShadow: `
+            0 0 ${config.glowSize}px ${config.glowSize / 2}px ${config.glowColor},
+            inset 0 0 ${config.glowSize / 2}px ${config.glowSize / 4}px ${config.glowColorAlt}
+          `,
+          animation: `avatar-glow-pulse ${config.breatheDur} ease-in-out infinite`,
         }}
       />
 
@@ -268,6 +362,11 @@ function AnimatedAvatar({
         height={size}
         viewBox={`0 0 ${size} ${size}`}
         className="relative z-10 rounded-full"
+        style={{
+          position: 'absolute',
+          left: 10,
+          top: 10,
+        }}
       >
         <defs>
           <clipPath id="avatar-clip">
@@ -277,14 +376,20 @@ function AnimatedAvatar({
             <feTurbulence
               type="turbulence"
               baseFrequency={config.baseFrequency}
-              numOctaves={2}
+              numOctaves={3}
               seed={42}
               result="turbulence"
             >
               <animate
                 attributeName="baseFrequency"
-                values={`${config.baseFrequency};${config.baseFrequency * 1.8};${config.baseFrequency}`}
+                values={`${config.baseFrequency};${config.baseFrequency * 2};${config.baseFrequency * 1.2};${config.baseFrequency}`}
                 dur={config.animDur}
+                repeatCount="indefinite"
+              />
+              <animate
+                attributeName="seed"
+                values="42;57;31;42"
+                dur={parseFloat(config.animDur) * 3 + "s"}
                 repeatCount="indefinite"
               />
             </feTurbulence>
@@ -294,7 +399,22 @@ function AnimatedAvatar({
               scale={config.scale}
               xChannelSelector="R"
               yChannelSelector="G"
-            />
+            >
+              <animate
+                attributeName="scale"
+                values={`${config.scale};${config.scale * 1.5};${config.scale}`}
+                dur={config.animDur}
+                repeatCount="indefinite"
+              />
+            </feDisplacementMap>
+          </filter>
+          {/* Subtle glow filter for the image */}
+          <filter id={glowFilterId}>
+            <feGaussianBlur stdDeviation="0.5" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
           </filter>
         </defs>
         <g clipPath="url(#avatar-clip)" filter={`url(#${filterId})`}>
@@ -305,17 +425,71 @@ function AnimatedAvatar({
             width={size}
             height={size}
             preserveAspectRatio="xMidYMid slice"
+            filter={`url(#${glowFilterId})`}
           />
         </g>
-        {/* Specular highlight */}
+        {/* Animated specular highlights - like eyes catching light */}
         <circle
           cx={size * 0.38}
           cy={size * 0.32}
-          r={size * 0.13}
-          fill="rgba(255,255,255,0.07)"
+          r={size * 0.12}
+          fill="rgba(255,255,255,0.08)"
+          className="pointer-events-none"
+        >
+          <animate
+            attributeName="opacity"
+            values="0.08;0.15;0.08"
+            dur="2s"
+            repeatCount="indefinite"
+          />
+        </circle>
+        <circle
+          cx={size * 0.62}
+          cy={size * 0.35}
+          r={size * 0.06}
+          fill="rgba(255,255,255,0.05)"
+          className="pointer-events-none"
+        >
+          <animate
+            attributeName="opacity"
+            values="0.05;0.12;0.05"
+            dur="2.5s"
+            repeatCount="indefinite"
+          />
+        </circle>
+        {/* Subtle inner shadow for depth */}
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={size / 2 - 2}
+          fill="none"
+          stroke="rgba(0,0,0,0.2)"
+          strokeWidth="4"
+          style={{ filter: 'blur(2px)' }}
           className="pointer-events-none"
         />
       </svg>
+
+      {/* State indicator dot */}
+      <span
+        className="absolute z-20 rounded-full border-2 border-[#0a0a0a]"
+        style={{
+          width: 14,
+          height: 14,
+          bottom: 8,
+          right: 8,
+          background: state === 'typing'
+            ? 'linear-gradient(135deg, #22c55e, #10b981)'
+            : state === 'thinking'
+            ? 'linear-gradient(135deg, #f59e0b, #eab308)'
+            : 'linear-gradient(135deg, #22c55e, #10b981)',
+          animation: state === 'thinking'
+            ? 'avatar-status-pulse 0.8s ease-in-out infinite'
+            : state === 'typing'
+            ? 'avatar-status-pulse 0.4s ease-in-out infinite'
+            : 'none',
+        }}
+      />
     </button>
   );
 }
@@ -357,9 +531,22 @@ export function ChatWidget() {
   const [leadData, setLeadData] = useState<Record<string, string>>({});
   const [hasStarted, setHasStarted] = useState(false);
   const [avatarState, setAvatarState] = useState<AvatarState>("idle");
+  const [conversationPath, setConversationPath] = useState<string[]>([]);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  /* Track conversation analytics */
+  const trackNode = useCallback((nodeKey: string) => {
+    setConversationPath((prev) => {
+      const newPath = [...prev, nodeKey];
+      // Log in development for debugging
+      if (process.env.NODE_ENV === "development") {
+        console.log("[Chat Analytics] Path:", newPath.join(" → "));
+      }
+      return newPath;
+    });
+  }, []);
 
   /* Auto-scroll to bottom */
   useEffect(() => {
@@ -406,12 +593,13 @@ export function ChatWidget() {
     (nodeKey: string) => {
       const node = TREE[nodeKey];
       if (!node) return;
+      trackNode(nodeKey);
       setAvatarState("thinking");
       setTimeout(() => {
         botType(node.message, nodeKey);
       }, 400);
     },
-    [botType]
+    [botType, trackNode]
   );
 
   /* Start conversation on first open */
@@ -448,12 +636,16 @@ export function ChatWidget() {
       const updated = { ...leadData, [node.input.field]: value };
       setLeadData(updated);
 
-      // If we just captured business, submit the lead
+      // If we just captured business, submit the lead with conversation path
       if (node.input.field === "business") {
         fetch("/api/chat-lead", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(updated),
+          body: JSON.stringify({
+            ...updated,
+            conversationPath: conversationPath.join(" → "),
+            capturedAt: new Date().toISOString(),
+          }),
         }).catch(() => {
           /* silent fail — message still shows */
         });
@@ -461,7 +653,7 @@ export function ChatWidget() {
 
       goTo(node.input.next);
     },
-    [currentNode, isTyping, inputValue, leadData, goTo]
+    [currentNode, isTyping, inputValue, leadData, goTo, conversationPath]
   );
 
   const node = TREE[currentNode];
@@ -472,7 +664,40 @@ export function ChatWidget() {
       <style jsx global>{`
         @keyframes chat-pulse {
           0%, 100% { transform: scale(1); opacity: 0.3; }
-          50% { transform: scale(1.15); opacity: 0; }
+          50% { transform: scale(1.18); opacity: 0; }
+        }
+
+        @keyframes avatar-breathe {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.03); }
+        }
+
+        @keyframes avatar-float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-4px); }
+        }
+
+        @keyframes avatar-orbit {
+          0% { transform: rotate(0deg) translateX(0); opacity: 0; }
+          10% { opacity: 0.8; }
+          50% { opacity: 0.4; }
+          90% { opacity: 0.8; }
+          100% { transform: rotate(360deg) translateX(0); opacity: 0; }
+        }
+
+        @keyframes avatar-aura {
+          0%, 100% { transform: scale(1); opacity: 0.4; }
+          50% { transform: scale(1.1); opacity: 0.7; }
+        }
+
+        @keyframes avatar-glow-pulse {
+          0%, 100% { opacity: 0.8; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.02); }
+        }
+
+        @keyframes avatar-status-pulse {
+          0%, 100% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.2); opacity: 0.7; }
         }
       `}</style>
 
@@ -487,6 +712,7 @@ export function ChatWidget() {
               transition={{ duration: 0.3, ease: [0.25, 0.1, 0, 1] }}
               className="w-[360px] max-w-[calc(100vw-3rem)] rounded-2xl border border-white/[0.08] bg-[#0a0a0a]/95 backdrop-blur-xl shadow-2xl overflow-hidden flex flex-col"
               style={{ maxHeight: "min(520px, 70vh)" }}
+              data-lenis-prevent
             >
               {/* Header */}
               <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-white/[0.02]">
@@ -519,6 +745,24 @@ export function ChatWidget() {
               <div
                 ref={scrollRef}
                 className="flex-1 overflow-y-auto p-4 space-y-3 scrollbar-thin"
+                style={{ overscrollBehavior: 'contain', touchAction: 'pan-y' }}
+                onWheel={(e) => {
+                  const el = e.currentTarget;
+                  const isAtTop = el.scrollTop === 0;
+                  const isAtBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
+
+                  // Prevent scroll propagation when not at boundaries, or when scrolling away from boundary
+                  if ((!isAtTop && !isAtBottom) ||
+                      (isAtTop && e.deltaY > 0) ||
+                      (isAtBottom && e.deltaY < 0)) {
+                    e.stopPropagation();
+                  }
+
+                  // Always stop if there's scrollable content
+                  if (el.scrollHeight > el.clientHeight) {
+                    e.stopPropagation();
+                  }
+                }}
               >
                 {messages.map((msg, i) => (
                   <motion.div
