@@ -51,9 +51,9 @@ AI handles the heavy lifting — code generation, optimization, testing — so d
 
 The result? Better sites, built faster, for less.
 
-## Ready to see the difference?
+  ## Ready to see the difference?
 
-[Get a free consultation](/contact) and we'll show you exactly how an AI-powered site would work for your business.`,
+  [Get a free consultation](/contact) and we'll show you exactly how an AI-powered site would work for your business.`,
   },
   {
     slug: "best-websites-hamilton-small-businesses",
@@ -99,9 +99,9 @@ Hamilton customers are savvy. They compare options before committing. Your site 
 - **Clear pricing** or at least pricing ranges
 - **Professional design** that signals you're established and reliable
 
-### 5. Work without constant maintenance
+  ## 5. Work without constant maintenance
 
-Small business owners don't have time to manage a WordPress site, update plugins, and fix security issues. Modern websites on managed platforms like Vercel handle hosting, SSL, CDN, and updates automatically.
+  Small business owners don't have time to manage a WordPress site, update plugins, and fix security issues. Modern websites on managed hosting platforms handle hosting, SSL, CDN, and updates automatically.
 
 ## The bottom line
 
@@ -129,7 +129,7 @@ Here are the 5 most common reasons small business websites lose leads, and exact
 
 **Why it happens:** Heavy images, bloated plugins (looking at you, WordPress), cheap shared hosting, and render-blocking scripts.
 
-**The fix:** Move to a modern framework (Next.js, Astro) on edge hosting (Vercel, Netlify). Optimize images to WebP/AVIF. Remove unnecessary plugins. Target under 2 seconds on mobile.
+  **The fix:** Move to a modern framework (Next.js, Astro) on edge hosting platforms. Optimize images to WebP/AVIF. Remove unnecessary plugins. Target under 2 seconds on mobile.
 
 ### 2. It's not mobile-first
 

@@ -82,11 +82,68 @@ const jsonLd = {
       publisher: { "@id": "https://zailai.com/#business" },
     },
     {
+      "@type": "ItemList",
+      "@id": "https://zailai.com/#nav",
+      name: "Main Navigation",
+      itemListElement: [
+        {
+          "@type": "SiteNavigationElement",
+          position: 1,
+          name: "Home",
+          description:
+            "AI-powered websites for Hamilton small businesses",
+          url: "https://zailai.com",
+        },
+        {
+          "@type": "SiteNavigationElement",
+          position: 2,
+          name: "Services",
+          description:
+            "AI web design, chatbots, automation, and local SEO services",
+          url: "https://zailai.com/#services",
+        },
+        {
+          "@type": "SiteNavigationElement",
+          position: 3,
+          name: "Pricing",
+          description: "Website build packages starting at $899",
+          url: "https://zailai.com/pricing",
+        },
+        {
+          "@type": "SiteNavigationElement",
+          position: 4,
+          name: "Blog",
+          description:
+            "AI and web design insights for small businesses",
+          url: "https://zailai.com/blog",
+        },
+        {
+          "@type": "SiteNavigationElement",
+          position: 5,
+          name: "Growth Stories",
+          description: "Real client results and case studies",
+          url: "https://zailai.com/growth-stories",
+        },
+        {
+          "@type": "SiteNavigationElement",
+          position: 6,
+          name: "Contact",
+          description: "Start your project with Zaila AI Designs",
+          url: "https://zailai.com/contact",
+        },
+      ],
+    },
+    {
       "@type": "LocalBusiness",
       "@id": "https://zailai.com/#business",
       name: "Zaila AI Designs",
       url: "https://zailai.com",
       email: "zailaaidesigns@gmail.com",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://zailai.com/logo.png",
+      },
+      image: "https://zailai.com/logo.png",
       description:
         "AI-powered web design and automation agency serving Hamilton and Ontario small businesses. Websites that launch in days, not months.",
       address: {

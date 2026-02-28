@@ -8,8 +8,13 @@ const plans = [
     name: "Launch Care",
     price: "$49",
     period: "/mo",
-    desc: "Light support for simple sites",
-    items: ["3 revisions/month", "Minor content updates", "72-hour response"],
+    desc: "Hosting, support & light updates",
+    items: [
+      "Managed hosting on a global edge network — SSL & CDN included",
+      "3 revisions/month",
+      "Minor content updates",
+      "72-hour response",
+    ],
     highlight: false,
   },
   {
@@ -18,35 +23,24 @@ const plans = [
     period: "/mo",
     desc: "Best for most businesses",
     items: [
+      "Everything in Launch",
       "Up to 9 revisions/month",
       "Priority queue",
-      "Performance checks",
+      "Performance checks & SEO monitoring",
       "Monthly report",
     ],
     highlight: true,
   },
   {
-    name: "Pro Care",
-    price: "$199",
-    period: "/mo",
-    desc: "For active, growing brands",
-    items: [
-      "Up to 15 revisions/month",
-      "Monthly optimization",
-      "36-hour response",
-      "SEO monitoring",
-    ],
-    highlight: false,
-  },
-  {
-    name: "Platinum AI Care",
+    name: "Partner Care",
     price: "$399",
     period: "/mo",
-    desc: "For power users (fair use)",
+    desc: "Your dedicated growth partner",
     items: [
+      "Everything in Growth",
       "Unlimited revisions (fair use)",
       "24-hour response",
-      "Monthly strategy session",
+      "Monthly optimization & strategy session",
       "AI feature upgrades",
     ],
     highlight: false,
@@ -57,7 +51,7 @@ export function CarePlans() {
   const ref = useReveal();
 
   return (
-    <div ref={ref} className="grid gap-4 md:grid-cols-2">
+    <div ref={ref} className="grid gap-4 md:grid-cols-3">
       {plans.map((p, i) => (
         <div
           key={p.name}

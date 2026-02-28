@@ -7,7 +7,7 @@ import { CarePlans } from "@/components/care-plans";
 export const metadata: Metadata = {
   title: "Pricing — AI Websites from $499 | Zaila AI Designs",
   description:
-    "Transparent pricing for AI-powered websites. Starter from $499, Growth from $699, Smart AI from $999. Monthly growth plans from $49/mo. No contracts.",
+    "Transparent pricing for AI-powered websites. Starter from $499, Growth from $899, Smart AI from $1,499. Monthly care plans from $49/mo. No contracts.",
   alternates: { canonical: "https://zailai.com/pricing" },
   openGraph: {
     title: "Pricing — AI Websites from $499 | Zaila AI Designs",
@@ -32,9 +32,9 @@ export default function PricingPage() {
 
       <div className="mt-24">
         <SectionHeading
-          eyebrow="Growth Plans"
-          title="AI Growth Plans"
-          description="Ongoing updates and optimization. Upgrade anytime."
+          eyebrow="Care Plans"
+          title="AI Care Plans"
+          description="Hosting, updates, and optimization included. All builds require a Care Plan."
         />
         <div className="mt-10">
           <CarePlans />

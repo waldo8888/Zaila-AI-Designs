@@ -36,7 +36,7 @@ const steps = [
     title: "Launch",
     subtitle: "Day 4",
     description:
-      "Your site goes live on Vercel with blazing performance, custom domain, SSL, and analytics — all set up.",
+      "Your site goes live on a modern hosting platform with blazing performance, custom domain, SSL, and analytics — all set up.",
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <path d="M12 2v20" />

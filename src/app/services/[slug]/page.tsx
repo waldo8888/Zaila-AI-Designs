@@ -23,6 +23,14 @@ export function generateMetadata({
         title: page.metaTitle,
         description: page.metaDescription,
         url: `https://zailai.com/services/${page.slug}`,
+        images: [
+          {
+            url: "/logo.png",
+            width: 1200,
+            height: 630,
+            alt: page.metaTitle,
+          },
+        ],
       },
     };
   });
@@ -43,20 +51,21 @@ export default async function LocalServicePage({
     "@type": "Service",
     name: page.title,
     description: page.metaDescription,
-    provider: {
-      "@type": "LocalBusiness",
-      name: "Zaila AI Designs",
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Hamilton",
-        addressRegion: "ON",
-        addressCountry: "CA",
-      },
-    },
+    provider: { "@id": "https://zailai.com/#business" },
     areaServed: {
       "@type": "AdministrativeArea",
       name: "Ontario",
     },
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://zailai.com" },
+      { "@type": "ListItem", position: 2, name: "Services", item: "https://zailai.com/services" },
+      { "@type": "ListItem", position: 3, name: page.title, item: `https://zailai.com/services/${page.slug}` },
+    ],
   };
 
   const faqJsonLd = {
@@ -77,6 +86,10 @@ export default async function LocalServicePage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <script
         type="application/ld+json"

@@ -114,7 +114,7 @@ const TREE: Record<string, TreeNode> = {
   /* --- Pricing branch --- */
   pricing: {
     message:
-      "Our websites start at $499 one-time — no subscriptions required. Optional monthly care plans from $49/mo keep your site fresh and supported. Want the details?",
+      "Our websites start at **$499** with monthly Care Plans from **$49/mo** that include hosting, updates, and support. Want the details?",
     options: [
       { label: "See pricing breakdown", next: "pricing_breakdown" },
       { label: "Get a custom quote", next: "capture_name" },
@@ -123,7 +123,7 @@ const TREE: Record<string, TreeNode> = {
   },
   pricing_breakdown: {
     message:
-      "Here's how it works:\n\n• Starter: $499 (1-3 pages)\n• Growth: $699 (chatbot + booking)\n• Smart: $999+ (payments + automation)\n\nOptional Care Plans: $49–$399/mo for updates and support.",
+      "Here's how it works:\n\n• Starter: **$499** (1-3 pages)\n• Growth: **$899** (chatbot + booking)\n• Smart: **$1,499+** (payments + automation)\n\nCare Plans: **$49–$399/mo** for hosting, updates, and support.",
     options: [
       { label: "Get a custom quote", next: "capture_name" },
       { label: "What's the timeline?", next: "timeline" },
@@ -140,7 +140,7 @@ const TREE: Record<string, TreeNode> = {
   },
   whats_included: {
     message:
-      "All sites include: custom design, mobile-first dev, SEO, performance tuning, hosting, and SSL. Analytics included from Growth tier up. Ongoing support available via Care Plans ($49–$199/mo).",
+      "All sites include: custom design, mobile-first dev, SEO, performance tuning, managed hosting on a global edge network (SSL, CDN, and monitoring included). Analytics included from Growth tier up. Ongoing support via Care Plans ($49–$399/mo).",
     options: [
       { label: "Let's do it", next: "capture_name" },
       { label: "See our work", next: "portfolio" },

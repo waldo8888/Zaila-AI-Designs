@@ -53,7 +53,7 @@ export const localPages: LocalPage[] = [
     faq: [
       {
         q: "How much does a website cost in Hamilton?",
-        a: "Traditional Hamilton agencies charge $3K–$15K. Our AI-powered websites start at $499 for a Starter site and $699 for a full Growth site with booking, chatbot, and social proof.",
+        a: "Traditional Hamilton agencies charge $3K–$15K. Our AI-powered websites start at $499 for a Starter site and $899 for a full Growth site with booking, chatbot, and social proof.",
       },
       {
         q: "How fast can you build my website?",
@@ -74,13 +74,13 @@ export const localPages: LocalPage[] = [
     metaTitle:
       "Next.js Website Development Hamilton — Modern Web Apps | Zaila AI Designs",
     metaDescription:
-      "Custom Next.js website development in Hamilton. Blazing fast React sites with server-side rendering, SEO optimization, and Vercel hosting. From $499.",
+      "Custom Next.js website development in Hamilton. Blazing fast React sites with server-side rendering, SEO optimization, and managed hosting on a global edge network. From $499.",
     title: "Next.js Websites Hamilton",
     h1: "Next.js Website Development in Hamilton",
     subtitle:
       "Enterprise-grade technology, small business pricing.",
     intro:
-      "Next.js is the framework behind Vercel, Netflix, Nike, and Notion. We bring that same technology to Hamilton businesses — blazing fast React websites with server-side rendering, automatic SEO optimization, and edge deployment. No WordPress bloat. No slow loading. Just modern web technology that works.",
+      "Next.js is the framework used by companies like Netflix, Nike, and Notion. We bring that same technology to Hamilton businesses — blazing fast React websites with server-side rendering, automatic SEO optimization, and edge deployment. No WordPress bloat. No slow loading. Just modern web technology that works.",
     features: [
       {
         title: "React + Next.js architecture",
@@ -88,9 +88,9 @@ export const localPages: LocalPage[] = [
           "Server-side rendering, static generation, and edge functions deliver sub-second page loads. Your site runs on the same stack used by Fortune 500 companies.",
       },
       {
-        title: "Vercel edge hosting",
+        title: "Edge hosting",
         description:
-          "Deployed on Vercel's global edge network — your Hamilton customers get near-instant load times, and so does everyone else. Built-in SSL, CDN, and 99.99% uptime.",
+          "Deployed on a global edge network — your Hamilton customers get near-instant load times, and so does everyone else. Built-in SSL, CDN, and 99.99% uptime.",
       },
       {
         title: "SEO that works",
@@ -100,7 +100,7 @@ export const localPages: LocalPage[] = [
       {
         title: "No WordPress headaches",
         description:
-          "No plugins to update, no security patches, no database management. A Next.js site on Vercel is secure, fast, and maintenance-free by default.",
+          "No plugins to update, no security patches, no database management. A Next.js site on modern hosting is secure, fast, and maintenance-free by default.",
       },
     ],
     stats: [
@@ -112,7 +112,7 @@ export const localPages: LocalPage[] = [
     faq: [
       {
         q: "What is Next.js?",
-        a: "Next.js is a React framework built by Vercel. It's the most popular framework for modern websites, used by companies like Netflix, Nike, and Notion. It provides server-side rendering, automatic code splitting, and optimization out of the box.",
+        a: "Next.js is a React framework. It's the most popular framework for modern websites, used by companies like Netflix, Nike, and Notion. It provides server-side rendering, automatic code splitting, and optimization out of the box.",
       },
       {
         q: "Why Next.js instead of WordPress?",
@@ -124,7 +124,7 @@ export const localPages: LocalPage[] = [
       },
       {
         q: "Will my site be hard to maintain?",
-        a: "The opposite. Next.js on Vercel handles hosting, SSL, CDN, and deployments automatically. There are no servers to manage and no plugins to update.",
+        a: "The opposite. Modern Next.js hosting platforms handle hosting, SSL, CDN, and deployments automatically. There are no servers to manage and no plugins to update.",
       },
     ],
   },
@@ -183,6 +183,65 @@ export const localPages: LocalPage[] = [
       {
         q: "What if the chatbot can't answer a question?",
         a: "It gracefully hands off to you — capturing the visitor's info and question so you can follow up personally. No leads slip through the cracks.",
+      },
+    ],
+  },
+  {
+    slug: "local-seo-hamilton",
+    metaTitle:
+      "Local SEO Hamilton — Dominate Google Maps & Near-Me Searches | Zaila",
+    metaDescription:
+      "Local SEO for Hamilton service businesses. Google Business Profile optimization, local schema markup, service area pages. From $1,499.",
+    title: "Local SEO Hamilton",
+    h1: "Local SEO for Hamilton Businesses",
+    subtitle:
+      "Show up when Hamilton searches for what you do.",
+    intro:
+      "If you're a plumber, contractor, dentist, or lawyer in Hamilton, your next customer is searching \"near me\" right now. Our Local Authority package combines a blazing-fast Next.js website with advanced local SEO — Google Business Profile optimization, service area pages, and schema markup — so you rank where it matters most: the top of Google Maps and local search results.",
+    features: [
+      {
+        title: "Google Business Profile optimization",
+        description:
+          "Full setup and optimization of your profile — keyword-rich descriptions, primary and secondary category selection, photos, and verification assistance to maximize visibility in Google Maps.",
+      },
+      {
+        title: "High-intent service area pages",
+        description:
+          "Up to 5 unique pages targeting specific cities (e.g., \"Plumbing in Hamilton,\" \"HVAC in Burlington\"). Each uses localized keywords, landmark mentions, and city-specific content to rank even without a physical storefront.",
+      },
+      {
+        title: "Local schema markup",
+        description:
+          "Structured data code (JSON-LD) that translates your business details directly for Google — making you eligible for rich snippets like star ratings, hours, and service areas in search results.",
+      },
+      {
+        title: "NAP consistency audit",
+        description:
+          "We ensure your Name, Address, and Phone number are 100% consistent across the web — directories, social profiles, and listings — to build trust with Google's ranking algorithm.",
+      },
+    ],
+    stats: [
+      { value: "$1,499", label: "Starting price" },
+      { value: "5+", label: "City pages" },
+      { value: "Top 3", label: "Local rank goal" },
+      { value: "$0", label: "Contracts" },
+    ],
+    faq: [
+      {
+        q: "How much does local SEO cost in Hamilton?",
+        a: "Our Local Authority package starts at $1,499 and includes Google Business Profile optimization, 5 service area pages, local schema markup, and a NAP audit. Traditional SEO agencies charge $6,000–$10,000+ for the same scope.",
+      },
+      {
+        q: "How long until I rank on Google Maps?",
+        a: "Most businesses see measurable improvement in local rankings within 4–8 weeks. Competitive niches may take longer, but the service area pages start indexing within days of launch.",
+      },
+      {
+        q: "Do I need a website first?",
+        a: "The Local Authority package includes a full website build — you don't need an existing site. If you already have one, we'll rebuild it on Next.js for maximum performance and integrate the local SEO elements.",
+      },
+      {
+        q: "What areas can you target beyond Hamilton?",
+        a: "We can target any city or region in Ontario — Burlington, Stoney Creek, Ancaster, Dundas, Oakville, and more. Each service area page is custom-written for that specific location.",
       },
     ],
   },

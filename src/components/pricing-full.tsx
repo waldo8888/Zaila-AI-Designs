@@ -8,7 +8,7 @@ const rows: [string, boolean, boolean, boolean][] = [
   ["Mobile-first design", true, true, true],
   ["Contact form", true, true, true],
   ["Basic SEO setup", true, true, true],
-  ["Vercel deployment", true, true, true],
+  ["Edge deployment", true, true, true],
   ["Booking integration", false, true, true],
   ["AI chatbot (basic)", false, true, true],
   ["Reviews + social proof", false, true, true],
@@ -63,7 +63,7 @@ export function PricingFull() {
                 POPULAR
               </span>
             </div>
-            <div className="mt-3 text-4xl font-bold tracking-tight">$699</div>
+            <div className="mt-3 text-4xl font-bold tracking-tight">$899</div>
             <div className="mt-1 text-sm text-zinc-400">
               Booking + chatbot + social proof.
             </div>
@@ -79,9 +79,9 @@ export function PricingFull() {
         <HolographicCard className="rounded-3xl">
           <Card className="p-6">
             <div className="text-lg font-semibold">Smart AI Website</div>
-            <div className="mt-3 text-4xl font-bold tracking-tight">$999+</div>
+            <div className="mt-3 text-4xl font-bold tracking-tight">$1,499+</div>
             <div className="mt-1 text-sm text-zinc-400">
-              Payments + integrations + automation.
+              Payments + integrations + advanced automation.
             </div>
             <Link
               href="/contact"
@@ -126,6 +126,9 @@ export function PricingFull() {
         <div className="mt-4 text-xs text-zinc-400">
           Add-ons available anytime: payments, mini store, streaming, advanced
           API integrations.
+        </div>
+        <div className="mt-3 text-xs text-zinc-500">
+          All sites include managed hosting on a global edge network (SSL, CDN, and monitoring included) through our Care Plans. Launch Care ($49/mo) minimum required.
         </div>
       </Card>
     </div>

@@ -62,9 +62,9 @@ export default function PrivacyPolicyPage() {
             information only with the following third-party service providers who assist us
             in operating our business:
           </p>
-          <ul className="mt-3 list-disc space-y-1 pl-5 text-zinc-400">
+            <ul className="mt-3 list-disc space-y-1 pl-5 text-zinc-400">
             <li><strong className="text-zinc-300">Resend</strong> — email delivery service used to receive your contact form submissions</li>
-            <li><strong className="text-zinc-300">Vercel</strong> — website hosting provider</li>
+            <li><strong className="text-zinc-300">Hosting provider</strong> — website hosting and CDN provider used to deliver the site</li>
           </ul>
           <p className="mt-3">
             These providers are contractually obligated to protect your data and may only

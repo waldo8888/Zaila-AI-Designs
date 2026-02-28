@@ -76,7 +76,7 @@ export default function TermsPage() {
         <section>
           <h2 className="text-lg font-semibold text-white">7. Hosting and Third-Party Services</h2>
           <p className="mt-2">
-            Websites are typically deployed on Vercel. While we assist with deployment,
+            Websites are typically deployed on a modern hosting platform that provides CDN, SSL, and edge delivery. While we assist with deployment,
             you are responsible for maintaining your own accounts with third-party services
             (hosting, domain registrar, email providers, etc.). We are not liable for
             outages or changes caused by third-party providers.
