@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { KineticHeading } from "@/components/ui/split-text";
 
 const steps = [
   {
@@ -91,15 +92,13 @@ export function ProcessSection() {
           >
             How it works
           </motion.p>
-          <motion.h2
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
+          <KineticHeading
+            as="h2"
+            delay={0.1}
             className="text-[clamp(2rem,5vw,4rem)] font-semibold text-white tracking-[-0.03em] mb-6"
           >
-            Idea to launch in <span className="text-gradient">days</span>
-          </motion.h2>
+            {`Idea to launch in `}<span className="text-gradient">days</span>
+          </KineticHeading>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

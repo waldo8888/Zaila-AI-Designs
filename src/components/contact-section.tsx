@@ -3,6 +3,8 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useState, useRef } from "react";
 import { submitContactForm } from "@/app/actions";
+import { KineticHeading } from "@/components/ui/split-text";
+import { useMagnetic } from "@/hooks/use-magnetic";
 
 export function ContactSection() {
   const [submitted, setSubmitted] = useState(false);
@@ -11,6 +13,7 @@ export function ContactSection() {
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [filledFields, setFilledFields] = useState<Set<string>>(new Set());
   const containerRef = useRef<HTMLDivElement>(null);
+  const magneticSubmit = useMagnetic(0.25, 80);
 
   function isFieldActive(name: string) {
     return focusedField === name || filledFields.has(name);
@@ -71,9 +74,13 @@ export function ContactSection() {
             <p className="text-[11px] uppercase tracking-[0.3em] text-zinc-400 mb-6">
               Get started
             </p>
-            <h2 className="text-[clamp(2.5rem,6vw,5rem)] font-semibold leading-[0.95] tracking-[-0.04em] text-white mb-6">
+            <KineticHeading
+              as="h2"
+              delay={0.15}
+              className="text-[clamp(2.5rem,6vw,5rem)] font-semibold leading-[0.95] tracking-[-0.04em] text-white mb-6"
+            >
               Ready to <span className="text-gradient">launch</span>?
-            </h2>
+            </KineticHeading>
             <p className="max-w-xl mx-auto text-[18px] leading-[1.8] text-zinc-400">
               Tell us what you need — we&apos;ll respond with a simple plan and a clear price. No contracts, no surprises.
             </p>
@@ -322,7 +329,9 @@ export function ContactSection() {
                   </div>
                 </div>
 
-                <button
+                <motion.button
+                  ref={magneticSubmit.ref as React.RefObject<HTMLButtonElement>}
+                  style={magneticSubmit.style}
                   type="submit"
                   disabled={loading}
                   className="group relative mt-12 w-full overflow-hidden rounded-full bg-white px-8 py-5 text-[15px] font-medium text-black transition-all duration-500 hover:shadow-[0_20px_60px_-15px_rgba(255,255,255,0.3)] disabled:opacity-60"
@@ -348,7 +357,7 @@ export function ContactSection() {
                     )}
                   </span>
                   <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-200 to-violet-200 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                </button>
+                </motion.button>
 
                 {error && (
                   <p className="mt-4 text-center text-[14px] text-red-400">{error}</p>

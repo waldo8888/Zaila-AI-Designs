@@ -67,10 +67,17 @@ function randomPositions(count: number, radius: number): Float32Array {
 // ─── component ─────────────────────────────────────────────────────
 export function LoadingScreen() {
     const containerRef = useRef<HTMLDivElement>(null);
-    const [visible, setVisible] = useState(true);
+    // Skip the loading screen if the user already navigated within the site this session.
+    // The flag is set below after the first external/direct visit completes.
+    const [visible, setVisible] = useState(() => {
+        if (typeof window === "undefined") return true;
+        return !sessionStorage.getItem("zaila_site_visited");
+    });
     const [fading, setFading] = useState(false);
 
     const startFadeOut = useCallback(() => {
+        // Mark that the user has now visited the site so internal navigations skip this screen.
+        sessionStorage.setItem("zaila_site_visited", "true");
         setFading(true);
         setTimeout(() => {
             setVisible(false);
@@ -79,7 +86,7 @@ export function LoadingScreen() {
 
     useEffect(() => {
         const container = containerRef.current;
-        if (!container) return;
+        if (!container || !visible) return;
 
         // ─── Mobile detection & responsive settings ──────────────────
         const isMobile = window.innerWidth < 768;

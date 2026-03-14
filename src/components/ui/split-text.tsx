@@ -1,7 +1,52 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 import { useInViewport } from "@/hooks/use-scroll-animation";
+
+// Awwwards-level clip-path line reveal heading
+// Each line slides up from behind an overflow:hidden mask — the "uncovering" metaphor
+export function KineticHeading({
+  children,
+  className = "",
+  delay = 0,
+  as: Tag = "h2",
+}: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+  as?: "h1" | "h2" | "h3" | "h4" | "p";
+}) {
+  const ref = useRef<HTMLElement>(null);
+  const isInView = useInView(ref as React.RefObject<Element>, { once: true, margin: "-80px" });
+
+  // Split string children into lines on \n, otherwise treat as single line
+  const lines: React.ReactNode[] =
+    typeof children === "string"
+      ? children.split("\n")
+      : [children];
+
+  return (
+    <Tag ref={ref as React.RefObject<HTMLHeadingElement & HTMLParagraphElement>} className={className}>
+      {lines.map((line, i) => (
+        <span key={i} className="block overflow-hidden leading-[1.1]">
+          <motion.span
+            className="block"
+            initial={{ y: "110%" }}
+            animate={isInView ? { y: 0 } : { y: "110%" }}
+            transition={{
+              duration: 0.9,
+              delay: delay + i * 0.12,
+              ease: [0.76, 0, 0.24, 1],
+            }}
+          >
+            {line}
+          </motion.span>
+        </span>
+      ))}
+    </Tag>
+  );
+}
 
 interface SplitTextProps {
   children: string;

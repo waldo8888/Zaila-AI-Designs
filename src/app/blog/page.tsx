@@ -20,6 +20,7 @@ const categoryColors: Record<string, string> = {
   "AI & Web Design": "text-fuchsia-400 bg-fuchsia-500/10",
   "Local Business": "text-violet-400 bg-violet-500/10",
   Conversion: "text-cyan-400 bg-cyan-500/10",
+  "Local SEO": "text-emerald-400 bg-emerald-500/10",
 };
 
 export default function BlogPage() {

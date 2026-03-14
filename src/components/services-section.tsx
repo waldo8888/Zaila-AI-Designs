@@ -199,9 +199,16 @@ function ServiceCard({
     [0.5, 1, 0.5]
   );
 
+  const clipPathReveal = useTransform(
+    scrollProgress,
+    [Math.max(0, center - halfSpan * 0.8), center],
+    ["inset(0 100% 0 0 round 24px)", "inset(0 0% 0 0 round 24px)"]
+  );
+
   return (
     <motion.div
       style={{ scale, opacity }}
+      data-cursor="view"
       className="flex-shrink-0 w-screen h-screen flex items-center justify-center px-6 md:px-24"
     >
       <div className="w-full max-w-4xl">
@@ -229,18 +236,21 @@ function ServiceCard({
             </div>
           </div>
 
-          {/* Right - Neural Network Visual */}
+          {/* Right - Neural Network Visual with clip-path reveal */}
           <div>
-            <div
+            <motion.div
+              style={{
+                clipPath: clipPathReveal,
+                backgroundColor: "#0a0a12",
+              }}
               className="aspect-[4/3] md:aspect-square rounded-3xl border border-white/[0.05] relative overflow-hidden isolate"
-              style={{ backgroundColor: "#0a0a12" }}
             >
               {/* Subtle gradient overlay */}
               <div
                 className={`absolute inset-0 bg-gradient-to-br ${service.gradient} pointer-events-none`}
               />
               <ServicesNetwork activeNodeIndex={index} />
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>

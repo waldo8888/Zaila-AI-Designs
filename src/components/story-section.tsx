@@ -1,7 +1,8 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 import { useRef } from "react";
+import { KineticHeading } from "@/components/ui/split-text";
 
 const storyPoints = [
   {
@@ -152,7 +153,10 @@ function StorySlide({
           </motion.div>
 
           {/* Title */}
-          <h2 className="mb-8 text-[clamp(2rem,5vw,4rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white">
+          <KineticHeading
+            as="h2"
+            className="mb-8 text-[clamp(2rem,5vw,4rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white"
+          >
             {point.title.split(point.highlight).map((part, i, arr) => (
               <span key={i}>
                 {part}
@@ -161,7 +165,7 @@ function StorySlide({
                 )}
               </span>
             ))}
-          </h2>
+          </KineticHeading>
 
           {/* Description */}
           <p className="max-w-xl text-[18px] leading-[1.8] text-zinc-400">
@@ -181,21 +185,53 @@ function StorySlide({
           </div>
         </div>
 
-        {/* Right - Stats panel */}
+        {/* Right - Stats panel with clip-path reveals */}
         <div className="hidden md:flex flex-col gap-4">
           {point.stats.map((stat, i) => (
-            <div
+            <StoryStatCard
               key={i}
-              className={`glass-card rounded-2xl p-6 bg-gradient-to-br ${accent.split(" ").slice(0, 2).join(" ")} border ${accent.split(" ")[2]}`}
-            >
-              <div className={`text-[32px] font-bold leading-none mb-1 ${accent.split(" ").slice(-1)[0]}`}>
-                {stat.value}
-              </div>
-              <div className="text-[13px] text-zinc-400">{stat.label}</div>
-            </div>
+              stat={stat}
+              index={i}
+              slideOpacity={opacity}
+              accent={accent}
+            />
           ))}
         </div>
       </div>
+    </motion.div>
+  );
+}
+
+function StoryStatCard({
+  stat,
+  index,
+  slideOpacity,
+  accent,
+}: {
+  stat: { value: string; label: string };
+  index: number;
+  slideOpacity: MotionValue<number>;
+  accent: string;
+}) {
+  const clipPath = useTransform(
+    slideOpacity,
+    [0, 0.55, 1],
+    [
+      "inset(0 100% 0 0 round 16px)",
+      "inset(0 100% 0 0 round 16px)",
+      "inset(0 0% 0 0 round 16px)",
+    ]
+  );
+
+  return (
+    <motion.div
+      style={{ clipPath, transitionDelay: `${index * 0.08}s` }}
+      className={`glass-card rounded-2xl p-6 bg-gradient-to-br ${accent.split(" ").slice(0, 2).join(" ")} border ${accent.split(" ")[2]}`}
+    >
+      <div className={`text-[32px] font-bold leading-none mb-1 ${accent.split(" ").slice(-1)[0]}`}>
+        {stat.value}
+      </div>
+      <div className="text-[13px] text-zinc-400">{stat.label}</div>
     </motion.div>
   );
 }

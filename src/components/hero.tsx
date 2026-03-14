@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useSyncExternalStore } from "react";
 import { useSmoothScrollTo } from "@/hooks/use-scroll-animation";
+import { useMagnetic } from "@/hooks/use-magnetic";
 
 const subscribe = () => () => { };
 
@@ -10,6 +11,7 @@ export function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const mounted = useSyncExternalStore(subscribe, () => true, () => false);
   const scrollTo = useSmoothScrollTo();
+  const magneticCta = useMagnetic(0.3, 90);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -85,13 +87,15 @@ export function Hero() {
           animate={mounted ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1.2, delay: 0.9, ease: [0.25, 0.1, 0, 1] }}
         >
-          <button
+          <motion.button
+            ref={magneticCta.ref as React.RefObject<HTMLButtonElement>}
+            style={magneticCta.style}
             onClick={() => scrollTo("contact")}
             className="group relative overflow-hidden rounded-full bg-white px-10 py-4 text-[15px] font-medium text-black transition-all duration-500 hover:shadow-[0_20px_60px_-15px_rgba(255,255,255,0.3)]"
           >
             <span className="relative z-10">Start a Project</span>
             <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-200 to-violet-200 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-          </button>
+          </motion.button>
         </motion.div>
       </motion.div>
 

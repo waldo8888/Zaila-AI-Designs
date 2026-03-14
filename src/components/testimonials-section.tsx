@@ -68,6 +68,7 @@ export function TestimonialsSection() {
     <section
       id="testimonials"
       ref={containerRef}
+      data-cursor="drag"
       className="relative min-h-screen flex items-center justify-center py-32 px-6"
     >
       {/* Background gradients */}
