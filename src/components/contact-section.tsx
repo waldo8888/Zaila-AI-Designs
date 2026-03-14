@@ -79,8 +79,8 @@ export function ContactSection() {
             </p>
             <p className="mt-4 text-[14px] text-zinc-400">
               Or email us directly at{" "}
-              <a href="mailto:zailaaidesigns@gmail.com" className="text-fuchsia-400/80 hover:text-fuchsia-400 transition-colors">
-                zailaaidesigns@gmail.com
+              <a href="mailto:hello@zailaaidesigns.com" className="text-fuchsia-400/80 hover:text-fuchsia-400 transition-colors">
+                hello@zailaaidesigns.com
               </a>
             </p>
           </motion.div>
@@ -150,14 +150,14 @@ export function ContactSection() {
             {/* Contact details */}
             <div className="space-y-4 border-t border-white/[0.05] pt-8">
               <a
-                href="mailto:zailaaidesigns@gmail.com"
+                href="mailto:hello@zailaaidesigns.com"
                 className="flex items-center gap-4 text-zinc-400 hover:text-white transition-colors"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                   <rect x="3" y="5" width="18" height="14" rx="2" />
                   <path d="M3 7l9 6 9-6" />
                 </svg>
-                <span className="text-[15px]">zailaaidesigns@gmail.com</span>
+                <span className="text-[15px]">hello@zailaaidesigns.com</span>
               </a>
               <div className="flex items-center gap-4 text-zinc-400">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">

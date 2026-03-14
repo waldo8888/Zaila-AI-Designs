@@ -138,7 +138,7 @@ const jsonLd = {
       "@id": "https://zailai.com/#business",
       name: "Zaila AI Designs",
       url: "https://zailai.com",
-      email: "zailaaidesigns@gmail.com",
+      email: "hello@zailaaidesigns.com",
       logo: {
         "@type": "ImageObject",
         url: "https://zailai.com/logo.png",

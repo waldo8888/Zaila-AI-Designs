@@ -135,8 +135,8 @@ export default function PrivacyPolicyPage() {
           <p className="mt-3 text-zinc-400">
             Zaila AI Designs<br />
             Hamilton, Ontario, Canada<br />
-            <a href="mailto:zailaaidesigns@gmail.com" className="text-fuchsia-400 hover:underline">
-              zailaaidesigns@gmail.com
+            <a href="mailto:hello@zailaaidesigns.com" className="text-fuchsia-400 hover:underline">
+              hello@zailaaidesigns.com
             </a>
           </p>
         </section>
