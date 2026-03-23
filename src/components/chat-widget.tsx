@@ -14,6 +14,8 @@ interface TreeNode {
   input?: { placeholder: string; next: string; field: "name" | "email" | "business" };
 }
 
+type ChatMode = "tree" | "ai";
+
 const TREE: Record<string, TreeNode> = {
   start: {
     message:
@@ -23,6 +25,7 @@ const TREE: Record<string, TreeNode> = {
       { label: "I'm interested in an AI chatbot", next: "chatbot" },
       { label: "I want to see pricing", next: "pricing" },
       { label: "Just browsing", next: "browsing" },
+      { label: "Ask me anything", next: "__ai_mode__" },
     ],
   },
 
@@ -532,6 +535,9 @@ export function ChatWidget() {
   const [hasStarted, setHasStarted] = useState(false);
   const [avatarState, setAvatarState] = useState<AvatarState>("idle");
   const [conversationPath, setConversationPath] = useState<string[]>([]);
+  const [chatMode, setChatMode] = useState<ChatMode>("tree");
+  const [aiInput, setAiInput] = useState("");
+  const [aiHistory, setAiHistory] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -612,11 +618,92 @@ export function ChatWidget() {
     }
   }, [hasStarted, botType]);
 
+  /* Send a free-text message to the AI */
+  const sendAiMessage = useCallback(
+    async (text: string) => {
+      if (!text.trim() || isTyping) return;
+
+      setMessages((prev) => [...prev, { from: "user", text }]);
+      setAiInput("");
+      setIsTyping(true);
+      setAvatarState("thinking");
+
+      const newHistory = [...aiHistory, { role: "user" as const, content: text }];
+
+      try {
+        const res = await fetch("/api/chat-ai", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text, history: aiHistory }),
+        });
+
+        const data = await res.json();
+        const reply = data.reply || data.error || "Sorry, something went wrong. Try again!";
+
+        setAiHistory([...newHistory, { role: "assistant", content: reply }]);
+
+        // Type out the AI response character-by-character
+        setAvatarState("typing");
+        let i = 0;
+        const partial: Message = { from: "bot", text: "" };
+        setMessages((prev) => [...prev, partial]);
+
+        const interval = setInterval(() => {
+          i++;
+          setMessages((prev) => {
+            const copy = [...prev];
+            copy[copy.length - 1] = { from: "bot", text: reply.slice(0, i) };
+            return copy;
+          });
+          if (i >= reply.length) {
+            clearInterval(interval);
+            setIsTyping(false);
+            setAvatarState("idle");
+          }
+        }, 14);
+      } catch {
+        setMessages((prev) => [
+          ...prev,
+          { from: "bot", text: "Oops — I had trouble connecting. Try again in a moment!" },
+        ]);
+        setIsTyping(false);
+        setAvatarState("idle");
+      }
+    },
+    [isTyping, aiHistory]
+  );
+
   /* Handle option click */
   const handleOption = useCallback(
     (label: string, next: string) => {
       if (isTyping) return;
       setMessages((prev) => [...prev, { from: "user", text: label }]);
+
+      // Switch to AI free-text mode
+      if (next === "__ai_mode__") {
+        setChatMode("ai");
+        setAvatarState("typing");
+        const msg = "Ask me anything about our services, pricing, process, or how we can help your business!";
+        let i = 0;
+        const partial: Message = { from: "bot", text: "" };
+        setMessages((prev) => [...prev, partial]);
+        setIsTyping(true);
+        const interval = setInterval(() => {
+          i++;
+          setMessages((prev) => {
+            const copy = [...prev];
+            copy[copy.length - 1] = { from: "bot", text: msg.slice(0, i) };
+            return copy;
+          });
+          if (i >= msg.length) {
+            clearInterval(interval);
+            setIsTyping(false);
+            setAvatarState("idle");
+          }
+        }, 18);
+        return;
+      }
+
       goTo(next);
     },
     [isTyping, goTo]
@@ -793,8 +880,8 @@ export function ChatWidget() {
                   </div>
                 )}
 
-                {/* Quick-reply options */}
-                {!isTyping && node?.options && (
+                {/* Quick-reply options (tree mode only) */}
+                {!isTyping && chatMode === "tree" && node?.options && (
                   <motion.div
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -814,8 +901,8 @@ export function ChatWidget() {
                 )}
               </div>
 
-              {/* Text input for lead capture */}
-              {!isTyping && node?.input && (
+              {/* Text input for lead capture (tree mode) */}
+              {!isTyping && chatMode === "tree" && node?.input && (
                 <form
                   onSubmit={handleSubmit}
                   className="flex items-center gap-2 px-4 py-3 border-t border-white/[0.06]"
@@ -837,6 +924,53 @@ export function ChatWidget() {
                     →
                   </button>
                 </form>
+              )}
+
+              {/* AI free-text input */}
+              {chatMode === "ai" && (
+                <div className="border-t border-white/[0.06]">
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      sendAiMessage(aiInput);
+                    }}
+                    className="flex items-center gap-2 px-4 py-3"
+                  >
+                    <input
+                      type="text"
+                      value={aiInput}
+                      onChange={(e) => setAiInput(e.target.value)}
+                      placeholder="Ask me anything..."
+                      disabled={isTyping}
+                      className="flex-1 rounded-xl border border-white/[0.08] bg-white/[0.04] px-3.5 py-2 text-sm text-white placeholder:text-zinc-600 outline-none focus:border-fuchsia-500/30 transition-colors disabled:opacity-50"
+                      autoComplete="off"
+                    />
+                    <button
+                      type="submit"
+                      disabled={isTyping || !aiInput.trim()}
+                      className="rounded-xl bg-fuchsia-500/20 px-3.5 py-2 text-sm text-fuchsia-300 hover:bg-fuchsia-500/30 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                      aria-label="Send"
+                    >
+                      →
+                    </button>
+                  </form>
+                  <div className="px-4 pb-2">
+                    <button
+                      onClick={() => {
+                        setChatMode("tree");
+                        setCurrentNode("start");
+                        setMessages((prev) => [
+                          ...prev,
+                          { from: "bot", text: "No problem! Here are your options:" },
+                        ]);
+                        goTo("start");
+                      }}
+                      className="text-[11px] text-zinc-500 hover:text-fuchsia-400 transition-colors cursor-pointer"
+                    >
+                      ← Back to guided options
+                    </button>
+                  </div>
+                </div>
               )}
             </motion.div>
           )}
