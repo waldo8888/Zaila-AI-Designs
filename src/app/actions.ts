@@ -13,6 +13,15 @@ type ZailaOsLeadPayload = {
   projectDescription: string;
   budgetRange?: string;
   urgency?: string;
+  sourcePage?: string;
+  sourceUrl?: string;
+  sourceReferrer?: string;
+  submittedFrom?: string;
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  utmTerm?: string;
+  utmContent?: string;
   website_url?: string;
 };
 
@@ -73,6 +82,15 @@ export async function submitContactForm(formData: FormData) {
   const message = trimFormString(formData, "message");
   const business = trimFormString(formData, "business");
   const honeypot = trimFormString(formData, "website_url");
+  const sourcePage = trimFormString(formData, "sourcePage");
+  const sourceUrl = trimFormString(formData, "sourceUrl");
+  const sourceReferrer = trimFormString(formData, "sourceReferrer");
+  const submittedFrom = trimFormString(formData, "submittedFrom");
+  const utmSource = trimFormString(formData, "utmSource");
+  const utmMedium = trimFormString(formData, "utmMedium");
+  const utmCampaign = trimFormString(formData, "utmCampaign");
+  const utmTerm = trimFormString(formData, "utmTerm");
+  const utmContent = trimFormString(formData, "utmContent");
 
   if (honeypot) {
     return { success: true };
@@ -100,6 +118,15 @@ export async function submitContactForm(formData: FormData) {
       contactName: name,
       email,
       projectDescription,
+      sourcePage,
+      sourceUrl,
+      sourceReferrer,
+      submittedFrom,
+      utmSource,
+      utmMedium,
+      utmCampaign,
+      utmTerm,
+      utmContent,
       website_url: honeypot,
     });
   } catch (syncError) {

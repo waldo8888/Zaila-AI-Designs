@@ -41,6 +41,17 @@ export function ContactSection() {
     setLoading(true);
     setError(null);
     const formData = new FormData(e.currentTarget);
+    const currentUrl = new URL(window.location.href);
+    const params = currentUrl.searchParams;
+    formData.set("sourcePage", currentUrl.pathname || "/");
+    formData.set("sourceUrl", currentUrl.toString());
+    formData.set("sourceReferrer", document.referrer || "");
+    formData.set("submittedFrom", "homepage-contact-section");
+    formData.set("utmSource", params.get("utm_source") ?? "");
+    formData.set("utmMedium", params.get("utm_medium") ?? "");
+    formData.set("utmCampaign", params.get("utm_campaign") ?? "");
+    formData.set("utmTerm", params.get("utm_term") ?? "");
+    formData.set("utmContent", params.get("utm_content") ?? "");
     const result = await submitContactForm(formData);
     setLoading(false);
     if (result.success) {
