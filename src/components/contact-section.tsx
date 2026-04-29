@@ -287,6 +287,30 @@ export function ContactSection() {
                     />
                   </div>
 
+                  {/* Business field */}
+                  <div className="relative">
+                    <label
+                      htmlFor="business"
+                      className={`absolute left-0 transition-all duration-300 ${
+                        isFieldActive("business")
+                          ? "top-0 text-[11px] text-fuchsia-400"
+                          : "top-4 text-[14px] text-zinc-400"
+                      }`}
+                    >
+                      Business name
+                    </label>
+                    <input
+                      type="text"
+                      id="business"
+                      name="business"
+                      required
+                      onFocus={() => setFocusedField("business")}
+                      onBlur={(e) => { if (!e.target.value) setFocusedField(null); }}
+                      onInput={(e) => handleInput("business", (e.target as HTMLInputElement).value)}
+                      className="w-full border-b border-white/[0.08] bg-transparent pt-6 pb-3 text-[16px] text-white outline-none transition-all focus:border-fuchsia-500/50"
+                    />
+                  </div>
+
                   {/* Project type */}
                   <div className="relative">
                     <label className="block text-[11px] uppercase tracking-[0.2em] text-zinc-400 mb-4">
@@ -326,6 +350,21 @@ export function ContactSection() {
                       onInput={(e) => handleInput("message", (e.target as HTMLTextAreaElement).value)}
                       className="w-full resize-none border-b border-white/[0.08] bg-transparent pt-6 pb-3 text-[16px] text-white outline-none transition-all focus:border-fuchsia-500/50"
                     />
+                  </div>
+
+                  <div
+                    aria-hidden="true"
+                    className="absolute -left-[9999px] top-auto h-px w-px overflow-hidden"
+                  >
+                    <label>
+                      Website URL
+                      <input
+                        type="text"
+                        name="website_url"
+                        tabIndex={-1}
+                        autoComplete="off"
+                      />
+                    </label>
                   </div>
                 </div>
 
