@@ -13,7 +13,7 @@ export function ContactSection() {
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [filledFields, setFilledFields] = useState<Set<string>>(new Set());
   const containerRef = useRef<HTMLDivElement>(null);
-  const magneticSubmit = useMagnetic(0.25, 80);
+  const { ref: magneticSubmitRef, style: magneticSubmitStyle } = useMagnetic(0.25, 80);
 
   function isFieldActive(name: string) {
     return focusedField === name || filledFields.has(name);
@@ -322,6 +322,52 @@ export function ContactSection() {
                     />
                   </div>
 
+                  <div className="grid gap-8 md:grid-cols-2">
+                    <div className="relative">
+                      <label
+                        htmlFor="website"
+                        className={`absolute left-0 transition-all duration-300 ${
+                          isFieldActive("website")
+                            ? "top-0 text-[11px] text-fuchsia-400"
+                            : "top-4 text-[14px] text-zinc-400"
+                        }`}
+                      >
+                        Current website
+                      </label>
+                      <input
+                        type="url"
+                        id="website"
+                        name="website"
+                        onFocus={() => setFocusedField("website")}
+                        onBlur={(e) => { if (!e.target.value) setFocusedField(null); }}
+                        onInput={(e) => handleInput("website", (e.target as HTMLInputElement).value)}
+                        className="w-full border-b border-white/[0.08] bg-transparent pt-6 pb-3 text-[16px] text-white outline-none transition-all focus:border-fuchsia-500/50"
+                      />
+                    </div>
+
+                    <div className="relative">
+                      <label
+                        htmlFor="phone"
+                        className={`absolute left-0 transition-all duration-300 ${
+                          isFieldActive("phone")
+                            ? "top-0 text-[11px] text-fuchsia-400"
+                            : "top-4 text-[14px] text-zinc-400"
+                        }`}
+                      >
+                        Phone
+                      </label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        onFocus={() => setFocusedField("phone")}
+                        onBlur={(e) => { if (!e.target.value) setFocusedField(null); }}
+                        onInput={(e) => handleInput("phone", (e.target as HTMLInputElement).value)}
+                        className="w-full border-b border-white/[0.08] bg-transparent pt-6 pb-3 text-[16px] text-white outline-none transition-all focus:border-fuchsia-500/50"
+                      />
+                    </div>
+                  </div>
+
                   {/* Project type */}
                   <div className="relative">
                     <label className="block text-[11px] uppercase tracking-[0.2em] text-zinc-400 mb-4">
@@ -337,6 +383,52 @@ export function ContactSection() {
                         </label>
                       ))}
                     </div>
+                  </div>
+
+                  <div className="relative">
+                    <label className="block text-[11px] uppercase tracking-[0.2em] text-zinc-400 mb-4">
+                      Primary goal
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {["More leads", "Better design", "Booking automation", "AI chatbot", "Full website system"].map((goal) => (
+                        <label key={goal} className="cursor-pointer">
+                          <input type="radio" name="primaryGoal" value={goal} className="peer sr-only" />
+                          <span className="inline-block rounded-full border border-white/10 px-4 py-2.5 text-[13px] text-zinc-400 transition-all peer-checked:border-fuchsia-500/50 peer-checked:bg-fuchsia-500/10 peer-checked:text-white hover:border-white/20">
+                            {goal}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid gap-6 md:grid-cols-2">
+                    <label className="grid gap-2 text-[13px] text-zinc-400">
+                      Budget range
+                      <select
+                        name="budgetRange"
+                        className="rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3 text-[14px] text-white outline-none transition-all focus:border-fuchsia-500/50"
+                        defaultValue=""
+                      >
+                        <option value="" className="bg-black">Not sure yet</option>
+                        <option value="$500-$1,500" className="bg-black">$500-$1,500</option>
+                        <option value="$1,500-$3,000" className="bg-black">$1,500-$3,000</option>
+                        <option value="$3,000+" className="bg-black">$3,000+</option>
+                      </select>
+                    </label>
+
+                    <label className="grid gap-2 text-[13px] text-zinc-400">
+                      Timeline
+                      <select
+                        name="urgency"
+                        className="rounded-xl border border-white/[0.08] bg-black/40 px-4 py-3 text-[14px] text-white outline-none transition-all focus:border-fuchsia-500/50"
+                        defaultValue=""
+                      >
+                        <option value="" className="bg-black">Just exploring</option>
+                        <option value="ASAP" className="bg-black">ASAP</option>
+                        <option value="This month" className="bg-black">This month</option>
+                        <option value="1-3 months" className="bg-black">1-3 months</option>
+                      </select>
+                    </label>
                   </div>
 
                   {/* Message field */}
@@ -380,8 +472,8 @@ export function ContactSection() {
                 </div>
 
                 <motion.button
-                  ref={magneticSubmit.ref as React.RefObject<HTMLButtonElement>}
-                  style={magneticSubmit.style}
+                  ref={magneticSubmitRef as React.RefObject<HTMLButtonElement>}
+                  style={magneticSubmitStyle}
                   type="submit"
                   disabled={loading}
                   className="group relative mt-12 w-full overflow-hidden rounded-full bg-white px-8 py-5 text-[15px] font-medium text-black transition-all duration-500 hover:shadow-[0_20px_60px_-15px_rgba(255,255,255,0.3)] disabled:opacity-60"

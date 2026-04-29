@@ -10,9 +10,24 @@ import Image from "next/image";
 
 interface TreeNode {
   message: string;
-  options?: { label: string; next: string }[];
-  input?: { placeholder: string; next: string; field: "name" | "email" | "business" };
+  options?: TreeOption[];
+  input?: { placeholder: string; next: string; field: ChatLeadField };
 }
+
+type ChatLeadField =
+  | "name"
+  | "email"
+  | "business"
+  | "website"
+  | "primaryGoal"
+  | "urgency"
+  | "budgetRange";
+
+type TreeOption = {
+  label: string;
+  next: string;
+  capture?: { field: ChatLeadField; value: string };
+};
 
 type ChatMode = "tree" | "ai";
 
@@ -200,16 +215,111 @@ const TREE: Record<string, TreeNode> = {
     input: { placeholder: "you@email.com", next: "capture_biz", field: "email" },
   },
   capture_biz: {
-    message: "Almost there — what's your business name or website (if you have one)?",
+    message: "What's your business name?",
     input: {
-      placeholder: "Business name or URL",
-      next: "captured",
+      placeholder: "Business name",
+      next: "capture_website",
       field: "business",
     },
   },
+  capture_website: {
+    message: "Do you have a current website I should review before Sheldon follows up?",
+    input: {
+      placeholder: "https://yourbusiness.com",
+      next: "capture_goal",
+      field: "website",
+    },
+    options: [
+      {
+        label: "No website yet",
+        next: "capture_goal",
+        capture: { field: "website", value: "" },
+      },
+    ],
+  },
+  capture_goal: {
+    message: "What is the main thing you want this project to help with?",
+    options: [
+      {
+        label: "More leads",
+        next: "capture_timeline",
+        capture: { field: "primaryGoal", value: "More leads" },
+      },
+      {
+        label: "Better design",
+        next: "capture_timeline",
+        capture: { field: "primaryGoal", value: "Better design" },
+      },
+      {
+        label: "Booking automation",
+        next: "capture_timeline",
+        capture: { field: "primaryGoal", value: "Booking automation" },
+      },
+      {
+        label: "AI chatbot",
+        next: "capture_timeline",
+        capture: { field: "primaryGoal", value: "AI chatbot" },
+      },
+      {
+        label: "Full website system",
+        next: "capture_timeline",
+        capture: { field: "primaryGoal", value: "Full website system" },
+      },
+    ],
+  },
+  capture_timeline: {
+    message: "When would you like to get started?",
+    options: [
+      {
+        label: "ASAP",
+        next: "capture_budget",
+        capture: { field: "urgency", value: "ASAP" },
+      },
+      {
+        label: "This month",
+        next: "capture_budget",
+        capture: { field: "urgency", value: "This month" },
+      },
+      {
+        label: "1-3 months",
+        next: "capture_budget",
+        capture: { field: "urgency", value: "1-3 months" },
+      },
+      {
+        label: "Just exploring",
+        next: "capture_budget",
+        capture: { field: "urgency", value: "Just exploring" },
+      },
+    ],
+  },
+  capture_budget: {
+    message: "Last question — what budget range feels realistic right now?",
+    options: [
+      {
+        label: "$500-$1,500",
+        next: "captured",
+        capture: { field: "budgetRange", value: "$500-$1,500" },
+      },
+      {
+        label: "$1,500-$3,000",
+        next: "captured",
+        capture: { field: "budgetRange", value: "$1,500-$3,000" },
+      },
+      {
+        label: "$3,000+",
+        next: "captured",
+        capture: { field: "budgetRange", value: "$3,000+" },
+      },
+      {
+        label: "Not sure yet",
+        next: "captured",
+        capture: { field: "budgetRange", value: "Not sure yet" },
+      },
+    ],
+  },
   captured: {
     message:
-      "You're all set! Our team will reach out within 24 hours with a custom plan for you. In the meantime, feel free to explore the site!",
+      "You're all set! I sent those details into ZailaOS so Sheldon can follow up with a cleaner plan. You'll hear back within 24 hours.",
     options: [
       { label: "See your work", next: "portfolio" },
       { label: "Start over", next: "start" },
@@ -673,14 +783,54 @@ export function ChatWidget() {
     [isTyping, aiHistory]
   );
 
+  const submitChatLead = useCallback(
+    (data: Record<string, string>) => {
+      const currentUrl = new URL(window.location.href);
+      const params = currentUrl.searchParams;
+
+      fetch("/api/chat-lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...data,
+          conversationPath: conversationPath.join(" → "),
+          capturedAt: new Date().toISOString(),
+          sourcePage: currentUrl.pathname || "/",
+          sourceUrl: currentUrl.toString(),
+          sourceReferrer: document.referrer || "",
+          submittedFrom: "chat-widget",
+          utmSource: params.get("utm_source") ?? "",
+          utmMedium: params.get("utm_medium") ?? "",
+          utmCampaign: params.get("utm_campaign") ?? "",
+          utmTerm: params.get("utm_term") ?? "",
+          utmContent: params.get("utm_content") ?? "",
+        }),
+      }).catch(() => {
+        /* silent fail — message still shows */
+      });
+    },
+    [conversationPath]
+  );
+
   /* Handle option click */
   const handleOption = useCallback(
-    (label: string, next: string) => {
+    (option: TreeOption) => {
       if (isTyping) return;
-      setMessages((prev) => [...prev, { from: "user", text: label }]);
+      setMessages((prev) => [...prev, { from: "user", text: option.label }]);
+
+      const updatedLeadData = option.capture
+        ? {
+            ...leadData,
+            [option.capture.field]: option.capture.value,
+          }
+        : leadData;
+
+      if (option.capture) {
+        setLeadData(updatedLeadData);
+      }
 
       // Switch to AI free-text mode
-      if (next === "__ai_mode__") {
+      if (option.next === "__ai_mode__") {
         setChatMode("ai");
         setAvatarState("typing");
         const msg = "Ask me anything about our services, pricing, process, or how we can help your business!";
@@ -704,9 +854,13 @@ export function ChatWidget() {
         return;
       }
 
-      goTo(next);
+      if (option.next === "captured") {
+        submitChatLead(updatedLeadData);
+      }
+
+      goTo(option.next);
     },
-    [isTyping, goTo]
+    [isTyping, leadData, goTo, submitChatLead]
   );
 
   /* Handle text input submission */
@@ -723,24 +877,13 @@ export function ChatWidget() {
       const updated = { ...leadData, [node.input.field]: value };
       setLeadData(updated);
 
-      // If we just captured business, submit the lead with conversation path
-      if (node.input.field === "business") {
-        fetch("/api/chat-lead", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ...updated,
-            conversationPath: conversationPath.join(" → "),
-            capturedAt: new Date().toISOString(),
-          }),
-        }).catch(() => {
-          /* silent fail — message still shows */
-        });
+      if (node.input.next === "captured") {
+        submitChatLead(updated);
       }
 
       goTo(node.input.next);
     },
-    [currentNode, isTyping, inputValue, leadData, goTo, conversationPath]
+    [currentNode, isTyping, inputValue, leadData, goTo, submitChatLead]
   );
 
   const node = TREE[currentNode];
@@ -891,7 +1034,7 @@ export function ChatWidget() {
                     {node.options.map((opt) => (
                       <button
                         key={opt.label}
-                        onClick={() => handleOption(opt.label, opt.next)}
+                        onClick={() => handleOption(opt)}
                         className="rounded-full border border-fuchsia-500/20 bg-fuchsia-500/[0.07] px-3.5 py-1.5 text-xs text-fuchsia-300 hover:bg-fuchsia-500/[0.15] hover:border-fuchsia-500/40 transition-all cursor-pointer"
                       >
                         {opt.label}

@@ -1,78 +1,23 @@
 "use server";
 
 import { Resend } from "resend";
+import { forwardLeadToZailaOS } from "@/lib/zaila-os-leads";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const TO_EMAIL = "hello@zailaaidesigns.com";
 const FROM_EMAIL = process.env.RESEND_FROM ?? "Zaila AI Designs <onboarding@resend.dev>";
 
-type ZailaOsLeadPayload = {
-  businessName: string;
-  contactName: string;
-  email: string;
-  projectDescription: string;
-  budgetRange?: string;
-  urgency?: string;
-  sourcePage?: string;
-  sourceUrl?: string;
-  sourceReferrer?: string;
-  submittedFrom?: string;
-  utmSource?: string;
-  utmMedium?: string;
-  utmCampaign?: string;
-  utmTerm?: string;
-  utmContent?: string;
-  website_url?: string;
-};
-
 function trimFormString(formData: FormData, key: string) {
   return ((formData.get(key) as string | null) ?? "").trim();
 }
 
-function getZailaOsInboundUrl() {
-  const explicitUrl = process.env.ZAILA_OS_INBOUND_URL?.trim();
-  if (explicitUrl) return explicitUrl;
-
-  const baseUrl = process.env.ZAILA_OS_BASE_URL?.trim();
-  if (!baseUrl) return null;
-
-  try {
-    return new URL("/api/leads/inbound", baseUrl).toString();
-  } catch {
-    console.error("Invalid ZAILA_OS_BASE_URL.");
-    return null;
-  }
-}
-
-async function forwardLeadToZailaOS(payload: ZailaOsLeadPayload) {
-  const inboundUrl = getZailaOsInboundUrl();
-  if (!inboundUrl) {
-    console.log("ZailaOS lead sync skipped: set ZAILA_OS_BASE_URL or ZAILA_OS_INBOUND_URL.");
-    return false;
-  }
-
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-  };
-  const secret = process.env.ZAILA_OS_INBOUND_SECRET?.trim();
-  if (secret) {
-    headers["x-zaila-inbound-secret"] = secret;
-  }
-
-  const response = await fetch(inboundUrl, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(payload),
-  });
-
-  if (!response.ok) {
-    const result = (await response.json().catch(() => null)) as
-      | { error?: string }
-      | null;
-    throw new Error(result?.error ?? `ZailaOS returned ${response.status}.`);
-  }
-
-  return true;
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 export async function submitContactForm(formData: FormData) {
@@ -81,6 +26,11 @@ export async function submitContactForm(formData: FormData) {
   const project = trimFormString(formData, "project");
   const message = trimFormString(formData, "message");
   const business = trimFormString(formData, "business");
+  const phone = trimFormString(formData, "phone");
+  const website = trimFormString(formData, "website");
+  const budgetRange = trimFormString(formData, "budgetRange");
+  const urgency = trimFormString(formData, "urgency");
+  const primaryGoal = trimFormString(formData, "primaryGoal");
   const honeypot = trimFormString(formData, "website_url");
   const sourcePage = trimFormString(formData, "sourcePage");
   const sourceUrl = trimFormString(formData, "sourceUrl");
@@ -106,6 +56,7 @@ export async function submitContactForm(formData: FormData) {
 
   const projectDescription = [
     project ? `Project type: ${project}` : null,
+    primaryGoal ? `Primary goal: ${primaryGoal}` : null,
     message,
   ]
     .filter(Boolean)
@@ -118,6 +69,10 @@ export async function submitContactForm(formData: FormData) {
       contactName: name,
       email,
       projectDescription,
+      phone,
+      website,
+      budgetRange,
+      urgency,
       sourcePage,
       sourceUrl,
       sourceReferrer,
@@ -143,18 +98,28 @@ export async function submitContactForm(formData: FormData) {
         `Name: ${name || "—"}`,
         `Email: ${email}`,
         `Business: ${business || "—"}`,
+        `Phone: ${phone || "—"}`,
+        `Website: ${website || "—"}`,
         `Project: ${project || "—"}`,
+        `Goal: ${primaryGoal || "—"}`,
+        `Budget: ${budgetRange || "—"}`,
+        `Timeline: ${urgency || "—"}`,
         ``,
         `Message:`,
         message || "—",
       ].join("\n"),
       html: [
-        "<p><strong>Name:</strong> " + (name || "—") + "</p>",
-        "<p><strong>Email:</strong> " + email + "</p>",
-        "<p><strong>Business:</strong> " + (business || "—") + "</p>",
-        "<p><strong>Project:</strong> " + (project || "—") + "</p>",
+        "<p><strong>Name:</strong> " + escapeHtml(name || "—") + "</p>",
+        "<p><strong>Email:</strong> " + escapeHtml(email) + "</p>",
+        "<p><strong>Business:</strong> " + escapeHtml(business || "—") + "</p>",
+        "<p><strong>Phone:</strong> " + escapeHtml(phone || "—") + "</p>",
+        "<p><strong>Website:</strong> " + escapeHtml(website || "—") + "</p>",
+        "<p><strong>Project:</strong> " + escapeHtml(project || "—") + "</p>",
+        "<p><strong>Goal:</strong> " + escapeHtml(primaryGoal || "—") + "</p>",
+        "<p><strong>Budget:</strong> " + escapeHtml(budgetRange || "—") + "</p>",
+        "<p><strong>Timeline:</strong> " + escapeHtml(urgency || "—") + "</p>",
         "<p><strong>Message:</strong></p>",
-        "<p>" + (message ? message.replace(/\n/g, "<br>") : "—") + "</p>",
+        "<p>" + (message ? escapeHtml(message).replace(/\n/g, "<br>") : "—") + "</p>",
       ].join(""),
     });
     if (error) {
@@ -163,7 +128,28 @@ export async function submitContactForm(formData: FormData) {
     }
   } else if (!zailaOsSynced) {
     console.log("--- New Contact Form Submission (no RESEND_API_KEY; add it to receive emails) ---");
-    console.log("Name:", name, "Email:", email, "Business:", business, "Project:", project, "Message:", message);
+    console.log(
+      "Name:",
+      name,
+      "Email:",
+      email,
+      "Business:",
+      business,
+      "Phone:",
+      phone,
+      "Website:",
+      website,
+      "Project:",
+      project,
+      "Goal:",
+      primaryGoal,
+      "Budget:",
+      budgetRange,
+      "Timeline:",
+      urgency,
+      "Message:",
+      message,
+    );
   }
 
   return { success: true };
