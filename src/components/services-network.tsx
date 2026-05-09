@@ -15,6 +15,7 @@ import * as THREE from "three";
 
 interface Props {
   activeNodeIndex: number; // 0-3 = service card index
+  isActive?: boolean;
 }
 
 // ─── Service Configuration ────────────────────────────────────────────────
@@ -171,8 +172,13 @@ const SERVICE_ICONS = [
   },
 ];
 
-export function ServicesNetwork({ activeNodeIndex }: Props) {
+export function ServicesNetwork({ activeNodeIndex, isActive = true }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const isActiveRef = useRef(isActive);
+
+  useEffect(() => {
+    isActiveRef.current = isActive;
+  }, [isActive]);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -191,8 +197,15 @@ export function ServicesNetwork({ activeNodeIndex }: Props) {
       alpha: true,
       powerPreference: isMobile ? "low-power" : "default",
     });
-    renderer.setSize(W, H);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
+    Object.assign(renderer.domElement.style, {
+      position: "absolute",
+      inset: "0",
+      width: "100%",
+      height: "100%",
+      display: "block",
+    });
+    renderer.setSize(W, H, false);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.1 : 1.5));
     el.insertBefore(renderer.domElement, el.firstChild);
 
     // ── Scene + Camera ─────────────────────────────────────
@@ -210,7 +223,7 @@ export function ServicesNetwork({ activeNodeIndex }: Props) {
     camera.position.z = 5;
 
     // ── Grid Pattern ───────────────────────────────────────
-    const gridSize = isMobile ? 12 : 16;
+    const gridSize = isMobile ? 10 : 12;
     const gridSpacing = (frustum * 2 * Math.max(aspect, 1)) / gridSize;
     const gridGroup = new THREE.Group();
 
@@ -242,7 +255,7 @@ export function ServicesNetwork({ activeNodeIndex }: Props) {
     scene.add(gridGroup);
 
     // ── Neural Network Nodes ───────────────────────────────
-    const nodeCount = isMobile ? 20 : 35;
+    const nodeCount = isMobile ? 14 : 24;
     const nodes: { pos: THREE.Vector3; vel: THREE.Vector3; size: number }[] = [];
     const nodeMeshes: THREE.Mesh[] = [];
 
@@ -278,7 +291,7 @@ export function ServicesNetwork({ activeNodeIndex }: Props) {
 
     // ── Connection Lines ───────────────────────────────────
     const connectionThreshold = isMobile ? 0.8 : 0.6;
-    const maxConnections = isMobile ? 30 : 60;
+    const maxConnections = isMobile ? 20 : 36;
     const connectionGeo = new THREE.BufferGeometry();
     const connectionPositions = new Float32Array(maxConnections * 6);
     connectionGeo.setAttribute("position", new THREE.BufferAttribute(connectionPositions, 3));
@@ -362,7 +375,7 @@ export function ServicesNetwork({ activeNodeIndex }: Props) {
     scene.add(iconMesh);
 
     // ── Floating Particles ─────────────────────────────────
-    const particleCount = isMobile ? 40 : 80;
+    const particleCount = isMobile ? 24 : 48;
     const particleGeo = new THREE.BufferGeometry();
     const particlePositions = new Float32Array(particleCount * 3);
     const particleSpeeds: number[] = [];
@@ -394,6 +407,8 @@ export function ServicesNetwork({ activeNodeIndex }: Props) {
 
     function tick() {
       raf = requestAnimationFrame(tick);
+      if (!isActiveRef.current || document.visibilityState === "hidden") return;
+
       const t = clock.getElapsedTime();
 
       // Update glow
@@ -470,6 +485,7 @@ export function ServicesNetwork({ activeNodeIndex }: Props) {
       renderer.render(scene, camera);
     }
 
+    renderer.render(scene, camera);
     tick();
 
     // ── Resize Observer ────────────────────────────────────
@@ -477,7 +493,7 @@ export function ServicesNetwork({ activeNodeIndex }: Props) {
       W = el.clientWidth;
       H = el.clientHeight;
       if (!W || !H) return;
-      renderer.setSize(W, H);
+      renderer.setSize(W, H, false);
       const a = W / H;
       camera.left = -frustum * a;
       camera.right = frustum * a;
@@ -522,6 +538,8 @@ export function ServicesNetwork({ activeNodeIndex }: Props) {
         width: "100%",
         height: "100%",
         minHeight: 200,
+        contain: "layout paint size",
+        overflow: "hidden",
       }}
     >
       {/* Label overlay */}

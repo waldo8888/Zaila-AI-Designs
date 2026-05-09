@@ -12,13 +12,6 @@ import * as THREE from "three";
  * - Smooth spring-back on mouse leave
  */
 
-// ─── Simplex-ish 2D noise (compact) ───────────────────────────────
-function hash(x: number, y: number): number {
-    let h = x * 374761393 + y * 668265263;
-    h = ((h ^ (h >> 13)) * 1274126177) | 0;
-    return (h ^ (h >> 16)) / 2147483648;
-}
-
 // ─── component ─────────────────────────────────────────────────────
 interface Props {
     children: React.ReactNode;

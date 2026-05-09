@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
+import { useRef, useState } from "react";
 import { ServicesNetwork } from "./services-network";
 
 const services = [
@@ -79,9 +79,15 @@ const services = [
 
 export function ServicesSection() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
+  });
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    const nextIndex = Math.max(0, Math.min(services.length - 1, Math.round(latest * (services.length - 1))));
+    setActiveIndex((current) => current === nextIndex ? current : nextIndex);
   });
 
   const x = useTransform(
@@ -132,6 +138,7 @@ export function ServicesSection() {
               index={index}
               total={services.length}
               scrollProgress={scrollYProgress}
+              activeIndex={activeIndex}
             />
           ))}
         </motion.div>
@@ -175,11 +182,13 @@ function ServiceCard({
   index,
   total,
   scrollProgress,
+  activeIndex,
 }: {
   service: (typeof services)[0];
   index: number;
   total: number;
   scrollProgress: ReturnType<typeof useScroll>["scrollYProgress"];
+  activeIndex: number;
 }) {
   // Each card is centered when scrollProgress = index / (total - 1)
   const center = total > 1 ? index / (total - 1) : 0;
@@ -204,6 +213,8 @@ function ServiceCard({
     [Math.max(0, center - halfSpan * 0.8), center],
     ["inset(0 100% 0 0 round 24px)", "inset(0 0% 0 0 round 24px)"]
   );
+  const shouldRenderNetwork = Math.abs(index - activeIndex) <= 1;
+  const shouldAnimateNetwork = index === activeIndex;
 
   return (
     <motion.div
@@ -249,7 +260,9 @@ function ServiceCard({
               <div
                 className={`absolute inset-0 bg-gradient-to-br ${service.gradient} pointer-events-none`}
               />
-              <ServicesNetwork activeNodeIndex={index} />
+              {shouldRenderNetwork ? (
+                <ServicesNetwork activeNodeIndex={index} isActive={shouldAnimateNetwork} />
+              ) : null}
             </motion.div>
           </div>
         </div>

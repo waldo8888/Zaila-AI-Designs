@@ -103,7 +103,7 @@ function StorySlide({
   point: (typeof storyPoints)[0];
   index: number;
   totalPoints: number;
-  scrollProgress: any;
+  scrollProgress: MotionValue<number>;
 }) {
   const segmentSize = 1 / (totalPoints + 0.25);
   const start = index * segmentSize;
@@ -243,7 +243,7 @@ function ProgressDot({
 }: {
   index: number;
   totalPoints: number;
-  scrollProgress: any;
+  scrollProgress: MotionValue<number>;
 }) {
   const segmentSize = 1 / (totalPoints + 0.25);
   const start = index * segmentSize;

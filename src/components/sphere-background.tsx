@@ -97,8 +97,13 @@ export function SphereBackground() {
     const container = containerRef.current;
     if (!container) return;
 
-    const PARTICLE_COUNT = isHomepage ? 12000 : 6000;
-    const DUST_COUNT = isHomepage ? 1000 : 1000;
+    const isMobileViewport = window.innerWidth < 768;
+    const PARTICLE_COUNT = isHomepage
+      ? isMobileViewport ? 7000 : 9000
+      : isMobileViewport ? 3000 : 4500;
+    const DUST_COUNT = isHomepage
+      ? isMobileViewport ? 400 : 650
+      : 300;
 
     // Track inner cleanup so we can call it even if the timer fires after unmount
     let innerCleanup: (() => void) | null = null;
@@ -123,14 +128,22 @@ export function SphereBackground() {
       // Bring camera a bit closer, or scale up shapes. We'll adjust camera and shape scale.
       camera.position.z = 4.5;
 
-      const currentPixelRatio = Math.min(window.devicePixelRatio, 1.5);
+      const pixelRatioCap = isMobileViewport ? 1 : 1.25;
+      const currentPixelRatio = Math.min(window.devicePixelRatio, pixelRatioCap);
 
       const renderer = new THREE.WebGLRenderer({
         antialias: false,
         alpha: true,
         powerPreference: "high-performance"
       });
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      Object.assign(renderer.domElement.style, {
+        position: "absolute",
+        inset: "0",
+        width: "100%",
+        height: "100%",
+        display: "block",
+      });
+      renderer.setSize(window.innerWidth, window.innerHeight, false);
       renderer.setPixelRatio(currentPixelRatio); // Bump pixel ratio cap slightly if available
       container.appendChild(renderer.domElement);
 
@@ -369,6 +382,8 @@ export function SphereBackground() {
       // Scroll tracking setup
       let scrollY = 0;
       let targetScroll = 0;
+      let maxScroll = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+      let startX = window.innerWidth < 768 ? 0 : 1.5;
       function handleScroll() {
         targetScroll = window.scrollY;
       }
@@ -378,7 +393,8 @@ export function SphereBackground() {
 
       // Mouse tracking (window-level to not block other interactions)
       let mouseActive = false;
-      let mouseTimeout: ReturnType<typeof setTimeout>;
+      let mouseTimeout: ReturnType<typeof setTimeout> | undefined;
+      const supportsHover = window.matchMedia("(hover: hover)").matches;
 
       function handleMouseMove(event: MouseEvent) {
         // Normalize mouse position to -1 to 1
@@ -387,7 +403,7 @@ export function SphereBackground() {
         mouseActive = true;
 
         // Reset timeout for mouse inactivity
-        clearTimeout(mouseTimeout);
+        if (mouseTimeout) clearTimeout(mouseTimeout);
         mouseTimeout = setTimeout(() => {
           mouseActive = false;
         }, 2000);
@@ -397,27 +413,31 @@ export function SphereBackground() {
         mouseActive = false;
       }
 
-      window.addEventListener("mousemove", handleMouseMove, { passive: true });
-      document.addEventListener("mouseleave", handleMouseLeave);
+      if (supportsHover) {
+        window.addEventListener("mousemove", handleMouseMove, { passive: true });
+        document.addEventListener("mouseleave", handleMouseLeave);
+      }
 
       function handleResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        material.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio, 2);
-
-        // On strictly mobile, move sphere to center instead of the right side
-        if (window.innerWidth < 768) {
-          particles.position.set(0, 0, -1);
-        } else {
-          particles.position.set(1.5, 0, 0);
-        }
+        renderer.setSize(window.innerWidth, window.innerHeight, false);
+        material.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio, window.innerWidth < 768 ? 1 : 1.25);
+        maxScroll = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+        startX = window.innerWidth < 768 ? 0 : 1.5;
       }
       window.addEventListener("resize", handleResize);
       handleResize(); // Initial setup
 
       const clock = new THREE.Clock();
       let animationId: number;
+      let isDocumentVisible = document.visibilityState === "visible";
+
+      function handleVisibilityChange() {
+        isDocumentVisible = document.visibilityState === "visible";
+      }
+
+      document.addEventListener("visibilitychange", handleVisibilityChange);
 
       let baseRotationY = 0;
       let baseTimeX = 0;
@@ -431,8 +451,10 @@ export function SphereBackground() {
 
       function animate() {
         animationId = requestAnimationFrame(animate);
-        const elapsed = clock.getElapsedTime();
-        const delta = clock.getDelta();
+        if (!isDocumentVisible) return;
+
+        const delta = Math.min(clock.getDelta(), 0.033);
+        const elapsed = clock.elapsedTime;
 
         baseRotationY += delta * 0.05;
         baseTimeX += delta * 0.02;
@@ -449,30 +471,27 @@ export function SphereBackground() {
         const targetInfluence = mouseActive ? 1.0 : 0.0;
         currentMouseInfluence += (targetInfluence - currentMouseInfluence) * 0.05;
 
-        // Calculate mouse position in particle local space
-        // First, unproject from NDC to world space at z=0 plane
-        // Using FOV geometry: at camera.position.z with FOV 45deg,
-        // the visible half-height at z=0 is camera.position.z * tan(FOV/2)
-        const fovRad = (camera.fov * Math.PI) / 180;
-        const halfHeight = camera.position.z * Math.tan(fovRad / 2);
-        const halfWidth = halfHeight * camera.aspect;
+        if (currentMouseInfluence > 0.001) {
+          // Calculate mouse position in particle local space only while the interaction is visible.
+          const fovRad = (camera.fov * Math.PI) / 180;
+          const halfHeight = camera.position.z * Math.tan(fovRad / 2);
+          const halfWidth = halfHeight * camera.aspect;
 
-        mouseWorldPos.set(
-          mouse.x * halfWidth,
-          mouse.y * halfHeight,
-          0
-        );
+          mouseWorldPos.set(
+            mouse.x * halfWidth,
+            mouse.y * halfHeight,
+            0
+          );
 
-        // Transform to particle local space (account for position and rotation)
-        particles.updateMatrixWorld();
-        inverseMatrix.copy(particles.matrixWorld).invert();
-        mouseLocalPos.copy(mouseWorldPos).applyMatrix4(inverseMatrix);
+          particles.updateMatrixWorld();
+          inverseMatrix.copy(particles.matrixWorld).invert();
+          mouseLocalPos.copy(mouseWorldPos).applyMatrix4(inverseMatrix);
+          material.uniforms.uMouse.value.copy(mouseLocalPos);
+        }
 
         material.uniforms.uTime.value = elapsed;
-        material.uniforms.uMouse.value.copy(mouseLocalPos);
         material.uniforms.uMouseInfluence.value = currentMouseInfluence;
 
-        const maxScroll = Math.max(document.body.scrollHeight - window.innerHeight, 1);
         const scrollProgress = scrollY / maxScroll;
 
         // Control how fast it morphs. 5 shapes = 4 transitions.
@@ -481,7 +500,6 @@ export function SphereBackground() {
 
         // Shift terrain X position to the absolute center as the user scrolls
         // (It starts offset by 1.5 on desktop, and ends exactly at 0)
-        const startX = window.innerWidth < 768 ? 0 : 1.5;
         particles.position.x = startX - (scrollProgress * startX);
 
         // The key MAZE effect: Highly visible rotation tied to scroll
@@ -513,11 +531,14 @@ export function SphereBackground() {
 
       innerCleanup = () => {
         cancelAnimationFrame(animationId);
-        clearTimeout(mouseTimeout);
+        if (mouseTimeout) clearTimeout(mouseTimeout);
         window.removeEventListener("scroll", handleScroll);
         window.removeEventListener("resize", handleResize);
-        window.removeEventListener("mousemove", handleMouseMove);
-        document.removeEventListener("mouseleave", handleMouseLeave);
+        document.removeEventListener("visibilitychange", handleVisibilityChange);
+        if (supportsHover) {
+          window.removeEventListener("mousemove", handleMouseMove);
+          document.removeEventListener("mouseleave", handleMouseLeave);
+        }
         renderer.dispose();
         geometry.dispose();
         material.dispose();
@@ -549,6 +570,8 @@ export function SphereBackground() {
         filter: 'blur(1px) brightness(0.92)',
         opacity: visible ? 1 : 0,
         transition: 'opacity 0.8s ease-out',
+        contain: 'layout paint size',
+        overflow: 'hidden',
       }}
     />
   );

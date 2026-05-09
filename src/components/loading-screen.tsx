@@ -71,6 +71,7 @@ export function LoadingScreen() {
     // The flag is set below after the first external/direct visit completes.
     const [visible, setVisible] = useState(() => {
         if (typeof window === "undefined") return true;
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
         return !sessionStorage.getItem("zaila_site_visited");
     });
     const [fading, setFading] = useState(false);
@@ -81,7 +82,7 @@ export function LoadingScreen() {
         setFading(true);
         setTimeout(() => {
             setVisible(false);
-        }, 700); // match CSS transition
+        }, 450); // match CSS transition
     }, []);
 
     useEffect(() => {
@@ -93,7 +94,7 @@ export function LoadingScreen() {
         const isSmallMobile = window.innerWidth < 400;
 
         // Reduce particles on mobile for performance
-        const PARTICLE_COUNT = isSmallMobile ? 2500 : isMobile ? 4000 : 6000;
+        const PARTICLE_COUNT = isSmallMobile ? 1800 : isMobile ? 2600 : 4200;
         // SPREAD = physical size of the logo in 3D space.
         // Must be small enough that the entire logo (icon + text)
         // fits within the camera frustum on narrow mobile screens.
@@ -111,13 +112,20 @@ export function LoadingScreen() {
         camera.position.z = isMobile ? 3.5 : 3.5;
 
         // Lower DPR cap on mobile for performance
-        const dpr = Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2);
+        const dpr = Math.min(window.devicePixelRatio, isMobile ? 1.25 : 1.5);
         const renderer = new THREE.WebGLRenderer({
             antialias: !isSmallMobile, // Skip AA on very small screens
             alpha: true,
             powerPreference: isMobile ? "low-power" : "high-performance",
         });
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        Object.assign(renderer.domElement.style, {
+            position: "absolute",
+            inset: "0",
+            width: "100%",
+            height: "100%",
+            display: "block",
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight, false);
         renderer.setPixelRatio(dpr);
         container.appendChild(renderer.domElement);
 
@@ -126,14 +134,21 @@ export function LoadingScreen() {
         img.crossOrigin = "anonymous";
         img.src = "/logo.png";
 
-        let animationId: number;
+        let animationId = 0;
         let clock: THREE.Clock;
+        let disposed = false;
+        let geometry: THREE.BufferGeometry | null = null;
+        let material: THREE.ShaderMaterial | null = null;
+        let points: THREE.Points | null = null;
+        let removeResizeListener: (() => void) | null = null;
 
         img.onload = () => {
+            if (disposed) return;
+
             const targets = sampleLogoPixels(img, PARTICLE_COUNT, SPREAD);
             const starts = randomPositions(PARTICLE_COUNT, 8);
 
-            const geometry = new THREE.BufferGeometry();
+            geometry = new THREE.BufferGeometry();
             geometry.setAttribute("position", new THREE.BufferAttribute(starts.slice(), 3));
             geometry.setAttribute("aTarget", new THREE.BufferAttribute(targets, 3));
             geometry.setAttribute("aStart", new THREE.BufferAttribute(starts, 3));
@@ -147,7 +162,7 @@ export function LoadingScreen() {
             const baseSize = isMobile ? 10.0 : 12.0;
             const sizeVariation = isMobile ? 14.0 : 18.0;
 
-            const material = new THREE.ShaderMaterial({
+            material = new THREE.ShaderMaterial({
                 uniforms: {
                     uProgress: { value: 0 },
                     uTime: { value: 0 },
@@ -268,19 +283,20 @@ export function LoadingScreen() {
                 blending: THREE.AdditiveBlending,
             });
 
-            const points = new THREE.Points(geometry, material);
+            points = new THREE.Points(geometry, material);
             scene.add(points);
 
             clock = new THREE.Clock();
 
-            // Phase timings (seconds) - slightly faster on mobile
-            const FLY_END = isMobile ? 2.0 : 2.5;
-            const HOLD_END = isMobile ? 3.2 : 4.0;
-            const DISSOLVE_END = isMobile ? 4.0 : 5.0;
+            // Phase timings (seconds) - keep the cinematic intro but avoid making first paint feel blocked.
+            const FLY_END = isMobile ? 1.1 : 1.25;
+            const HOLD_END = isMobile ? 1.7 : 1.9;
+            const DISSOLVE_END = isMobile ? 2.3 : 2.55;
 
             function animate() {
                 animationId = requestAnimationFrame(animate);
                 const elapsed = clock.getElapsedTime();
+                if (!material) return;
                 material.uniforms.uTime.value = elapsed;
 
                 if (elapsed < FLY_END) {
@@ -314,26 +330,34 @@ export function LoadingScreen() {
             const onResize = () => {
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-                material.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio, 2);
+                renderer.setSize(window.innerWidth, window.innerHeight, false);
+                if (material) {
+                    material.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio, isMobile ? 1.25 : 1.5);
+                }
             };
             window.addEventListener("resize", onResize);
 
-            // Cleanup stored in ref via IIFE closure
-            (container as any).__loadingCleanup = () => {
+            removeResizeListener = () => {
                 window.removeEventListener("resize", onResize);
             };
         };
 
         return () => {
+            disposed = true;
+            img.onload = null;
             cancelAnimationFrame(animationId);
+            removeResizeListener?.();
+            if (points) {
+                scene.remove(points);
+            }
+            geometry?.dispose();
+            material?.dispose();
             renderer.dispose();
             if (container.contains(renderer.domElement)) {
                 container.removeChild(renderer.domElement);
             }
-            (container as any).__loadingCleanup?.();
         };
-    }, [startFadeOut]);
+    }, [startFadeOut, visible]);
 
     if (!visible) return null;
 
@@ -346,13 +370,15 @@ export function LoadingScreen() {
                 zIndex: 9999,
                 background: "radial-gradient(circle at center, #0a0612 0%, #000000 100%)",
                 opacity: fading ? 0 : 1,
-                transition: "opacity 0.7s ease-out",
+                transition: "opacity 0.45s ease-out",
                 pointerEvents: fading ? "none" : "auto",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "flex-end",
                 paddingBottom: "env(safe-area-inset-bottom, 0px)",
+                contain: "layout paint size",
+                overflow: "hidden",
             }}
             aria-hidden="true"
         >

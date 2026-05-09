@@ -8,7 +8,10 @@ type CursorMode = "default" | "hover" | "view" | "drag" | "text";
 export function CustomCursor() {
   const [mode, setMode] = useState<CursorMode>("default");
   const [isVisible, setIsVisible] = useState(false);
-  const [isTouch, setIsTouch] = useState(false);
+  const [isTouch] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(hover: none)").matches;
+  });
 
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
@@ -18,10 +21,7 @@ export function CustomCursor() {
   const cursorYSpring = useSpring(cursorY, springConfig);
 
   useEffect(() => {
-    if (window.matchMedia("(hover: none)").matches) {
-      setIsTouch(true);
-      return;
-    }
+    if (isTouch) return;
 
     document.body.style.cursor = "none";
 
@@ -85,7 +85,7 @@ export function CustomCursor() {
       document.body.style.cursor = "auto";
       document.head.removeChild(style);
     };
-  }, [cursorX, cursorY, isVisible]);
+  }, [cursorX, cursorY, isTouch, isVisible]);
 
   if (isTouch) return null;
 

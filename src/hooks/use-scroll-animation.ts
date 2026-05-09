@@ -83,7 +83,7 @@ export function useParallax(speed = 0.5) {
 }
 
 // Hook for sticky section with scroll progress
-export function useStickyScroll(stickyHeight = "200vh") {
+export function useStickyScroll() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
   const [isSticky, setIsSticky] = useState(false);

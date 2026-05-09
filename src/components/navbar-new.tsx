@@ -7,6 +7,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { useSmoothScroll } from "@/components/smooth-scroll";
 
+type NavItem =
+  | { type: "section"; label: string; id: string }
+  | { type: "link"; label: string; href: string };
+
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -66,12 +70,12 @@ export function Navbar() {
     }
   }
 
-  const navItems = [
-    { label: "Services", id: "services" },
-    { label: "Process", id: "process" },
-    { label: "Work", href: "/growth-stories" },
-    { label: "Blog", href: "/blog" },
-    { label: "Pricing", href: "/pricing" },
+  const navItems: NavItem[] = [
+    { type: "section", label: "Services", id: "services" },
+    { type: "section", label: "Process", id: "process" },
+    { type: "link", label: "Work", href: "/growth-stories" },
+    { type: "link", label: "Blog", href: "/blog" },
+    { type: "link", label: "Pricing", href: "/pricing" },
   ];
 
   return (
@@ -210,8 +214,8 @@ export function Navbar() {
   );
 }
 
-function DesktopNavItem({ item, i, handleNav }: { item: any; i: number; handleNav: (id: string) => void }) {
-  if ("href" in item && item.href) {
+function DesktopNavItem({ item, i, handleNav }: { item: NavItem; i: number; handleNav: (id: string) => void }) {
+  if (item.type === "link") {
     return (
       <motion.div
         initial={{ opacity: 0, y: -10 }}
@@ -229,7 +233,7 @@ function DesktopNavItem({ item, i, handleNav }: { item: any; i: number; handleNa
   }
   return (
     <motion.button
-      onClick={() => handleNav(item.id!)}
+      onClick={() => handleNav(item.id)}
       className="group relative px-5 py-2 text-[13px] text-zinc-400 transition-colors hover:text-white"
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
@@ -246,8 +250,18 @@ function DesktopNavItem({ item, i, handleNav }: { item: any; i: number; handleNa
   );
 }
 
-function MobileNavItem({ item, i, handleNav, setMobileOpen }: { item: any; i: number; handleNav: (id: string) => void; setMobileOpen: (v: boolean) => void }) {
-  if ("href" in item && item.href) {
+function MobileNavItem({
+  item,
+  i,
+  handleNav,
+  setMobileOpen,
+}: {
+  item: NavItem;
+  i: number;
+  handleNav: (id: string) => void;
+  setMobileOpen: (v: boolean) => void;
+}) {
+  if (item.type === "link") {
     return (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -267,7 +281,7 @@ function MobileNavItem({ item, i, handleNav, setMobileOpen }: { item: any; i: nu
   }
   return (
     <motion.button
-      onClick={() => handleNav(item.id!)}
+      onClick={() => handleNav(item.id)}
       className="text-[32px] font-semibold text-white tracking-tight"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
