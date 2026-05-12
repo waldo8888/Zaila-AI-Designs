@@ -10,14 +10,14 @@ export default function TermsPage() {
   return (
     <div className="mx-auto w-full max-w-3xl px-6 pt-28 pb-20">
       <h1 className="text-3xl font-semibold tracking-tight">Terms of Service</h1>
-      <p className="mt-2 text-sm text-zinc-400">Last updated: February 24, 2026</p>
+      <p className="mt-2 text-sm text-zinc-400">Last updated: May 12, 2026</p>
 
       <div className="mt-10 space-y-8 text-[15px] leading-[1.8] text-zinc-300">
         <section>
           <h2 className="text-lg font-semibold text-white">1. Overview</h2>
           <p className="mt-2">
             These Terms of Service (&quot;Terms&quot;) govern your use of the website{" "}
-            <Link href="/" className="text-fuchsia-400 hover:underline">zailai.com</Link>{" "}
+            <Link href="/" className="text-fuchsia-400 hover:underline">zailaai.com</Link>{" "}
             and any services provided by Zaila AI Designs (&quot;we&quot;, &quot;us&quot;,
             &quot;our&quot;), a web design and AI automation business based in Hamilton,
             Ontario, Canada. By using our website or engaging our services, you agree to
@@ -113,7 +113,37 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-white">11. Governing Law</h2>
+          <h2 className="text-lg font-semibold text-white">11. Meta Platform Terms</h2>
+          <p className="mt-2">
+            Zaila AI Designs operates an Instagram business presence and uses
+            Meta&apos;s Instagram Graph API to manage content, comments, direct
+            messages, and engagement data on our own account. Our use of these
+            APIs is governed by, and we acknowledge our compliance with, the{" "}
+            <a
+              href="https://developers.facebook.com/terms/"
+              className="text-fuchsia-400 hover:underline"
+            >Meta Platform Terms</a>
+            {" "}and{" "}
+            <a
+              href="https://developers.facebook.com/devpolicy/"
+              className="text-fuchsia-400 hover:underline"
+            >Developer Policies</a>. We do not represent ourselves as endorsed
+            by, partnered with, or otherwise affiliated with Meta beyond our use
+            of their developer platform on commercially reasonable terms.
+          </p>
+          <p className="mt-3">
+            If you contact us via Instagram, the handling of your messages,
+            metadata, and engagement is described in section 10 of our{" "}
+            <Link href="/privacy" className="text-fuchsia-400 hover:underline">
+              Privacy Policy
+            </Link>
+            . You may revoke our app&apos;s access to your Instagram data at any
+            time via your Instagram account settings.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-lg font-semibold text-white">12. Governing Law</h2>
           <p className="mt-2">
             These Terms are governed by and construed in accordance with the laws of the
             Province of Ontario and the federal laws of Canada applicable therein. Any
@@ -122,7 +152,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-white">12. Changes to These Terms</h2>
+          <h2 className="text-lg font-semibold text-white">13. Changes to These Terms</h2>
           <p className="mt-2">
             We reserve the right to update these Terms at any time. Changes will be posted
             on this page with an updated &quot;Last updated&quot; date. Continued use of our
@@ -131,7 +161,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-white">13. Contact Us</h2>
+          <h2 className="text-lg font-semibold text-white">14. Contact Us</h2>
           <p className="mt-2">
             If you have questions about these Terms, contact us at:
           </p>
