@@ -41,7 +41,7 @@ export function PricingFull() {
         <HolographicCard className="rounded-3xl">
           <Card className="p-6">
             <div className="text-lg font-semibold">Starter Launch</div>
-            <div className="mt-3 text-4xl font-bold tracking-tight">$499</div>
+            <div className="mt-3 text-4xl font-bold tracking-tight">$800</div>
             <div className="mt-1 text-sm text-zinc-400">
               1–3 pages. Fast launch.
             </div>
@@ -63,7 +63,7 @@ export function PricingFull() {
                 POPULAR
               </span>
             </div>
-            <div className="mt-3 text-4xl font-bold tracking-tight">$899</div>
+            <div className="mt-3 text-4xl font-bold tracking-tight">$1,800</div>
             <div className="mt-1 text-sm text-zinc-400">
               Booking + chatbot + social proof.
             </div>
@@ -79,7 +79,7 @@ export function PricingFull() {
         <HolographicCard className="rounded-3xl">
           <Card className="p-6">
             <div className="text-lg font-semibold">Smart AI Website</div>
-            <div className="mt-3 text-4xl font-bold tracking-tight">$1,499+</div>
+            <div className="mt-3 text-4xl font-bold tracking-tight">$3,500+</div>
             <div className="mt-1 text-sm text-zinc-400">
               Payments + integrations + advanced automation.
             </div>
@@ -128,7 +128,7 @@ export function PricingFull() {
           API integrations.
         </div>
         <div className="mt-3 text-xs text-zinc-500">
-          All sites include managed hosting on a global edge network (SSL, CDN, and monitoring included) through our Care Plans. Launch Care ($49/mo) minimum required.
+          All sites include managed hosting on a global edge network (SSL, CDN, and monitoring included) through our Care Plans. Launch Care ($59/mo) minimum required.
         </div>
       </Card>
     </div>

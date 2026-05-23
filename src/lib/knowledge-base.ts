@@ -49,17 +49,17 @@ Monthly hosting, updates, optimization, and AI-powered improvements.
 
 | Tier | Price | What's Included |
 |------|-------|-----------------|
-| **Starter Launch** | $499 | 1–3 pages, mobile-first design, contact form, basic SEO, edge deployment |
-| **Growth Website** (Most Popular) | $899 | Everything in Starter + booking integration, AI chatbot (basic), reviews/social proof, Google Analytics |
-| **Smart AI Website** | $1,499+ | Everything in Growth + payments integration, streaming/video section, advanced API integrations, priority build queue |
+| **Starter Launch** | $800 | 1–3 pages, mobile-first design, contact form, basic SEO, edge deployment |
+| **Growth Website** (Most Popular) | $1,800 | Everything in Starter + booking integration, AI chatbot (basic), reviews/social proof, Google Analytics |
+| **Smart AI Website** | $3,500+ | Everything in Growth + payments integration, streaming/video section, advanced API integrations, priority build queue |
 
 ## Pricing — Care Plans (Monthly, required with all builds)
 
 | Plan | Price | What's Included |
 |------|-------|-----------------|
-| **Launch Care** | $49/mo | Managed hosting (global edge, SSL, CDN), 3 revisions/month, minor content updates, 72-hour response |
-| **Growth Care** (Most Popular) | $119/mo | Everything in Launch + up to 9 revisions/month, priority queue, performance checks, SEO monitoring, monthly report |
-| **Partner Care** | $399/mo | Everything in Growth + unlimited revisions (fair use), 24-hour response, monthly optimization & strategy session, AI feature upgrades |
+| **Launch Care** | $59/mo | Managed hosting (global edge, SSL, CDN), 3 revisions/month, minor content updates, 72-hour response |
+| **Growth Care** (Most Popular) | $149/mo | Everything in Launch + up to 9 revisions/month, priority queue, performance checks, SEO monitoring, monthly report |
+| **Partner Care** | $499/mo | Everything in Growth + unlimited revisions (fair use), 24-hour response, monthly optimization & strategy session, AI feature upgrades |
 
 Add-ons available anytime: payments, mini store, streaming, advanced API integrations.
 
@@ -75,7 +75,7 @@ Complex projects may take 5–7 days.
 ## Why Choose Zaila
 
 - **Speed:** 48-hour average launch vs 3–6 months at traditional agencies
-- **Cost:** Starting at $499 vs $8K–$25K at agencies — 60% average savings
+- **Cost:** Starting at $800 vs $8K–$25K at agencies — 60% average savings
 - **Technology:** Next.js (same stack as Netflix, Nike, Notion)
 - **Performance:** 95–99 Google Lighthouse scores (WordPress typically 40–65)
 - **No Contracts:** Month-to-month care plans, cancel anytime
@@ -95,7 +95,7 @@ Complex projects may take 5–7 days.
 
 **Chen Services** (Home Services): AI chatbot saves 12+ hrs/week, 24/7 lead capture, <5s response time.
 
-**Rodriguez Tech** (Technology Consulting): 60% cost savings vs previous agency, Lighthouse 99, 99.9% uptime, $119/mo Growth Plan vs $2,400/mo previous agency.
+**Rodriguez Tech** (Technology Consulting): 60% cost savings vs previous agency, Lighthouse 99, 99.9% uptime, $149/mo Growth Plan vs $2,400/mo previous agency.
 
 **Serenity Wellness** (Health & Wellness): Launched in 48 hours, 3x bookings in first month, 40% lower bounce rate.
 
@@ -112,13 +112,13 @@ Hamilton, Burlington, Stoney Creek, Ancaster, Dundas, and surrounding Ontario ar
 ## FAQs
 
 **How much does a website cost?**
-Websites start at $499 (Starter, 1–3 pages). Growth is $899 (includes chatbot & booking). Smart is $1,499+ (payments & automation). All require a Care Plan starting at $49/mo.
+Websites start at $800 (Starter, 1–3 pages). Growth is $1,800 (includes chatbot & booking). Smart is $3,500+ (payments & automation). All require a Care Plan starting at $59/mo.
 
 **How long does it take?**
 Most sites launch in 2–4 days. Complex projects take 5–7 days.
 
 **Do I need a Care Plan?**
-Yes — all websites include managed hosting through a Care Plan (minimum Launch Care at $49/mo). This covers hosting, SSL, CDN, updates, and support.
+Yes — all websites include managed hosting through a Care Plan (minimum Launch Care at $59/mo). This covers hosting, SSL, CDN, updates, and support.
 
 **Can I cancel anytime?**
 Yes, care plans are month-to-month with no long-term contracts.
@@ -127,7 +127,7 @@ Yes, care plans are month-to-month with no long-term contracts.
 We can migrate your content to a new, faster site. Your domain stays the same.
 
 **Do you build AI chatbots?**
-Yes! AI chatbots are included in the Growth tier ($899) and up. They're trained on your business information and handle FAQs, lead capture, and booking.
+Yes! AI chatbots are included in the Growth tier ($1,800) and up. They're trained on your business information and handle FAQs, lead capture, and booking.
 
 **What technology do you use?**
 We build with Next.js — the same framework used by Netflix, Nike, and Notion. It's faster, more secure, and more SEO-friendly than WordPress.

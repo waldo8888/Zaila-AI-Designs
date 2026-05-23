@@ -106,7 +106,7 @@ const jsonLd = {
           "@type": "SiteNavigationElement",
           position: 3,
           name: "Pricing",
-          description: "Website build packages starting at $899",
+          description: "Website build packages starting at $1,800",
           url: "https://zailai.com/pricing",
         },
         {

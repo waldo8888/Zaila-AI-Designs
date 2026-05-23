@@ -6,7 +6,7 @@ import { useReveal } from "@/components/use-reveal";
 const plans = [
   {
     name: "Launch Care",
-    price: "$49",
+    price: "$59",
     period: "/mo",
     desc: "Hosting, support & light updates",
     items: [
@@ -19,7 +19,7 @@ const plans = [
   },
   {
     name: "Growth Care",
-    price: "$119",
+    price: "$149",
     period: "/mo",
     desc: "Best for most businesses",
     items: [
@@ -33,7 +33,7 @@ const plans = [
   },
   {
     name: "Partner Care",
-    price: "$399",
+    price: "$499",
     period: "/mo",
     desc: "Your dedicated growth partner",
     items: [

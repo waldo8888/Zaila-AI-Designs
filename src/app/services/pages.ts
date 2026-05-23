@@ -16,7 +16,7 @@ export const localPages: LocalPage[] = [
     slug: "ai-web-design-hamilton",
     metaTitle: "AI Web Design Hamilton — Fast Websites for Local Businesses | Zaila",
     metaDescription:
-      "Hamilton's AI-powered web design agency. Modern, fast-loading websites built in days for local businesses. From $499. Free consultation.",
+      "Hamilton's AI-powered web design agency. Modern, fast-loading websites built in days for local businesses. From $800. Free consultation.",
     title: "AI Web Design Hamilton",
     h1: "AI Web Design for Hamilton Businesses",
     subtitle: "Modern, fast-loading websites built in days — not months.",
@@ -45,7 +45,7 @@ export const localPages: LocalPage[] = [
       },
     ],
     stats: [
-      { value: "$499", label: "Starting price" },
+      { value: "$800", label: "Starting price" },
       { value: "48hr", label: "Avg. launch" },
       { value: "99", label: "Performance score" },
       { value: "$0", label: "Contracts" },
@@ -53,7 +53,7 @@ export const localPages: LocalPage[] = [
     faq: [
       {
         q: "How much does a website cost in Hamilton?",
-        a: "Traditional Hamilton agencies charge $3K–$15K. Our AI-powered websites start at $499 for a Starter site and $899 for a full Growth site with booking, chatbot, and social proof.",
+        a: "Traditional Hamilton agencies charge $3K–$15K. Our AI-powered websites start at $800 for a Starter site and $1,800 for a full Growth site with booking, chatbot, and social proof.",
       },
       {
         q: "How fast can you build my website?",
@@ -74,7 +74,7 @@ export const localPages: LocalPage[] = [
     metaTitle:
       "Next.js Website Development Hamilton — Modern Web Apps | Zaila AI Designs",
     metaDescription:
-      "Custom Next.js website development in Hamilton. Blazing fast React sites with server-side rendering, SEO optimization, and managed hosting on a global edge network. From $499.",
+      "Custom Next.js website development in Hamilton. Blazing fast React sites with server-side rendering, SEO optimization, and managed hosting on a global edge network. From $800.",
     title: "Next.js Websites Hamilton",
     h1: "Next.js Website Development in Hamilton",
     subtitle:

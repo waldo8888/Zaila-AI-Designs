@@ -5,12 +5,12 @@ import { PricingFull } from "@/components/pricing-full";
 import { CarePlans } from "@/components/care-plans";
 
 export const metadata: Metadata = {
-  title: "Pricing — AI Websites from $499 | Zaila AI Designs",
+  title: "Pricing — AI Websites from $800 | Zaila AI Designs",
   description:
-    "Transparent pricing for AI-powered websites. Starter from $499, Growth from $899, Smart AI from $1,499. Monthly care plans from $49/mo. No contracts.",
+    "Transparent pricing for AI-powered websites. Starter from $800, Growth from $1,800, Smart AI from $3,500. Monthly care plans from $59/mo. No contracts.",
   alternates: { canonical: "https://zailai.com/pricing" },
   openGraph: {
-    title: "Pricing — AI Websites from $499 | Zaila AI Designs",
+    title: "Pricing — AI Websites from $800 | Zaila AI Designs",
     description:
       "Transparent pricing for AI-powered websites. No hidden fees, no contracts. Launch in days.",
     url: "https://zailai.com/pricing",

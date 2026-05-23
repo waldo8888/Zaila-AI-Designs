@@ -81,7 +81,7 @@ const caseStudies = [
       "Updates took 2–3 weeks to implement",
     ],
     after: [
-      "Growth Plan at $119/mo — same quality, better results",
+      "Growth Plan at $149/mo — same quality, better results",
       "Lighthouse 99 — blazing fast on all devices",
       "Updates deployed in 24–48 hours",
     ],
