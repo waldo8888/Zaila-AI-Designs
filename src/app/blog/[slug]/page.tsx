@@ -18,11 +18,11 @@ export function generateMetadata({
     return {
       title: `${post.title} | Zaila AI Designs`,
       description: post.description,
-      alternates: { canonical: `https://zailai.com/blog/${post.slug}` },
+      alternates: { canonical: `https://www.zailaai.com/blog/${post.slug}` },
       openGraph: {
         title: post.title,
         description: post.description,
-        url: `https://zailai.com/blog/${post.slug}`,
+        url: `https://www.zailaai.com/blog/${post.slug}`,
         type: "article",
         publishedTime: post.date,
         images: [
@@ -54,16 +54,16 @@ export default async function BlogPostPage({
     description: post.description,
     datePublished: post.date,
     dateModified: post.date,
-    image: "https://zailai.com/logo.png",
+    image: "https://www.zailaai.com/logo.png",
     author: {
       "@type": "Organization",
-      "@id": "https://zailai.com/#business",
+      "@id": "https://www.zailaai.com/#business",
       name: "Zaila AI Designs",
     },
-    publisher: { "@id": "https://zailai.com/#business" },
+    publisher: { "@id": "https://www.zailaai.com/#business" },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://zailai.com/blog/${post.slug}`,
+      "@id": `https://www.zailaai.com/blog/${post.slug}`,
     },
   };
 
@@ -71,9 +71,9 @@ export default async function BlogPostPage({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://zailai.com" },
-      { "@type": "ListItem", position: 2, name: "Blog", item: "https://zailai.com/blog" },
-      { "@type": "ListItem", position: 3, name: post.title, item: `https://zailai.com/blog/${post.slug}` },
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.zailaai.com" },
+      { "@type": "ListItem", position: 2, name: "Blog", item: "https://www.zailaai.com/blog" },
+      { "@type": "ListItem", position: 3, name: post.title, item: `https://www.zailaai.com/blog/${post.slug}` },
     ],
   };
 

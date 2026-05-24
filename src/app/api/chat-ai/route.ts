@@ -63,7 +63,7 @@ export async function POST(request: Request) {
       headers: {
         Authorization: `Bearer ${OPENROUTER_API_KEY}`,
         "Content-Type": "application/json",
-        "HTTP-Referer": "https://zailai.com",
+        "HTTP-Referer": "https://www.zailaai.com",
         "X-Title": "Zaila AI Designs Chatbot",
       },
       body: JSON.stringify({

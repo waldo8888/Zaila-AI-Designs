@@ -8,7 +8,7 @@ export const KNOWLEDGE_BASE = `
 
 ## Company Overview
 - **Company:** Zaila AI Designs
-- **Website:** https://zailai.com
+- **Website:** https://www.zailaai.com
 - **Location:** Hamilton, Ontario, Canada
 - **Email:** hello@zailaaidesigns.com
 - **Availability:** Currently accepting new projects

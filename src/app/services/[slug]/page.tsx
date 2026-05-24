@@ -18,11 +18,11 @@ export function generateMetadata({
     return {
       title: page.metaTitle,
       description: page.metaDescription,
-      alternates: { canonical: `https://zailai.com/services/${page.slug}` },
+      alternates: { canonical: `https://www.zailaai.com/services/${page.slug}` },
       openGraph: {
         title: page.metaTitle,
         description: page.metaDescription,
-        url: `https://zailai.com/services/${page.slug}`,
+        url: `https://www.zailaai.com/services/${page.slug}`,
         images: [
           {
             url: "/logo.png",
@@ -51,7 +51,7 @@ export default async function LocalServicePage({
     "@type": "Service",
     name: page.title,
     description: page.metaDescription,
-    provider: { "@id": "https://zailai.com/#business" },
+    provider: { "@id": "https://www.zailaai.com/#business" },
     areaServed: {
       "@type": "AdministrativeArea",
       name: "Ontario",
@@ -62,9 +62,9 @@ export default async function LocalServicePage({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://zailai.com" },
-      { "@type": "ListItem", position: 2, name: "Services", item: "https://zailai.com/services" },
-      { "@type": "ListItem", position: 3, name: page.title, item: `https://zailai.com/services/${page.slug}` },
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.zailaai.com" },
+      { "@type": "ListItem", position: 2, name: "Services", item: "https://www.zailaai.com/services" },
+      { "@type": "ListItem", position: 3, name: page.title, item: `https://www.zailaai.com/services/${page.slug}` },
     ],
   };
 

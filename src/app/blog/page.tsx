@@ -7,12 +7,12 @@ export const metadata: Metadata = {
   title: "Blog — AI Web Design Insights | Zaila AI Designs",
   description:
     "Tips on AI-powered web design, local SEO, and conversion optimization for small businesses. Grow smarter with Zaila.",
-  alternates: { canonical: "https://zailai.com/blog" },
+  alternates: { canonical: "https://www.zailaai.com/blog" },
   openGraph: {
     title: "Blog — AI Web Design Insights | Zaila AI Designs",
     description:
       "Tips on AI-powered web design, local SEO, and conversion optimization for small businesses.",
-    url: "https://zailai.com/blog",
+    url: "https://www.zailaai.com/blog",
   },
 };
 
