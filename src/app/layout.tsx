@@ -22,7 +22,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://zailai.com"),
+  metadataBase: new URL("https://www.zailaai.com"),
   title: "Zaila AI Designs — AI-Powered Websites",
   description:
     "AI-powered business websites and automation for Hamilton small businesses. Launch fast, grow smarter.",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     title: "Zaila AI Designs — AI-Powered Websites",
     description:
       "AI-powered business websites and automation for Hamilton small businesses. Launch fast, grow smarter.",
-    url: "https://zailai.com",
+    url: "https://www.zailaai.com",
     siteName: "Zaila AI Designs",
     images: [
       {
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     images: ["/logo.png"],
   },
   alternates: {
-    canonical: "https://zailai.com",
+    canonical: "https://www.zailaai.com",
   },
   keywords: [
     "AI web design",
@@ -74,16 +74,16 @@ const jsonLd = {
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://zailai.com/#website",
-      url: "https://zailai.com",
+      "@id": "https://www.zailaai.com/#website",
+      url: "https://www.zailaai.com",
       name: "Zaila AI Designs",
       description:
         "AI-powered business websites and automation for Hamilton small businesses.",
-      publisher: { "@id": "https://zailai.com/#business" },
+      publisher: { "@id": "https://www.zailaai.com/#business" },
     },
     {
       "@type": "ItemList",
-      "@id": "https://zailai.com/#nav",
+      "@id": "https://www.zailaai.com/#nav",
       name: "Main Navigation",
       itemListElement: [
         {
@@ -92,7 +92,7 @@ const jsonLd = {
           name: "Home",
           description:
             "AI-powered websites for Hamilton small businesses",
-          url: "https://zailai.com",
+          url: "https://www.zailaai.com",
         },
         {
           "@type": "SiteNavigationElement",
@@ -100,14 +100,14 @@ const jsonLd = {
           name: "Services",
           description:
             "AI web design, chatbots, automation, and local SEO services",
-          url: "https://zailai.com/#services",
+          url: "https://www.zailaai.com/#services",
         },
         {
           "@type": "SiteNavigationElement",
           position: 3,
           name: "Pricing",
           description: "Website build packages starting at $1,800",
-          url: "https://zailai.com/pricing",
+          url: "https://www.zailaai.com/pricing",
         },
         {
           "@type": "SiteNavigationElement",
@@ -115,35 +115,35 @@ const jsonLd = {
           name: "Blog",
           description:
             "AI and web design insights for small businesses",
-          url: "https://zailai.com/blog",
+          url: "https://www.zailaai.com/blog",
         },
         {
           "@type": "SiteNavigationElement",
           position: 5,
           name: "Growth Stories",
           description: "Real client results and case studies",
-          url: "https://zailai.com/growth-stories",
+          url: "https://www.zailaai.com/growth-stories",
         },
         {
           "@type": "SiteNavigationElement",
           position: 6,
           name: "Contact",
           description: "Start your project with Zaila AI Designs",
-          url: "https://zailai.com/contact",
+          url: "https://www.zailaai.com/contact",
         },
       ],
     },
     {
       "@type": "LocalBusiness",
-      "@id": "https://zailai.com/#business",
+      "@id": "https://www.zailaai.com/#business",
       name: "Zaila AI Designs",
-      url: "https://zailai.com",
+      url: "https://www.zailaai.com",
       email: "hello@zailaaidesigns.com",
       logo: {
         "@type": "ImageObject",
-        url: "https://zailai.com/logo.png",
+        url: "https://www.zailaai.com/logo.png",
       },
-      image: "https://zailai.com/logo.png",
+      image: "https://www.zailaai.com/logo.png",
       description:
         "AI-powered web design and automation agency serving Hamilton and Ontario small businesses. Websites that launch in days, not months.",
       address: {

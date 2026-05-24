@@ -5,12 +5,12 @@ export const metadata: Metadata = {
   title: "Growth Stories — Real Results from AI Websites | Zaila AI Designs",
   description:
     "See how Hamilton businesses grew with AI-powered websites. Real before & after results: faster load times, 3x more leads, 60% cost savings vs traditional agencies.",
-  alternates: { canonical: "https://zailai.com/growth-stories" },
+  alternates: { canonical: "https://www.zailaai.com/growth-stories" },
   openGraph: {
     title: "Growth Stories — Real Results from AI Websites | Zaila AI Designs",
     description:
       "See how Hamilton businesses grew with AI-powered websites. Real before & after results.",
-    url: "https://zailai.com/growth-stories",
+    url: "https://www.zailaai.com/growth-stories",
   },
 };
 

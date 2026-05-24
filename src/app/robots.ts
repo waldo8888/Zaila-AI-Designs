@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api/", "/spline-test/"],
       },
     ],
-    sitemap: "https://zailai.com/sitemap.xml",
+    sitemap: "https://www.zailaai.com/sitemap.xml",
   };
 }

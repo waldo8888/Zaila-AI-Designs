@@ -3,7 +3,7 @@ import { blogPosts } from "./blog/posts";
 import { localPages } from "./services/pages";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://zailai.com";
+  const baseUrl = "https://www.zailaai.com";
 
   const staticPages: MetadataRoute.Sitemap = [
     {

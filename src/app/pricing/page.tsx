@@ -8,12 +8,12 @@ export const metadata: Metadata = {
   title: "Pricing — AI Websites from $800 | Zaila AI Designs",
   description:
     "Transparent pricing for AI-powered websites. Starter from $800, Growth from $1,800, Smart AI from $3,500. Monthly care plans from $59/mo. No contracts.",
-  alternates: { canonical: "https://zailai.com/pricing" },
+  alternates: { canonical: "https://www.zailaai.com/pricing" },
   openGraph: {
     title: "Pricing — AI Websites from $800 | Zaila AI Designs",
     description:
       "Transparent pricing for AI-powered websites. No hidden fees, no contracts. Launch in days.",
-    url: "https://zailai.com/pricing",
+    url: "https://www.zailaai.com/pricing",
   },
 };
 
