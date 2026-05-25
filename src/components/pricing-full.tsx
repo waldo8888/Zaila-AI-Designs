@@ -128,7 +128,7 @@ export function PricingFull() {
           API integrations.
         </div>
         <div className="mt-3 text-xs text-zinc-500">
-          All sites include managed hosting on a global edge network (SSL, CDN, and monitoring included) through our Care Plans. Launch Care ($59/mo) minimum required.
+          All sites include managed hosting on a global edge network (SSL, CDN, and monitoring included) through our Care Plans. Launch Care ($69/mo) minimum required.
         </div>
       </Card>
     </div>

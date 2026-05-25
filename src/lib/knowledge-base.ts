@@ -57,9 +57,9 @@ Monthly hosting, updates, optimization, and AI-powered improvements.
 
 | Plan | Price | What's Included |
 |------|-------|-----------------|
-| **Launch Care** | $59/mo | Managed hosting (global edge, SSL, CDN), 3 revisions/month, minor content updates, 72-hour response |
-| **Growth Care** (Most Popular) | $149/mo | Everything in Launch + up to 9 revisions/month, priority queue, performance checks, SEO monitoring, monthly report |
-| **Partner Care** | $499/mo | Everything in Growth + unlimited revisions (fair use), 24-hour response, monthly optimization & strategy session, AI feature upgrades |
+| **Launch Care** | $69/mo | Managed hosting (global edge, SSL, CDN), up to 20 min of changes/month, minor content updates, 72-hour response |
+| **Growth Care** (Most Popular) | $189/mo | Everything in Launch + up to 1 hr of changes/month, priority queue, performance checks, SEO monitoring, monthly report |
+| **Partner Care** | $599/mo | Everything in Growth + up to 2.5 hrs of changes/month, 24-hour response, monthly optimization & strategy session, AI feature upgrades |
 
 Add-ons available anytime: payments, mini store, streaming, advanced API integrations.
 
@@ -112,13 +112,13 @@ Hamilton, Burlington, Stoney Creek, Ancaster, Dundas, and surrounding Ontario ar
 ## FAQs
 
 **How much does a website cost?**
-Websites start at $800 (Starter, 1–3 pages). Growth is $1,800 (includes chatbot & booking). Smart is $3,500+ (payments & automation). All require a Care Plan starting at $59/mo.
+Websites start at $800 (Starter, 1–3 pages). Growth is $1,800 (includes chatbot & booking). Smart is $3,500+ (payments & automation). All require a Care Plan starting at $69/mo.
 
 **How long does it take?**
 Most sites launch in 2–4 days. Complex projects take 5–7 days.
 
 **Do I need a Care Plan?**
-Yes — all websites include managed hosting through a Care Plan (minimum Launch Care at $59/mo). This covers hosting, SSL, CDN, updates, and support.
+Yes — all websites include managed hosting through a Care Plan (minimum Launch Care at $69/mo). This covers hosting, SSL, CDN, updates, and support.
 
 **Can I cancel anytime?**
 Yes, care plans are month-to-month with no long-term contracts.
