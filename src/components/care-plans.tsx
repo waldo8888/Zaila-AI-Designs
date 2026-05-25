@@ -6,12 +6,12 @@ import { useReveal } from "@/components/use-reveal";
 const plans = [
   {
     name: "Launch Care",
-    price: "$59",
+    price: "$69",
     period: "/mo",
     desc: "Hosting, support & light updates",
     items: [
       "Managed hosting on a global edge network — SSL & CDN included",
-      "3 revisions/month",
+      "Up to 20 min of changes/month",
       "Minor content updates",
       "72-hour response",
     ],
@@ -19,12 +19,12 @@ const plans = [
   },
   {
     name: "Growth Care",
-    price: "$149",
+    price: "$189",
     period: "/mo",
     desc: "Best for most businesses",
     items: [
       "Everything in Launch",
-      "Up to 9 revisions/month",
+      "Up to 1 hour of changes/month",
       "Priority queue",
       "Performance checks & SEO monitoring",
       "Monthly report",
@@ -33,12 +33,12 @@ const plans = [
   },
   {
     name: "Partner Care",
-    price: "$499",
+    price: "$599",
     period: "/mo",
     desc: "Your dedicated growth partner",
     items: [
       "Everything in Growth",
-      "Unlimited revisions (fair use)",
+      "Up to 2.5 hours of changes/month",
       "24-hour response",
       "Monthly optimization & strategy session",
       "AI feature upgrades",
