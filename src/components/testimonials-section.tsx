@@ -3,38 +3,34 @@
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 
-const testimonials = [
+const principles = [
   {
     quote:
-      "Zaila AI Designs completely transformed our online presence. We went from zero to a professional, conversion-focused site in under a week.",
-    name: "Sarah Mitchell",
-    role: "Owner, Mitchell & Co.",
-    stat: "3x",
-    statLabel: "More leads",
+      "We start by figuring out what's actually losing you leads — then we build for that. No proposal until we understand the problem.",
+    label: "Diagnose first",
+    stat: "Step 1",
+    statLabel: "We start here",
   },
   {
     quote:
-      "The AI chatbot alone has saved us hours per week. It handles FAQs and captures leads while we focus on running the business.",
-    name: "David Chen",
-    role: "Founder, Chen Services",
-    stat: "24/7",
-    statLabel: "Availability",
+      "AI handles the heavy lifting, so you're live in days instead of stuck in a three-month agency queue. Custom domain and analytics on day one.",
+    label: "Launch in days",
+    stat: "Days",
+    statLabel: "Not months",
   },
   {
     quote:
-      "Agency-level quality at a fraction of the cost. The monthly growth plan keeps our site fresh and performing at its best.",
-    name: "Emma Rodriguez",
-    role: "CEO, Rodriguez Tech",
-    stat: "60%",
-    statLabel: "Cost savings",
+      "Pretty is the floor. Every page leads somewhere — a booking, a form, a call — and it's mobile-first, because that's where your visitors are.",
+    label: "Built to convert",
+    stat: "Mobile",
+    statLabel: "First, always",
   },
   {
     quote:
-      "From concept to live in 48 hours. The speed and quality blew us away. Our booking rate tripled in the first month.",
-    name: "Lisa Park",
-    role: "Director, Serenity Wellness",
-    stat: "48hr",
-    statLabel: "Launch time",
+      "Launch day is the start, not the finish. Your care plan keeps the site fast, updated, and looked after — month to month, no lock-in.",
+    label: "Care that lasts",
+    stat: "Ongoing",
+    statLabel: "No lock-in",
   },
 ];
 
@@ -50,11 +46,11 @@ export function TestimonialsSection() {
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
   const scale = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.95, 1, 1, 0.95]);
 
-  // Auto-rotate testimonials — reset timer on user interaction
+  // Auto-rotate principles — reset timer on user interaction
   const [userInteracted, setUserInteracted] = useState(0);
   useEffect(() => {
     const interval = setInterval(() => {
-      setActive((prev) => (prev + 1) % testimonials.length);
+      setActive((prev) => (prev + 1) % principles.length);
     }, 5000);
     return () => clearInterval(interval);
   }, [userInteracted]);
@@ -66,7 +62,7 @@ export function TestimonialsSection() {
 
   return (
     <section
-      id="testimonials"
+      id="approach"
       ref={containerRef}
       data-cursor="drag"
       className="relative min-h-screen flex items-center justify-center py-32 px-6"
@@ -86,10 +82,11 @@ export function TestimonialsSection() {
           className="text-center mb-20"
         >
           <p className="text-[11px] uppercase tracking-[0.3em] text-zinc-400 mb-4">
-            Testimonials
+            How we work
           </p>
           <h2 className="text-[clamp(2rem,5vw,4rem)] font-semibold text-white tracking-[-0.03em]">
-            Trusted by <span className="text-gradient">ambitious</span> businesses
+            What working with us{" "}
+            <span className="text-gradient">looks like</span>
           </h2>
         </motion.div>
 
@@ -112,34 +109,34 @@ export function TestimonialsSection() {
                   transition={{ duration: 0.6, ease: [0.25, 0.1, 0, 1] }}
                 >
                   <p className="text-[clamp(1.5rem,4vw,2.5rem)] font-light leading-[1.4] tracking-[-0.02em] text-zinc-200 mb-12">
-                    {testimonials[active].quote}
+                    {principles[active].quote}
                   </p>
                   <div className="flex items-center gap-6">
-                    {/* Avatar */}
+                    {/* Step marker */}
                     <div className="relative h-14 w-14">
                       <div className="absolute inset-0 rounded-full bg-gradient-to-br from-fuchsia-500 to-violet-500 animate-[spin_6s_linear_infinite] opacity-60" />
                       <div className="absolute inset-[2px] rounded-full bg-black" />
                       <div className="absolute inset-[3px] rounded-full bg-gradient-to-br from-fuchsia-500/20 to-violet-500/20 flex items-center justify-center">
-                        <span className="text-[20px] font-semibold text-white">
-                          {testimonials[active].name.charAt(0)}
+                        <span className="text-[18px] font-semibold text-white tabular-nums">
+                          {String(active + 1).padStart(2, "0")}
                         </span>
                       </div>
                     </div>
                     <div>
                       <p className="text-[16px] font-medium text-white">
-                        {testimonials[active].name}
+                        {principles[active].label}
                       </p>
                       <p className="text-[14px] text-zinc-400">
-                        {testimonials[active].role}
+                        How we build
                       </p>
                     </div>
-                    {/* Mobile stat badge */}
+                    {/* Mobile keyword badge */}
                     <div className="ml-auto md:hidden glass-card rounded-xl px-4 py-2 text-center">
-                      <div className="text-[20px] font-bold text-gradient leading-none">
-                        {testimonials[active].stat}
+                      <div className="text-[18px] font-bold text-gradient leading-none">
+                        {principles[active].stat}
                       </div>
                       <div className="text-[10px] text-zinc-400 uppercase tracking-wider mt-0.5">
-                        {testimonials[active].statLabel}
+                        {principles[active].statLabel}
                       </div>
                     </div>
                   </div>
@@ -158,11 +155,11 @@ export function TestimonialsSection() {
                   transition={{ duration: 0.5, ease: [0.25, 0.1, 0, 1] }}
                   className="glass-card rounded-3xl p-10 text-center"
                 >
-                  <div className="text-[64px] font-bold text-gradient leading-none mb-4">
-                    {testimonials[active].stat}
+                  <div className="text-[44px] font-bold text-gradient leading-none mb-4">
+                    {principles[active].stat}
                   </div>
                   <div className="text-[14px] text-zinc-400 uppercase tracking-wider">
-                    {testimonials[active].statLabel}
+                    {principles[active].statLabel}
                   </div>
                 </motion.div>
               </AnimatePresence>
@@ -173,7 +170,7 @@ export function TestimonialsSection() {
           <div className="mt-16 flex items-center justify-between">
             {/* Progress dots */}
             <div className="flex gap-3">
-              {testimonials.map((_, i) => (
+              {principles.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => goTo(i)}
@@ -182,7 +179,7 @@ export function TestimonialsSection() {
                       ? "w-12 bg-gradient-to-r from-fuchsia-500 to-violet-500"
                       : "w-6 bg-zinc-800 hover:bg-zinc-700"
                   }`}
-                  aria-label={`Testimonial ${i + 1}`}
+                  aria-label={`Step ${i + 1}`}
                 />
               ))}
             </div>
@@ -191,7 +188,7 @@ export function TestimonialsSection() {
             <div className="flex gap-3">
               <button
                 onClick={() =>
-                  goTo((active - 1 + testimonials.length) % testimonials.length)
+                  goTo((active - 1 + principles.length) % principles.length)
                 }
                 className="h-12 w-12 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:border-white/20 transition-colors"
               >
@@ -200,7 +197,7 @@ export function TestimonialsSection() {
                 </svg>
               </button>
               <button
-                onClick={() => goTo((active + 1) % testimonials.length)}
+                onClick={() => goTo((active + 1) % principles.length)}
                 className="h-12 w-12 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:border-white/20 transition-colors"
               >
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">

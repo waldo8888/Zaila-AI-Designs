@@ -120,8 +120,8 @@ const jsonLd = {
         {
           "@type": "SiteNavigationElement",
           position: 5,
-          name: "Growth Stories",
-          description: "Real client results and case studies",
+          name: "How We Work",
+          description: "Our approach — how Zaila builds and what to expect",
           url: "https://www.zailaai.com/growth-stories",
         },
         {

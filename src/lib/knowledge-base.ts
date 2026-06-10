@@ -74,30 +74,16 @@ Complex projects may take 5–7 days.
 
 ## Why Choose Zaila
 
-- **Speed:** 48-hour average launch vs 3–6 months at traditional agencies
-- **Cost:** Starting at $800 vs $8K–$25K at agencies — 60% average savings
-- **Technology:** Next.js (same stack as Netflix, Nike, Notion)
-- **Performance:** 95–99 Google Lighthouse scores (WordPress typically 40–65)
+- **Speed:** Launch in days, not the months a traditional agency build usually takes
+- **Cost:** Starts at $800 — a fraction of typical agency build pricing
+- **Technology:** Next.js (the same stack used by Netflix, Nike, and Notion)
+- **Performance:** Built for speed — modern Next.js sites load far faster than a typical plugin-heavy WordPress build
 - **No Contracts:** Month-to-month care plans, cancel anytime
 - **Transparent Pricing:** Clear quotes, no hidden fees
-- **Local Expertise:** Based in Hamilton, understand the Ontario market
+- **Local Expertise:** Based in Hamilton, we understand the Ontario market
 
-## Performance Metrics
-- 99 Lighthouse performance score
-- A+ security grade
-- 100 mobile score
-- Sub-2 second load times
-- 99.99% uptime
-
-## Client Results
-
-**Mitchell & Co.** (Professional Services): 3x more leads, launched in 4 days, load speed dropped from 4.2s to 0.8s.
-
-**Chen Services** (Home Services): AI chatbot saves 12+ hrs/week, 24/7 lead capture, <5s response time.
-
-**Rodriguez Tech** (Technology Consulting): 60% cost savings vs previous agency, Lighthouse 99, 99.9% uptime, $149/mo Growth Plan vs $2,400/mo previous agency.
-
-**Serenity Wellness** (Health & Wellness): Launched in 48 hours, 3x bookings in first month, 40% lower bounce rate.
+## Performance & Reliability
+Sites are built on fast, modern edge infrastructure with strong security defaults — global CDN, automatic SSL, and a stack designed for speed and uptime. We build mobile-first, so pages load quickly on a phone, not just a desktop.
 
 ## Service Areas
 Hamilton, Burlington, Stoney Creek, Ancaster, Dundas, and surrounding Ontario areas. We also serve clients across Canada remotely.

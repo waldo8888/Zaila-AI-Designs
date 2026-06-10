@@ -90,7 +90,7 @@ export const localPages: LocalPage[] = [
       {
         title: "Edge hosting",
         description:
-          "Deployed on a global edge network — your Hamilton customers get near-instant load times, and so does everyone else. Built-in SSL, CDN, and 99.99% uptime.",
+          "Deployed on a global edge network — your Hamilton customers get near-instant load times, and so does everyone else. Built-in SSL, CDN, and reliable managed hosting by default.",
       },
       {
         title: "SEO that works",
@@ -105,9 +105,9 @@ export const localPages: LocalPage[] = [
     ],
     stats: [
       { value: "<1s", label: "Page load" },
-      { value: "99.99%", label: "Uptime" },
+      { value: "Edge", label: "Global hosting" },
       { value: "0", label: "Plugins needed" },
-      { value: "A+", label: "Security grade" },
+      { value: "SSL", label: "Secure by default" },
     ],
     faq: [
       {
@@ -162,10 +162,10 @@ export const localPages: LocalPage[] = [
       },
     ],
     stats: [
-      { value: "24/7", label: "Availability" },
-      { value: "<5s", label: "Response time" },
-      { value: "12+hr", label: "Saved per week" },
-      { value: "3x", label: "More leads" },
+      { value: "24/7", label: "Always on" },
+      { value: "Instant", label: "Replies to visitors" },
+      { value: "Trained", label: "On your business" },
+      { value: "Books", label: "Right from the chat" },
     ],
     faq: [
       {
