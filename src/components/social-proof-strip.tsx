@@ -4,12 +4,12 @@ import { useEffect, useRef } from "react";
 import { useSmoothScroll } from "@/components/smooth-scroll";
 
 const proofItems = [
-  { metric: "48hr", label: "Average launch time" },
-  { metric: "99", label: "Lighthouse score" },
-  { metric: "3x", label: "Avg. lead increase" },
-  { metric: "60%", label: "Cost savings vs agencies" },
+  { metric: "Days", label: "Launch, not months" },
+  { metric: "Mobile", label: "First, built to convert" },
+  { metric: "Edge", label: "Fast hosting by default" },
   { metric: "$0", label: "Lock-in contracts" },
-  { metric: "24/7", label: "AI chatbot uptime" },
+  { metric: "AI", label: "Booking & support when it helps" },
+  { metric: "Local", label: "Hamilton-built" },
 ];
 
 function MarqueeRow({
@@ -116,7 +116,7 @@ export function SocialProofStrip() {
       <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
 
       <p className="text-center text-[11px] uppercase tracking-[0.3em] text-zinc-500 mb-10">
-        By the numbers
+        What you get
       </p>
 
       <div className="space-y-4">

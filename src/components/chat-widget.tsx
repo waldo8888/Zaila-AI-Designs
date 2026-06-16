@@ -180,9 +180,9 @@ const TREE: Record<string, TreeNode> = {
   /* --- Portfolio / See our work --- */
   portfolio: {
     message:
-      "We've helped businesses across Hamilton and Ontario launch fast, beautiful websites. Check out our Growth Stories page to see real results — or let's chat about your project!",
+      "Want to know how we actually build? Our How We Work page walks through the whole thing — diagnose first, launch in days, build to convert, and a care plan that keeps it working. Or we can talk about your project right now.",
     options: [
-      { label: "Let's chat!", next: "capture_name" },
+      { label: "Let's chat", next: "capture_name" },
       { label: "Tell me about pricing", next: "pricing" },
       { label: "Back to start", next: "start" },
     ],

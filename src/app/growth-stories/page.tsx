@@ -2,112 +2,75 @@ import type { Metadata } from "next";
 import { GrowthStoriesClient } from "./client";
 
 export const metadata: Metadata = {
-  title: "Growth Stories — Real Results from AI Websites | Zaila AI Designs",
+  title: "How We Work — Our Approach | Zaila AI Designs",
   description:
-    "See how Hamilton businesses grew with AI-powered websites. Real before & after results: faster load times, 3x more leads, 60% cost savings vs traditional agencies.",
+    "How Zaila builds: we diagnose before we build, launch in days not months, design to convert, and keep your site working with a care plan. Hamilton-based, edge-fast.",
   alternates: { canonical: "https://www.zailaai.com/growth-stories" },
   openGraph: {
-    title: "Growth Stories — Real Results from AI Websites | Zaila AI Designs",
+    title: "How We Work — Our Approach | Zaila AI Designs",
     description:
-      "See how Hamilton businesses grew with AI-powered websites. Real before & after results.",
+      "How Zaila builds: diagnose first, launch in days not months, design to convert, and keep it working with a care plan.",
     url: "https://www.zailaai.com/growth-stories",
+    siteName: "Zaila AI Designs",
+    images: [
+      {
+        url: "/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Zaila AI Designs",
+      },
+    ],
+    locale: "en_CA",
+    type: "website",
   },
 };
 
-const caseStudies = [
+const principles = [
   {
-    client: "Mitchell & Co.",
-    industry: "Professional Services",
-    quote:
-      "Zaila AI Designs completely transformed our online presence. We went from zero to a professional, conversion-focused site in under a week.",
-    person: "Sarah Mitchell",
-    role: "Owner",
-    stats: [
-      { label: "More leads", value: "3x", detail: "Monthly leads tripled in 30 days" },
-      { label: "Launch time", value: "4 days", detail: "From concept to live site" },
-      { label: "Load speed", value: "0.8s", detail: "Down from 4.2s on old site" },
-    ],
-    before: [
-      "No website — relying solely on word-of-mouth",
-      "Losing leads to competitors with online presence",
-      "Quoted $6K+ and 8 weeks by a local agency",
-    ],
-    after: [
-      "Conversion-focused site with lead capture forms",
-      "AI chatbot handling FAQs and booking inquiries 24/7",
-      "Organic search traffic growing month-over-month",
+    title: "Diagnose before we build",
+    summary:
+      "We figure out what's actually losing you leads before anyone writes a line of code.",
+    body: "Most sites get built backwards — design first, ask what it's for later. We start with a short conversation about your business: who you're trying to reach, what's getting in their way, what a win looks like. Then we build for that. No discovery call, no proposal until we understand the problem.",
+    points: [
+      "A real conversation about your goals — not a sales pitch",
+      "We map the path from visitor to booked customer",
+      "Scope written down in plain language before work starts",
     ],
     color: "fuchsia" as const,
   },
   {
-    client: "Chen Services",
-    industry: "Home Services",
-    quote:
-      "The AI chatbot alone has saved us hours per week. It handles FAQs and captures leads while we focus on running the business.",
-    person: "David Chen",
-    role: "Founder",
-    stats: [
-      { label: "Hours saved", value: "12+/wk", detail: "From automated FAQ handling" },
-      { label: "Lead capture", value: "24/7", detail: "AI chatbot never sleeps" },
-      { label: "Response time", value: "<5s", detail: "Instant answers for visitors" },
-    ],
-    before: [
-      "Spending hours answering the same questions by phone",
-      "Missing leads after business hours",
-      "Template website with no automation",
-    ],
-    after: [
-      "AI chatbot captures and qualifies leads automatically",
-      "Online booking integrated — no more phone tag",
-      "Monthly growth plan keeps site optimized",
+    title: "Launch in days, not months",
+    summary:
+      "AI handles the heavy lifting, so you're live in a week — not stuck in a three-month agency queue.",
+    body: "Traditional agencies move slowly because the process is slow, not because the work is hard. We use AI for the parts machines are good at — generating code, optimizing, testing — and keep humans on the parts that matter: your story, your design, your decisions. Most builds go from first call to live site in a few days.",
+    points: [
+      "AI-assisted build with fast iterations and constant feedback",
+      "Custom domain, SSL, and analytics live on day one",
+      "Complex projects take a little longer — we'll tell you up front",
     ],
     color: "violet" as const,
   },
   {
-    client: "Rodriguez Tech",
-    industry: "Technology Consulting",
-    quote:
-      "Agency-level quality at a fraction of the cost. The monthly growth plan keeps our site fresh and performing at its best.",
-    person: "Emma Rodriguez",
-    role: "CEO",
-    stats: [
-      { label: "Cost savings", value: "60%", detail: "Vs. previous agency retainer" },
-      { label: "Performance", value: "99", detail: "Lighthouse performance score" },
-      { label: "Uptime", value: "99.9%", detail: "Zero downtime since launch" },
-    ],
-    before: [
-      "Paying $2,400/mo to a traditional agency",
-      "Slow site — Lighthouse score of 42",
-      "Updates took 2–3 weeks to implement",
-    ],
-    after: [
-      "Growth Plan at $149/mo — same quality, better results",
-      "Lighthouse 99 — blazing fast on all devices",
-      "Updates deployed in 24–48 hours",
+    title: "Built to convert, not just look nice",
+    summary:
+      "Pretty is the floor. The point is a site that turns visitors into customers.",
+    body: "A site that looks premium but doesn't move anyone to act is decoration. Every page we build leads somewhere — a clear next step, a booking, a form, a call. Mobile-first, because that's where most of your visitors actually are. Fast, because slow sites quietly lose people before the page even loads.",
+    points: [
+      "Mobile-first design — most visitors are on a phone",
+      "One clear next step on every page",
+      "Booking, payments, and AI support added when they earn their place",
     ],
     color: "cyan" as const,
   },
   {
-    client: "Serenity Wellness",
-    industry: "Health & Wellness",
-    quote:
-      "From concept to live in 48 hours. The speed and quality blew us away. Our booking rate tripled in the first month.",
-    person: "Lisa Park",
-    role: "Director",
-    stats: [
-      { label: "Launch time", value: "48hr", detail: "Concept to live in 2 days" },
-      { label: "Bookings", value: "3x", detail: "Online bookings tripled in month one" },
-      { label: "Bounce rate", value: "−40%", detail: "Visitors stay and convert" },
-    ],
-    before: [
-      "DIY Wix site that looked dated and slow",
-      "No online booking — all appointments by phone",
-      "High bounce rate from poor mobile experience",
-    ],
-    after: [
-      "Modern, mobile-first design with instant load times",
-      "Integrated booking system with automated reminders",
-      "Patients find and book directly from Google",
+    title: "Care that keeps it working",
+    summary:
+      "A site is like a houseplant. Looks fine in week one. By month nine, somebody should be watering it.",
+    body: "Launch day is the start, not the finish. Every build comes with a care plan: managed hosting on a fast edge network, ongoing changes, performance checks, and a real person to email when you need something. No long-term lock-in — care plans are month-to-month.",
+    points: [
+      "Managed hosting — global edge, SSL, CDN",
+      "Ongoing updates and performance monitoring",
+      "Month-to-month — cancel anytime, no lock-in contracts",
     ],
     color: "emerald" as const,
   },
@@ -149,5 +112,5 @@ const colorMap = {
 };
 
 export default function GrowthStoriesPage() {
-  return <GrowthStoriesClient caseStudies={caseStudies} colorMap={colorMap} />;
+  return <GrowthStoriesClient principles={principles} colorMap={colorMap} />;
 }

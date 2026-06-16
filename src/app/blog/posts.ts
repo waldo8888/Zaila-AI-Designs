@@ -37,13 +37,13 @@ AI-built sites on frameworks like Next.js deliver sub-second load times out of t
 
 AI analyzes successful sites in your industry to structure content flow: hero → problem → solution → proof → CTA. This isn't guesswork — it's pattern recognition across thousands of high-converting pages.
 
-### The numbers
+### Where the wins show up
 
-Businesses using AI-powered websites typically see:
+An AI-assisted build tends to move the needle in a few predictable places:
 
-- **40–60% faster load times** compared to template-based sites
-- **2–3x more lead conversions** in the first 90 days
-- **50–70% lower costs** vs. traditional agency builds
+- **Faster load times** than a typical template or plugin-heavy site
+- **More of your visitors taking action**, because the page is built to convert, not just to look nice
+- **Lower build cost** than a traditional agency, because the slow parts of the process get automated
 
 ### It's not about replacing designers
 
@@ -153,7 +153,7 @@ Here are the 5 most common reasons small business websites lose leads, and exact
 
 **Why it happens:** You're too busy doing the work to document it. Client testimonials, case studies, and results feel like "nice to have" rather than essential.
 
-**The fix:** Add testimonials with real names and businesses. Show before/after results. Display logos of clients you've worked with. Include specific metrics: "3x more leads," "launched in 48 hours," "99 performance score."
+**The fix:** Add testimonials with real names and businesses. Show before/after results. Display logos of clients you've worked with. Include specific, honest metrics — the ones you can actually back up, like how fast you launched or how much a client's bookings grew.
 
 ### 5. No automation
 

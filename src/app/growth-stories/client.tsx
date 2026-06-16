@@ -6,20 +6,15 @@ import {
   useTransform,
   useMotionValue,
   useSpring,
-  useInView,
 } from "framer-motion";
 import Link from "next/link";
-import { useRef, useEffect, useState } from "react";
+import { useRef } from "react";
 
-interface CaseStudy {
-  client: string;
-  industry: string;
-  quote: string;
-  person: string;
-  role: string;
-  stats: { label: string; value: string; detail: string }[];
-  before: string[];
-  after: string[];
+interface Principle {
+  title: string;
+  summary: string;
+  body: string;
+  points: string[];
   color: "fuchsia" | "violet" | "cyan" | "emerald";
 }
 
@@ -34,67 +29,17 @@ interface ColorMap {
   };
 }
 
-// --- Animated number counter ---
-function AnimatedStat({ value, label }: { value: string; label: string }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
-  const [displayed, setDisplayed] = useState(value);
-
-  const prefix = value.match(/^[^0-9]+/)?.[0] ?? "";
-  const cleanValue = prefix ? value.slice(prefix.length) : value;
-  const cleanNum = cleanValue.match(/^(\d+)/);
-  const finalNum = cleanNum ? parseInt(cleanNum[1], 10) : null;
-  const finalSuffix = cleanNum ? cleanValue.slice(cleanNum[1].length) : cleanValue;
-
-  useEffect(() => {
-    if (!isInView || finalNum === null) return;
-    const duration = 1200;
-    const startTime = performance.now();
-
-    function tick(now: number) {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      // Ease out cubic
-      const eased = 1 - Math.pow(1 - progress, 3);
-      const current = Math.round(eased * finalNum!);
-      setDisplayed(`${prefix}${current}${finalSuffix}`);
-      if (progress < 1) requestAnimationFrame(tick);
-    }
-
-    requestAnimationFrame(tick);
-  }, [isInView, finalNum, prefix, finalSuffix]);
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30, scale: 0.95 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, margin: "-30px" }}
-      transition={{ duration: 0.7, ease: [0.25, 0.1, 0, 1] }}
-      whileHover={{ scale: 1.04, y: -2 }}
-      className="group relative rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 text-center overflow-hidden transition-colors hover:border-white/[0.12] hover:bg-white/[0.04]"
-    >
-      {/* Shine sweep on hover */}
-      <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-[linear-gradient(105deg,transparent_40%,rgba(255,255,255,0.03)_45%,rgba(255,255,255,0.06)_50%,rgba(255,255,255,0.03)_55%,transparent_60%)] bg-[length:200%_100%] group-hover:animate-[shine_1.5s_ease-in-out]" />
-      <div className="text-2xl font-bold bg-gradient-to-r from-fuchsia-400 to-violet-400 bg-clip-text text-transparent">
-        {displayed}
-      </div>
-      <div className="mt-1 text-xs text-zinc-500 uppercase tracking-wider">
-        {label}
-      </div>
-    </motion.div>
-  );
-}
-
-// --- 3D tilt stat card ---
-function TiltStatCard({
-  stat,
+// --- 3D tilt step-number card ---
+function TiltStepCard({
+  index,
   colorText,
-  delay,
+  colorBorder,
+  colorGradient,
 }: {
-  stat: { value: string; label: string; detail: string };
+  index: number;
   colorText: string;
-  delay: number;
+  colorBorder: string;
+  colorGradient: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
@@ -125,18 +70,16 @@ function TiltStatCard({
       ref={ref}
       onMouseMove={handleMouse}
       onMouseLeave={handleLeave}
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, scale: 0.9 }}
+      whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
-      transition={{ delay, duration: 0.6, ease: [0.25, 0.1, 0, 1] }}
+      transition={{ duration: 0.6, ease: [0.25, 0.1, 0, 1] }}
       style={{ rotateX, rotateY, transformPerspective: 800 }}
-      className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 cursor-default will-change-transform"
+      className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border ${colorBorder} bg-gradient-to-br ${colorGradient} cursor-default will-change-transform`}
     >
-      <div className={`text-3xl font-bold ${colorText} leading-none mb-1`}>
-        {stat.value}
-      </div>
-      <div className="text-sm font-medium text-white mb-0.5">{stat.label}</div>
-      <div className="text-xs text-zinc-500">{stat.detail}</div>
+      <span className={`text-2xl font-bold ${colorText} leading-none`}>
+        {String(index + 1).padStart(2, "0")}
+      </span>
     </motion.div>
   );
 }
@@ -162,13 +105,13 @@ function StaggeredListItem({
   );
 }
 
-// --- Case study card ---
-function CaseStudyCard({
-  study,
+// --- Principle card ---
+function PrincipleCard({
+  principle,
   colors,
   index,
 }: {
-  study: CaseStudy;
+  principle: Principle;
   colors: ColorMap[string];
   index: number;
 }) {
@@ -225,124 +168,76 @@ function CaseStudyCard({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.15, duration: 0.6 }}
-          className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-10"
+          className="flex items-center gap-5 mb-8"
         >
+          <TiltStepCard
+            index={index}
+            colorText={colors.text}
+            colorBorder={colors.border}
+            colorGradient={colors.gradient}
+          />
           <div>
             <motion.span
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2, type: "spring", stiffness: 300 }}
-              className={`inline-block rounded-full ${colors.bg} ${colors.text} px-3 py-1 text-xs font-medium uppercase tracking-wider mb-3`}
+              className={`inline-block rounded-full ${colors.bg} ${colors.text} px-3 py-1 text-xs font-medium uppercase tracking-wider mb-2`}
             >
-              {study.industry}
+              Step {String(index + 1).padStart(2, "0")}
             </motion.span>
             <h3 className="text-2xl md:text-3xl font-semibold text-white tracking-tight">
-              {study.client}
+              {principle.title}
             </h3>
-          </div>
-          <div className="flex items-center gap-3">
-            <motion.div
-              initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-              className={`h-10 w-10 rounded-full bg-gradient-to-br ${colors.gradient} flex items-center justify-center border ${colors.border}`}
-            >
-              <span className="text-sm font-semibold text-white">
-                {study.person.charAt(0)}
-              </span>
-            </motion.div>
-            <div>
-              <p className="text-sm font-medium text-white">{study.person}</p>
-              <p className="text-xs text-zinc-400">
-                {study.role}, {study.client}
-              </p>
-            </div>
           </div>
         </motion.div>
 
-        {/* Quote with animated border */}
-        <motion.blockquote
+        {/* Summary line with animated border */}
+        <motion.p
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.25, duration: 0.7 }}
-          className="relative text-lg md:text-xl font-light text-zinc-300 leading-relaxed pl-6 mb-10"
+          className="relative text-lg md:text-xl font-light text-zinc-300 leading-relaxed pl-6 mb-8"
         >
-          {/* Animated quote bar */}
-          <motion.div
+          {/* Animated accent bar */}
+          <motion.span
             initial={{ height: 0 }}
             whileInView={{ height: "100%" }}
             viewport={{ once: true }}
             transition={{ delay: 0.3, duration: 0.8, ease: [0.25, 0.1, 0, 1] }}
             className={`absolute left-0 top-0 w-[2px] bg-gradient-to-b ${colors.gradient} rounded-full`}
           />
-          &ldquo;{study.quote}&rdquo;
-        </motion.blockquote>
+          {principle.summary}
+        </motion.p>
 
-        {/* Stats row — 3D tilt cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
-          {study.stats.map((stat, i) => (
-            <TiltStatCard
-              key={stat.label}
-              stat={stat}
-              colorText={colors.text}
-              delay={0.3 + i * 0.1}
-            />
-          ))}
-        </div>
-
-        {/* Before / After with staggered list reveals */}
-        <div className="grid md:grid-cols-2 gap-6">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+        {/* Body + points */}
+        <div className="grid md:grid-cols-[1.2fr_1fr] gap-6 md:gap-10">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6"
+            transition={{ delay: 0.35, duration: 0.6 }}
+            className="text-[15px] leading-relaxed text-zinc-400"
           >
-            <h4 className="text-xs font-medium uppercase tracking-wider text-zinc-500 mb-4">
-              Before Zaila
-            </h4>
-            <ul className="space-y-3">
-              {study.before.map((item, i) => (
-                <StaggeredListItem key={item} delay={0.5 + i * 0.08}>
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    className="mt-0.5 shrink-0 text-zinc-600"
-                  >
-                    <path
-                      d="M4 4L12 12M12 4L4 12"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                  <span className="text-zinc-400">{item}</span>
-                </StaggeredListItem>
-              ))}
-            </ul>
-          </motion.div>
+            {principle.body}
+          </motion.p>
 
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.45, duration: 0.6 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
             className={`rounded-2xl border ${colors.border} bg-gradient-to-br ${colors.gradient} p-6`}
           >
             <h4
               className={`text-xs font-medium uppercase tracking-wider ${colors.text} mb-4`}
             >
-              After Zaila
+              What that means for you
             </h4>
             <ul className="space-y-3">
-              {study.after.map((item, i) => (
-                <StaggeredListItem key={item} delay={0.55 + i * 0.08}>
+              {principle.points.map((item, i) => (
+                <StaggeredListItem key={item} delay={0.5 + i * 0.08}>
                   <svg
                     width="16"
                     height="16"
@@ -371,10 +266,10 @@ function CaseStudyCard({
 
 // --- Main client component ---
 export function GrowthStoriesClient({
-  caseStudies,
+  principles,
   colorMap,
 }: {
-  caseStudies: CaseStudy[];
+  principles: Principle[];
   colorMap: ColorMap;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -400,31 +295,19 @@ export function GrowthStoriesClient({
         transition={{ duration: 0.8, ease: [0.25, 0.1, 0, 1] }}
       >
         <p className="mb-3 text-sm font-medium uppercase tracking-widest text-fuchsia-400">
-          Growth Stories
+          How we work
         </p>
         <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">
-          Real results, not{" "}
-          <span className="text-gradient-animated">promises</span>
+          A simple way to build a site that{" "}
+          <span className="text-gradient-animated">actually works</span>
         </h1>
-        <p className="mt-4 text-lg text-zinc-400">
-          See how businesses like yours grew with AI-powered websites. Real
-          metrics, real outcomes.
+        <p className="mt-4 max-w-2xl text-lg text-zinc-400">
+          No mystery, no three-month timeline. Here&rsquo;s exactly how we take you
+          from first conversation to a live site that earns its keep.
         </p>
       </motion.div>
 
-      {/* Stats banner — animated counters */}
-      <div className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-4">
-        {[
-          { value: "48hr", label: "Avg. launch time" },
-          { value: "3x", label: "Avg. lead increase" },
-          { value: "99", label: "Lighthouse score" },
-          { value: "$0", label: "Contracts required" },
-        ].map((stat) => (
-          <AnimatedStat key={stat.label} value={stat.value} label={stat.label} />
-        ))}
-      </div>
-
-      {/* Case studies with vertical timeline */}
+      {/* The four principles with vertical timeline */}
       <div className="relative mt-20">
         {/* Vertical progress timeline */}
         <div
@@ -439,8 +322,8 @@ export function GrowthStoriesClient({
             className="absolute top-0 left-0 right-0 bg-gradient-to-b from-fuchsia-500/60 via-violet-500/60 to-cyan-500/60 rounded-full"
           />
 
-          {/* Node dots for each case study */}
-          {caseStudies.map((_, i) => (
+          {/* Node dots for each step */}
+          {principles.map((_, i) => (
             <motion.div
               key={i}
               initial={{ scale: 0 }}
@@ -448,7 +331,7 @@ export function GrowthStoriesClient({
               viewport={{ once: true }}
               transition={{ type: "spring", stiffness: 300, delay: 0.2 }}
               className="absolute left-1/2 -translate-x-1/2 h-3 w-3 rounded-full border-2 border-white/20 bg-black"
-              style={{ top: `${(i / (caseStudies.length - 1)) * 100}%` }}
+              style={{ top: `${(i / (principles.length - 1)) * 100}%` }}
             >
               <motion.div
                 initial={{ scale: 0 }}
@@ -462,11 +345,11 @@ export function GrowthStoriesClient({
         </div>
 
         <div className="space-y-20 md:pl-0">
-          {caseStudies.map((study, index) => (
-            <CaseStudyCard
-              key={study.client}
-              study={study}
-              colors={colorMap[study.color]}
+          {principles.map((principle, index) => (
+            <PrincipleCard
+              key={principle.title}
+              principle={principle}
+              colors={colorMap[principle.color]}
               index={index}
             />
           ))}
@@ -504,7 +387,7 @@ export function GrowthStoriesClient({
               transition={{ delay: 0.1, duration: 0.6 }}
               className="text-2xl md:text-3xl font-semibold text-white"
             >
-              Ready to be the next growth story?
+              Want to see what this looks like for your business?
             </motion.h3>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -513,8 +396,9 @@ export function GrowthStoriesClient({
               transition={{ delay: 0.2, duration: 0.6 }}
               className="mt-4 max-w-xl mx-auto text-zinc-400"
             >
-              Get a free consultation and see how an AI-powered website can
-              transform your business in days, not months.
+              Start with a short, no-pressure conversation. We&rsquo;ll tell you
+              what we&rsquo;d build and what it would take — before you commit to
+              anything.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
