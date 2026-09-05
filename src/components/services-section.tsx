@@ -1,8 +1,7 @@
 "use client";
 
-import { motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
-import { useRef, useState } from "react";
-import { ServicesNetwork } from "./services-network";
+import { motion } from "framer-motion";
+import Link from "next/link";
 
 const services = [
   {
@@ -77,196 +76,88 @@ const services = [
   },
 ];
 
+const reveal = {
+  initial: { opacity: 0, y: 32 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-80px" },
+};
+
+/**
+ * What we build — plain 2x2 grid.
+ * Replaced the pinned horizontal-scroll track (4 screens of scroll before pricing).
+ */
 export function ServicesSection() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
-
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const nextIndex = Math.max(0, Math.min(services.length - 1, Math.round(latest * (services.length - 1))));
-    setActiveIndex((current) => current === nextIndex ? current : nextIndex);
-  });
-
-  const x = useTransform(
-    scrollYProgress,
-    [0, 1],
-    ["0vw", `-${(services.length - 1) * 100}vw`]
-  );
-
   return (
-    <section
-      id="services"
-      ref={containerRef}
-      className="relative"
-      style={{ height: `${services.length * 100}vh` }}
-    >
-      {/* Sticky horizontal scroll container */}
-      <div className="sticky top-0 h-screen overflow-hidden flex items-center">
-        {/* Background gradient */}
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_50%,rgba(120,50,200,0.04),transparent_60%)]" />
+    <section id="services" className="relative py-24 md:py-32 px-6">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_50%,rgba(120,50,200,0.04),transparent_60%)]" />
 
-        {/* Section header - fixed */}
-        <div className="absolute top-12 md:top-20 left-6 md:left-12 z-20">
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-[11px] uppercase tracking-[0.3em] text-zinc-400 mb-4"
-          >
+      <div className="relative z-10 mx-auto w-full max-w-6xl">
+        <motion.div {...reveal} transition={{ duration: 0.6 }} className="max-w-2xl mb-14 md:mb-20">
+          <p className="text-[11px] uppercase tracking-[0.3em] text-zinc-400 mb-4">
             What we build
-          </motion.p>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-[clamp(1.5rem,3vw,2.5rem)] font-semibold text-white tracking-[-0.02em]"
-          >
-            Websites, lead flow, and the stuff that keeps them working
-          </motion.h2>
-        </div>
+          </p>
+          <h2 className="text-[clamp(2rem,4.5vw,3.5rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white">
+            Websites, lead flow, and the stuff that{" "}
+            <span className="text-gradient">keeps them working</span>
+          </h2>
+          <p className="mt-5 text-[17px] leading-[1.8] text-zinc-400">
+            One journey: we build the site, keep it running, and add booking, payments, or AI only where it moves the needle.
+          </p>
+        </motion.div>
 
-        {/* Horizontal scroll track */}
-        <motion.div style={{ x }} className="flex">
+        <div className="grid gap-5 md:grid-cols-2">
           {services.map((service, index) => (
-            <ServiceCard
+            <motion.article
               key={service.num}
-              service={service}
-              index={index}
-              total={services.length}
-              scrollProgress={scrollYProgress}
-              activeIndex={activeIndex}
-            />
+              {...reveal}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              data-cursor="view"
+              className="glass-card glass-card-interactive rounded-3xl p-7 md:p-9 relative overflow-hidden transition-transform duration-300"
+            >
+              <div className={`pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br ${service.gradient} blur-3xl opacity-60`} />
+
+              <div className="relative">
+                <div className="mb-6 flex items-start justify-between">
+                  <span className={`${service.iconColor} opacity-90`}>{service.icon}</span>
+                  <span className="text-[12px] font-medium tracking-[0.2em] text-zinc-500">{service.num}</span>
+                </div>
+
+                <h3 className="text-[clamp(1.5rem,2.5vw,2rem)] font-semibold text-white tracking-[-0.02em] mb-4">
+                  {service.title}
+                </h3>
+                <p className="text-[16px] leading-[1.8] text-zinc-400 mb-7">
+                  {service.description}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {service.features.map((feature) => (
+                    <span
+                      key={feature}
+                      className="rounded-full bg-white/[0.03] border border-white/[0.06] px-3.5 py-1.5 text-[12px] font-medium text-zinc-400"
+                    >
+                      {feature}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.article>
           ))}
-        </motion.div>
-
-        {/* Scroll hint */}
-        <motion.div
-          initial={{ opacity: 1 }}
-          style={{ opacity: useTransform(scrollYProgress, [0, 0.15], [1, 0]) }}
-          className="absolute bottom-28 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 text-zinc-400"
-        >
-          <span className="text-[11px] uppercase tracking-[0.2em]">Scroll to explore</span>
-          <motion.svg
-            width="20" height="20" viewBox="0 0 20 20" fill="none"
-            animate={{ x: [0, 6, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </motion.svg>
-        </motion.div>
-
-        {/* Progress bar */}
-        <div className="absolute bottom-12 left-6 md:left-12 right-6 md:right-12 z-20">
-          <div className="relative h-px bg-white/10">
-            <motion.div
-              style={{ scaleX: scrollYProgress }}
-              className="absolute inset-y-0 left-0 right-0 origin-left bg-gradient-to-r from-fuchsia-500 to-violet-500"
-            />
-          </div>
-          <div className="mt-4 flex justify-between text-[12px] text-zinc-500">
-            <span>01</span>
-            <span>0{services.length}</span>
-          </div>
         </div>
+
+        <motion.div {...reveal} transition={{ duration: 0.6, delay: 0.2 }} className="mt-12 flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
+          <Link
+            href="/pricing"
+            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-6 py-3 text-[14px] font-medium text-white transition-colors hover:bg-white/5"
+          >
+            See pricing — builds from $800
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </Link>
+          <p className="text-[14px] text-zinc-500">
+            Not sure which tier? Book the discovery call. We&apos;ll tell you if you&apos;re overbuying.
+          </p>
+        </motion.div>
       </div>
     </section>
-  );
-}
-
-function ServiceCard({
-  service,
-  index,
-  total,
-  scrollProgress,
-  activeIndex,
-}: {
-  service: (typeof services)[0];
-  index: number;
-  total: number;
-  scrollProgress: ReturnType<typeof useScroll>["scrollYProgress"];
-  activeIndex: number;
-}) {
-  // Each card is centered when scrollProgress = index / (total - 1)
-  const center = total > 1 ? index / (total - 1) : 0;
-  const halfSpan = total > 1 ? 0.5 / (total - 1) : 0.5;
-  const start = Math.max(0, center - halfSpan);
-  const end = Math.min(1, center + halfSpan);
-
-  const scale = useTransform(
-    scrollProgress,
-    [start, center, end],
-    [0.9, 1, 0.9]
-  );
-
-  const opacity = useTransform(
-    scrollProgress,
-    [start, center, end],
-    [0.5, 1, 0.5]
-  );
-
-  const clipPathReveal = useTransform(
-    scrollProgress,
-    [Math.max(0, center - halfSpan * 0.8), center],
-    ["inset(0 100% 0 0 round 24px)", "inset(0 0% 0 0 round 24px)"]
-  );
-  const shouldRenderNetwork = Math.abs(index - activeIndex) <= 1;
-  const shouldAnimateNetwork = index === activeIndex;
-
-  return (
-    <motion.div
-      style={{ scale, opacity }}
-      data-cursor="view"
-      className="flex-shrink-0 w-screen h-screen flex items-center justify-center px-6 md:px-24"
-    >
-      <div className="w-full max-w-4xl">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          {/* Left - Content */}
-          <div>
-            <span className="text-[64px] md:text-[96px] font-bold text-white/[0.03] leading-none block mb-[-20px] md:mb-[-40px]">
-              {service.num}
-            </span>
-            <h3 className="text-[clamp(1.75rem,4vw,3rem)] font-semibold text-white tracking-[-0.02em] mb-6">
-              {service.title}
-            </h3>
-            <p className="text-[17px] leading-[1.8] text-zinc-400 mb-8">
-              {service.description}
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {service.features.map((feature) => (
-                <span
-                  key={feature}
-                  className="rounded-full bg-white/[0.03] border border-white/[0.05] px-4 py-2 text-[12px] font-medium text-zinc-400"
-                >
-                  {feature}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Right - Neural Network Visual with clip-path reveal */}
-          <div>
-            <motion.div
-              style={{
-                clipPath: clipPathReveal,
-                backgroundColor: "#0a0a12",
-              }}
-              className="aspect-[4/3] md:aspect-square rounded-3xl border border-white/[0.05] relative overflow-hidden isolate"
-            >
-              {/* Subtle gradient overlay */}
-              <div
-                className={`absolute inset-0 bg-gradient-to-br ${service.gradient} pointer-events-none`}
-              />
-              {shouldRenderNetwork ? (
-                <ServicesNetwork activeNodeIndex={index} isActive={shouldAnimateNetwork} />
-              ) : null}
-            </motion.div>
-          </div>
-        </div>
-      </div>
-    </motion.div>
   );
 }

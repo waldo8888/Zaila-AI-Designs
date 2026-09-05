@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import Link from "next/link";
 import { useSmoothScrollTo } from "@/hooks/use-scroll-animation";
 import { useMagnetic } from "@/hooks/use-magnetic";
 
@@ -65,7 +66,7 @@ export function Hero() {
         </motion.div>
 
         {/* CTA */}
-        <div className="mt-10">
+        <div className="mt-10 flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
           <motion.button
             ref={magneticCtaRef as React.RefObject<HTMLButtonElement>}
             style={magneticCtaStyle}
@@ -75,6 +76,15 @@ export function Hero() {
             <span className="relative z-10">Start your project</span>
             <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-200 to-violet-200 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
           </motion.button>
+          <Link
+            href="/pricing"
+            className="inline-flex items-center gap-2 text-[14px] text-zinc-400 transition-colors hover:text-white"
+          >
+            See pricing — builds from $800, care from $69/mo
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </Link>
         </div>
       </motion.div>
 

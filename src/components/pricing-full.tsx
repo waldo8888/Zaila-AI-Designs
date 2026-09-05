@@ -45,6 +45,9 @@ export function PricingFull() {
             <div className="mt-1 text-sm text-zinc-400">
               1–3 pages. Fast launch.
             </div>
+            <p className="mt-3 text-[13px] leading-relaxed text-zinc-500">
+              <span className="text-zinc-300">Best for:</span> a new or one-service business that needs a credible, mobile-first site and a contact form — this month, not next quarter.
+            </p>
             <Link
               href="/contact"
               className="mt-5 block rounded-xl border border-white/15 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-white/5"
@@ -67,6 +70,9 @@ export function PricingFull() {
             <div className="mt-1 text-sm text-zinc-400">
               Booking + chatbot + social proof.
             </div>
+            <p className="mt-3 text-[13px] leading-relaxed text-zinc-500">
+              <span className="text-zinc-300">Best for:</span> most service businesses — you take bookings or inquiries and want them handled on the site instead of by email ping-pong.
+            </p>
             <Link
               href="/contact"
               className="mt-5 block rounded-xl bg-gradient-to-r from-fuchsia-500 to-violet-500 px-4 py-3 text-center text-sm font-semibold text-white hover:opacity-90"
@@ -83,6 +89,9 @@ export function PricingFull() {
             <div className="mt-1 text-sm text-zinc-400">
               Payments + integrations + advanced automation.
             </div>
+            <p className="mt-3 text-[13px] leading-relaxed text-zinc-500">
+              <span className="text-zinc-300">Best for:</span> businesses selling, streaming, or taking deposits online, or with software the site needs to talk to.
+            </p>
             <Link
               href="/contact"
               className="mt-5 block rounded-xl border border-white/15 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-white/5"
@@ -128,7 +137,7 @@ export function PricingFull() {
           API integrations.
         </div>
         <div className="mt-3 text-xs text-zinc-500">
-          All sites include managed hosting on a global edge network (SSL, CDN, and monitoring included) through our Care Plans. Launch Care ($69/mo) minimum required.
+          Every site runs on managed edge hosting (SSL, CDN, monitoring) through a care plan. The care tier matches your build tier at minimum — Starter → Launch Care, Growth → Growth Care, Smart AI → Partner Care.
         </div>
       </Card>
     </div>

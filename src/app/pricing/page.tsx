@@ -3,6 +3,17 @@ import Link from "next/link";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { PricingFull } from "@/components/pricing-full";
 import { CarePlans } from "@/components/care-plans";
+import { PricingFaq, pricingFaq } from "@/components/pricing-faq";
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: pricingFaq.map((item) => ({
+    "@type": "Question",
+    name: item.q,
+    acceptedAnswer: { "@type": "Answer", text: item.a },
+  })),
+};
 
 export const metadata: Metadata = {
   title: "Pricing — AI Websites from $800 | Zaila AI Designs",
@@ -20,6 +31,10 @@ export const metadata: Metadata = {
 export default function PricingPage() {
   return (
     <div className="mx-auto w-full max-w-6xl px-6 pt-28 py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <SectionHeading
         eyebrow="Pricing"
         title="Transparent pricing"
@@ -41,6 +56,17 @@ export default function PricingPage() {
         />
         <div className="mt-10">
           <CarePlans />
+        </div>
+      </div>
+
+      <div className="mt-24">
+        <SectionHeading
+          eyebrow="Questions"
+          title="The stuff people ask before they sign"
+          description="Short answers. If yours isn't here, it's a 20-minute call away."
+        />
+        <div className="mt-10">
+          <PricingFaq />
         </div>
       </div>
 
