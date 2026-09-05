@@ -7,10 +7,10 @@ import { ServicesNetwork } from "./services-network";
 const services = [
   {
     num: "01",
-    title: "AI-Powered Websites",
+    title: "Websites",
     description:
-      "Modern, mobile-first sites built with Next.js. Blazing fast, beautifully designed, and engineered to convert visitors into customers.",
-    features: ["Custom design", "SEO optimized", "Sub-second loads", "Mobile-first"],
+      "Premium, mobile-first sites that load fast and make you look like the obvious choice. Built on Next.js, hosted on the edge, designed to get a visitor to actually do something.",
+    features: ["Custom design", "Mobile-first", "Fast loads", "SEO basics done"],
     gradient: "from-fuchsia-500/20 to-violet-500/20",
     iconColor: "text-fuchsia-400",
     icon: (
@@ -23,10 +23,10 @@ const services = [
   },
   {
     num: "02",
-    title: "AI Assistants",
+    title: "Lead systems",
     description:
-      "24/7 chatbots that answer FAQs, capture leads, and book appointments. Your always-on sales team that never sleeps.",
-    features: ["Lead capture", "FAQ handling", "Smart routing", "Natural language"],
+      "Booking, quote forms, deposits, and checkout — so a visitor can book a table, request a quote, or pay without emailing you first and waiting.",
+    features: ["Online booking", "Quote & contact forms", "Payments & deposits", "Calendar sync"],
     gradient: "from-cyan-500/20 to-blue-500/20",
     iconColor: "text-cyan-400",
     icon: (
@@ -40,10 +40,10 @@ const services = [
   },
   {
     num: "03",
-    title: "Bookings & Payments",
+    title: "AI & automation",
     description:
-      "Integrated scheduling, deposits, and checkout flows. Let customers self-serve and close sales while you sleep.",
-    features: ["Online booking", "Payment processing", "Auto reminders", "Calendar sync"],
+      "An assistant that answers the questions you're tired of answering, captures the lead, and books the call. We add it when it actually helps — not as decoration.",
+    features: ["Lead capture", "FAQ handling", "Booking handoff", "Trained on your business"],
     gradient: "from-emerald-500/20 to-teal-500/20",
     iconColor: "text-emerald-400",
     icon: (
@@ -62,10 +62,10 @@ const services = [
   },
   {
     num: "04",
-    title: "Growth Plans",
+    title: "Care plans",
     description:
-      "Monthly updates, optimization, and AI-powered improvements. Your site gets better every month, not stale.",
-    features: ["Monthly updates", "A/B testing", "Analytics", "SEO monitoring"],
+      "Hosting, updates, and a human who checks on your site every month. A website is like a houseplant — fine in week one, quietly dying by month nine unless someone's watering it.",
+    features: ["Managed hosting", "Monthly change time", "Performance checks", "SEO monitoring"],
     gradient: "from-orange-500/20 to-amber-500/20",
     iconColor: "text-orange-400",
     icon: (
@@ -125,7 +125,7 @@ export function ServicesSection() {
             transition={{ delay: 0.1 }}
             className="text-[clamp(1.5rem,3vw,2.5rem)] font-semibold text-white tracking-[-0.02em]"
           >
-            AI-powered solutions
+            Websites, lead flow, and the stuff that keeps them working
           </motion.h2>
         </div>
 

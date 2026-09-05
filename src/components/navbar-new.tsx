@@ -73,7 +73,7 @@ export function Navbar() {
   const navItems: NavItem[] = [
     { type: "section", label: "Services", id: "services" },
     { type: "section", label: "Process", id: "process" },
-    { type: "link", label: "Work", href: "/growth-stories" },
+    { type: "link", label: "How we work", href: "/growth-stories" },
     { type: "link", label: "Blog", href: "/blog" },
     { type: "link", label: "Pricing", href: "/pricing" },
   ];

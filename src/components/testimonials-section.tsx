@@ -13,7 +13,7 @@ const principles = [
   },
   {
     quote:
-      "AI handles the heavy lifting, so you're live in days instead of stuck in a three-month agency queue. Custom domain and analytics on day one.",
+      "We use AI for the parts machines are good at and keep humans on the parts that matter — your story, your design, your decisions. That's how you're live in days instead of a three-month agency queue.",
     label: "Launch in days",
     stat: "Days",
     statLabel: "Not months",

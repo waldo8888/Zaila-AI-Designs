@@ -8,9 +8,9 @@ const steps = [
   {
     num: "01",
     title: "Discovery",
-    subtitle: "Day 1",
+    subtitle: "Step 1",
     description:
-      "We learn your business, goals, and must-have features in a quick 20-minute call. No commitment required.",
+      "A 20-minute call about your business, your customers, and what's losing you leads. No pitch, and no proposal until we understand the problem.",
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <circle cx="12" cy="12" r="10" />
@@ -21,9 +21,9 @@ const steps = [
   {
     num: "02",
     title: "Build Sprint",
-    subtitle: "Days 2-3",
+    subtitle: "Step 2",
     description:
-      "We design and build your site with an AI-assisted workflow. Fast iterations, clean code, constant feedback.",
+      "We design and build in fast rounds with you in the loop. Starter and Growth sites are usually ready to review within days of getting your content.",
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <path d="M12 2L2 7l10 5 10-5-10-5z" />
@@ -35,9 +35,9 @@ const steps = [
   {
     num: "03",
     title: "Launch",
-    subtitle: "Day 4",
+    subtitle: "Step 3",
     description:
-      "Your site goes live on a modern hosting platform with blazing performance, custom domain, SSL, and analytics — all set up.",
+      "Custom domain, SSL, analytics, and edge hosting — set up and live. Then we keep an eye on it for the first couple of weeks.",
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <path d="M12 2v20" />
@@ -53,7 +53,7 @@ const steps = [
     title: "Grow",
     subtitle: "Ongoing",
     description:
-      "Monthly updates, AI improvements, and performance tuning through your growth plan. Your site evolves with you.",
+      "Your care plan keeps the site fast, updated, and looked after — month to month, no lock-in. Launch is the start, not the finish.",
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <path d="M3 20l5-5 4 4 9-11" />
@@ -106,7 +106,7 @@ export function ProcessSection() {
             transition={{ delay: 0.2 }}
             className="max-w-xl mx-auto text-[17px] leading-[1.8] text-zinc-400"
           >
-            A streamlined process powered by AI that gets you from concept to launch faster than you thought possible.
+            No mystery, no three-month timeline. Here&apos;s what actually happens between &ldquo;hey, we should talk&rdquo; and a live site.
           </motion.p>
         </div>
 

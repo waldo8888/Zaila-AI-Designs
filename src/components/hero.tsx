@@ -48,21 +48,19 @@ export function Hero() {
         {/* Main headline */}
         <motion.div style={{ y: titleY }}>
           <h1
-            className="text-[clamp(2.8rem,8vw,6rem)] font-semibold leading-[0.95] tracking-[-0.04em] text-white"
+            className="text-[clamp(2.25rem,6vw,4.5rem)] font-semibold leading-[1.02] tracking-[-0.04em] text-white"
           >
-            Websites that{" "}
-            <span className="text-gradient">grow</span>
-            <br />
-            your business
+            Premium websites for service businesses that want{" "}
+            <span className="text-gradient">more leads</span>
           </h1>
         </motion.div>
 
         {/* Subtitle */}
         <motion.div style={{ y: subtitleY }}>
           <p
-            className="mt-6 max-w-md text-[17px] leading-[1.7] text-zinc-400"
+            className="mt-6 max-w-xl text-[17px] leading-[1.7] text-zinc-400"
           >
-            AI-powered design and automation that launches in days, not months.
+            Zaila designs and builds fast, modern websites with optional booking, payments, and AI support — so your business looks credible and works harder online. Live in days, not months.
           </p>
         </motion.div>
 
@@ -74,7 +72,7 @@ export function Hero() {
             onClick={() => scrollTo("contact")}
             className="group relative overflow-hidden rounded-full bg-white px-10 py-4 text-[15px] font-medium text-black transition-all duration-500 hover:shadow-[0_20px_60px_-15px_rgba(255,255,255,0.3)]"
           >
-            <span className="relative z-10">Start a Project</span>
+            <span className="relative z-10">Start your project</span>
             <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-200 to-violet-200 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
           </motion.button>
         </div>

@@ -24,25 +24,25 @@ const SERVICE_CONFIG = [
     color: new THREE.Color("#c084fc"),
     hex: "#c084fc",
     glowHex: "#e879f9",
-    label: "AI-POWERED WEBSITES",
+    label: "WEBSITES",
   },
   {
     color: new THREE.Color("#22d3ee"),
     hex: "#22d3ee",
     glowHex: "#67e8f9",
-    label: "AI ASSISTANTS",
+    label: "LEAD SYSTEMS",
   },
   {
     color: new THREE.Color("#34d399"),
     hex: "#34d399",
     glowHex: "#6ee7b7",
-    label: "BOOKINGS & PAYMENTS",
+    label: "AI & AUTOMATION",
   },
   {
     color: new THREE.Color("#fb923c"),
     hex: "#fb923c",
     glowHex: "#fdba74",
-    label: "GROWTH PLANS",
+    label: "CARE PLANS",
   },
 ];
 

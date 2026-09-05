@@ -38,7 +38,7 @@ export function FooterNew() {
                 />
               </div>
               <p className="text-[14px] leading-[1.8] text-zinc-400 max-w-xs mb-6">
-                AI-powered web design and automation for businesses that want to grow.
+                Premium websites and lead systems for service businesses — with AI support when it actually helps. Hamilton-built.
               </p>
               <Link
                 href="mailto:hello@zailaaidesigns.com"
@@ -61,7 +61,7 @@ export function FooterNew() {
                 {[
                   { label: "Services", id: "services" },
                   { label: "Process", id: "process" },
-                  { label: "Work", href: "/growth-stories" },
+                  { label: "How we work", href: "/growth-stories" },
                   { label: "Blog", href: "/blog" },
                   { label: "Contact", id: "contact" },
                 ].map((item) =>
@@ -92,9 +92,9 @@ export function FooterNew() {
               </h3>
               <nav className="space-y-3">
                 <span className="block text-[13px] text-zinc-400">Websites</span>
-                <span className="block text-[13px] text-zinc-400">AI Chatbots</span>
-                <span className="block text-[13px] text-zinc-400">Automation</span>
-                <span className="block text-[13px] text-zinc-400">Growth Plans</span>
+                <span className="block text-[13px] text-zinc-400">Lead systems</span>
+                <span className="block text-[13px] text-zinc-400">AI &amp; automation</span>
+                <span className="block text-[13px] text-zinc-400">Care plans</span>
               </nav>
             </div>
 

@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Free Consultation — Zaila AI Designs",
+  title: "Start your project — Zaila AI Designs",
   description:
-    "Get a free consultation and custom quote for your AI-powered website. Tell us what you need and we'll reply within 24 hours.",
+    "Tell us what your business needs — we reply within 24 hours with a simple plan and a clear price. Free discovery call, no pitch.",
   alternates: { canonical: "https://www.zailaai.com/contact" },
   openGraph: {
-    title: "Free Consultation — Zaila AI Designs",
+    title: "Start your project — Zaila AI Designs",
     description:
-      "Get a free consultation and custom quote for your AI-powered website.",
+      "Tell us what your business needs — we reply within 24 hours with a simple plan and a clear price.",
     url: "https://www.zailaai.com/contact",
   },
 };

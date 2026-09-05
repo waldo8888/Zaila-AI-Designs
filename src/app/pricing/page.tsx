@@ -23,18 +23,21 @@ export default function PricingPage() {
       <SectionHeading
         eyebrow="Pricing"
         title="Transparent pricing"
-        description="Packages that undercut traditional agency pricing — without cutting quality."
+        description="Three build tiers, three care plans, no hidden fees. Pick the one that fits — we'll tell you if you're overbuying."
       />
 
       <div className="mt-10">
         <PricingFull />
+        <p className="mt-6 text-center text-sm text-zinc-500">
+          Deposit to start: Starter 50% · Growth 35% · Smart AI 30%. Balance due at launch.
+        </p>
       </div>
 
       <div className="mt-24">
         <SectionHeading
           eyebrow="Care Plans"
-          title="AI Care Plans"
-          description="Hosting, updates, and optimization included. All builds require a Care Plan."
+          title="Care plans"
+          description="Hosting, updates, and a human keeping an eye on things. Every build needs a care plan — it's what keeps the site online. Month to month, no lock-in."
         />
         <div className="mt-10">
           <CarePlans />

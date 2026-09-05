@@ -52,7 +52,7 @@ export default function ContactPage() {
               <path d="M3 12l6 6L21 6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
-          <h3 className="text-2xl font-semibold text-white mb-3">Request sent!</h3>
+          <h3 className="text-2xl font-semibold text-white mb-3">Request sent.</h3>
           <p className="text-zinc-400">We&apos;ll get back to you within 24 hours with a custom proposal.</p>
         </div>
       ) : (
@@ -127,9 +127,9 @@ export default function ContactPage() {
                 defaultValue=""
               >
                 <option value="" className="bg-black">Not sure yet</option>
-                <option value="$500-$1,500" className="bg-black">$500-$1,500</option>
-                <option value="$1,500-$3,000" className="bg-black">$1,500-$3,000</option>
-                <option value="$3,000+" className="bg-black">$3,000+</option>
+                <option value="$800-$1,800" className="bg-black">$800-$1,800</option>
+                <option value="$1,800-$3,500" className="bg-black">$1,800-$3,500</option>
+                <option value="$3,500+" className="bg-black">$3,500+</option>
               </select>
             </div>
 

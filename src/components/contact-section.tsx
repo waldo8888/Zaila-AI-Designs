@@ -93,7 +93,7 @@ export function ContactSection() {
               Ready to <span className="text-gradient">launch</span>?
             </KineticHeading>
             <p className="max-w-xl mx-auto text-[18px] leading-[1.8] text-zinc-400">
-              Tell us what you need — we&apos;ll respond with a simple plan and a clear price. No contracts, no surprises.
+              Tell us what you need — we&apos;ll reply with a simple plan and a clear price. No lock-in, no surprises.
             </p>
             <p className="mt-4 text-[14px] text-zinc-400">
               Or email us directly at{" "}
@@ -186,18 +186,17 @@ export function ContactSection() {
               </div>
             </div>
 
-            {/* Performance trust badges */}
+            {/* Trust badges — plain facts only, no invented scores */}
             <div className="mt-8 grid grid-cols-3 gap-3">
               {[
-                { icon: "⚡", value: "99", label: "Performance" },
-                { icon: "🔒", value: "A+", label: "Security" },
-                { icon: "📱", value: "100", label: "Mobile" },
+                { value: "24h", label: "Reply time" },
+                { value: "Days", label: "To launch" },
+                { value: "Monthly", label: "No lock-in" },
               ].map((badge) => (
                 <div
                   key={badge.label}
                   className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 text-center"
                 >
-                  <span className="text-sm">{badge.icon}</span>
                   <div className="text-lg font-bold text-white leading-none mt-1">
                     {badge.value}
                   </div>
@@ -410,9 +409,9 @@ export function ContactSection() {
                         defaultValue=""
                       >
                         <option value="" className="bg-black">Not sure yet</option>
-                        <option value="$500-$1,500" className="bg-black">$500-$1,500</option>
-                        <option value="$1,500-$3,000" className="bg-black">$1,500-$3,000</option>
-                        <option value="$3,000+" className="bg-black">$3,000+</option>
+                        <option value="$800-$1,800" className="bg-black">$800-$1,800</option>
+                        <option value="$1,800-$3,500" className="bg-black">$1,800-$3,500</option>
+                        <option value="$3,500+" className="bg-black">$3,500+</option>
                       </select>
                     </label>
 

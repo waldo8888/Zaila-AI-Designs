@@ -23,25 +23,25 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.zailaai.com"),
-  title: "Zaila AI Designs — AI-Powered Websites",
+  title: "Zaila AI Designs — Premium websites for service businesses",
   description:
-    "AI-powered business websites and automation for Hamilton small businesses. Launch fast, grow smarter.",
+    "Premium websites, booking and lead systems, and AI support when it actually helps — for Hamilton service businesses. Launch in days, not months.",
   icons: {
     icon: "/logo.png",
     apple: "/logo.png",
   },
   openGraph: {
-    title: "Zaila AI Designs — AI-Powered Websites",
+    title: "Zaila AI Designs — Premium websites for service businesses",
     description:
-      "AI-powered business websites and automation for Hamilton small businesses. Launch fast, grow smarter.",
+      "Premium websites, booking and lead systems, and AI support when it actually helps — for Hamilton service businesses. Launch in days, not months.",
     url: "https://www.zailaai.com",
     siteName: "Zaila AI Designs",
     images: [
       {
-        url: "/logo.png",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Zaila AI Designs",
+        alt: "Zaila AI Designs — Premium websites for service businesses. Launch in days, not months.",
       },
     ],
     locale: "en_CA",
@@ -49,22 +49,22 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Zaila AI Designs — AI-Powered Websites",
+    title: "Zaila AI Designs — Premium websites for service businesses",
     description:
-      "AI-powered business websites and automation for Hamilton small businesses. Launch fast, grow smarter.",
-    images: ["/logo.png"],
+      "Premium websites, booking and lead systems, and AI support when it actually helps — for Hamilton service businesses. Launch in days, not months.",
+    images: ["/og-image.png"],
   },
   alternates: {
     canonical: "https://www.zailaai.com",
   },
   keywords: [
-    "AI web design",
-    "AI website builder",
     "Hamilton web design",
+    "web design Hamilton Ontario",
+    "service business websites",
     "small business websites",
-    "AI chatbot",
-    "website automation",
-    "Next.js agency",
+    "online booking website",
+    "AI chatbot for small business",
+    "website care plan",
     "fast website launch",
   ],
 };
@@ -78,7 +78,7 @@ const jsonLd = {
       url: "https://www.zailaai.com",
       name: "Zaila AI Designs",
       description:
-        "AI-powered business websites and automation for Hamilton small businesses.",
+        "Premium websites and lead systems for Hamilton service businesses.",
       publisher: { "@id": "https://www.zailaai.com/#business" },
     },
     {
@@ -91,7 +91,7 @@ const jsonLd = {
           position: 1,
           name: "Home",
           description:
-            "AI-powered websites for Hamilton small businesses",
+            "Premium websites for Hamilton service businesses that want more leads",
           url: "https://www.zailaai.com",
         },
         {
@@ -99,14 +99,14 @@ const jsonLd = {
           position: 2,
           name: "Services",
           description:
-            "AI web design, chatbots, automation, and local SEO services",
+            "Websites, lead systems, AI & automation, care plans, and local SEO",
           url: "https://www.zailaai.com/#services",
         },
         {
           "@type": "SiteNavigationElement",
           position: 3,
           name: "Pricing",
-          description: "Website build packages starting at $1,800",
+          description: "Website builds from $800, care plans from $69/mo",
           url: "https://www.zailaai.com/pricing",
         },
         {
@@ -114,7 +114,7 @@ const jsonLd = {
           position: 4,
           name: "Blog",
           description:
-            "AI and web design insights for small businesses",
+            "Web design, lead flow, and local SEO notes for small businesses",
           url: "https://www.zailaai.com/blog",
         },
         {
@@ -145,7 +145,7 @@ const jsonLd = {
       },
       image: "https://www.zailaai.com/logo.png",
       description:
-        "AI-powered web design and automation agency serving Hamilton and Ontario small businesses. Websites that launch in days, not months.",
+        "Hamilton, Ontario studio building premium websites, booking and lead systems, and AI support for service businesses. Launch in days, not months.",
       address: {
         "@type": "PostalAddress",
         addressLocality: "Hamilton",
@@ -159,9 +159,10 @@ const jsonLd = {
       priceRange: "$$",
       serviceType: [
         "Web Design",
+        "Online Booking and Lead Capture Systems",
         "AI Chatbot Development",
-        "Website Automation",
-        "SEO Optimization",
+        "Website Hosting and Maintenance",
+        "Local SEO",
       ],
     },
   ],
