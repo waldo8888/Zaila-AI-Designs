@@ -231,7 +231,7 @@ export function HolographicCard({ children, className = "" }: Props) {
                 }}
             />
             {/* Card content on top */}
-            <div style={{ position: "relative", zIndex: 2 }}>{children}</div>
+            <div className="h-full" style={{ position: "relative", zIndex: 2 }}>{children}</div>
         </div>
     );
 }

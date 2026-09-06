@@ -38,27 +38,27 @@ export function PricingFull() {
   return (
     <div className="space-y-6">
       <div className="grid gap-6 md:grid-cols-3">
-        <HolographicCard className="rounded-3xl">
-          <Card className="p-6">
+        <HolographicCard className="rounded-3xl h-full">
+          <Card className="flex h-full flex-col p-6">
             <div className="text-lg font-semibold">Starter Launch</div>
             <div className="mt-3 text-4xl font-bold tracking-tight">$800</div>
             <div className="mt-1 text-sm text-zinc-400">
               1–3 pages. Fast launch.
             </div>
-            <p className="mt-3 text-[13px] leading-relaxed text-zinc-500">
+            <p className="mt-3 mb-5 text-[13px] leading-relaxed text-zinc-500">
               <span className="text-zinc-300">Best for:</span> a new or one-service business that needs a credible, mobile-first site and a contact form — this month, not next quarter.
             </p>
             <Link
               href="/contact"
-              className="mt-5 block rounded-xl border border-white/15 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-white/5"
+              className="mt-auto block rounded-xl border border-white/15 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-white/5"
             >
               Get started
             </Link>
           </Card>
         </HolographicCard>
 
-        <HolographicCard className="rounded-3xl">
-          <Card className="relative p-6 border-fuchsia-400/30 bg-gradient-to-b from-fuchsia-500/[0.08] to-violet-500/[0.03]">
+        <HolographicCard className="rounded-3xl h-full">
+          <Card className="relative flex h-full flex-col p-6 border-fuchsia-400/30 bg-gradient-to-b from-fuchsia-500/[0.08] to-violet-500/[0.03]">
             <div className="absolute -top-px left-1/2 h-px w-1/2 -translate-x-1/2 bg-gradient-to-r from-transparent via-fuchsia-400 to-transparent" />
             <div className="flex items-center justify-between">
               <div className="text-lg font-semibold">Growth Website</div>
@@ -70,31 +70,31 @@ export function PricingFull() {
             <div className="mt-1 text-sm text-zinc-400">
               Booking + chatbot + social proof.
             </div>
-            <p className="mt-3 text-[13px] leading-relaxed text-zinc-500">
+            <p className="mt-3 mb-5 text-[13px] leading-relaxed text-zinc-500">
               <span className="text-zinc-300">Best for:</span> most service businesses — you take bookings or inquiries and want them handled on the site instead of by email ping-pong.
             </p>
             <Link
               href="/contact"
-              className="mt-5 block rounded-xl bg-gradient-to-r from-fuchsia-500 to-violet-500 px-4 py-3 text-center text-sm font-semibold text-white hover:opacity-90"
+              className="mt-auto block rounded-xl bg-gradient-to-r from-fuchsia-500 to-violet-500 px-4 py-3 text-center text-sm font-semibold text-white hover:opacity-90"
             >
               Get started
             </Link>
           </Card>
         </HolographicCard>
 
-        <HolographicCard className="rounded-3xl">
-          <Card className="p-6">
+        <HolographicCard className="rounded-3xl h-full">
+          <Card className="flex h-full flex-col p-6">
             <div className="text-lg font-semibold">Smart AI Website</div>
             <div className="mt-3 text-4xl font-bold tracking-tight">$3,500+</div>
             <div className="mt-1 text-sm text-zinc-400">
               Payments + integrations + advanced automation.
             </div>
-            <p className="mt-3 text-[13px] leading-relaxed text-zinc-500">
+            <p className="mt-3 mb-5 text-[13px] leading-relaxed text-zinc-500">
               <span className="text-zinc-300">Best for:</span> businesses selling, streaming, or taking deposits online, or with software the site needs to talk to.
             </p>
             <Link
               href="/contact"
-              className="mt-5 block rounded-xl border border-white/15 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-white/5"
+              className="mt-auto block rounded-xl border border-white/15 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-white/5"
             >
               Get started
             </Link>

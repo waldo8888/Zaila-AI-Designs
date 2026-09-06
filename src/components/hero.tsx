@@ -49,7 +49,7 @@ export function Hero() {
         {/* Main headline */}
         <motion.div style={{ y: titleY }}>
           <h1
-            className="text-[clamp(2.25rem,6vw,4.5rem)] font-semibold leading-[1.02] tracking-[-0.04em] text-white"
+            className="text-[clamp(2rem,6vw,4.5rem)] font-semibold leading-[1.02] tracking-[-0.04em] text-white"
           >
             Premium websites for service businesses that want{" "}
             <span className="text-gradient">more leads</span>
@@ -80,7 +80,8 @@ export function Hero() {
             href="/pricing"
             className="inline-flex items-center gap-2 text-[14px] text-zinc-400 transition-colors hover:text-white"
           >
-            See pricing — builds from $800, care from $69/mo
+            <span className="sm:hidden">See pricing — from $800</span>
+            <span className="hidden sm:inline">See pricing — builds from $800, care from $69/mo</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M5 12h14M13 6l6 6-6 6" />
             </svg>
