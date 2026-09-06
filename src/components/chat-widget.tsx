@@ -34,10 +34,10 @@ type ChatMode = "tree" | "ai";
 const TREE: Record<string, TreeNode> = {
   start: {
     message:
-      "Hey! I'm Zaila — your AI-powered web design assistant. What brings you here today?",
+      "Hey — I'm Zaila, the assistant for Zaila AI Designs. Yes, our name has AI in it. Long story. What brings you here?",
     options: [
       { label: "I need a new website", next: "website" },
-      { label: "I'm interested in an AI chatbot", next: "chatbot" },
+      { label: "I'm curious about an AI assistant", next: "chatbot" },
       { label: "I want to see pricing", next: "pricing" },
       { label: "Just browsing", next: "browsing" },
       { label: "Ask me anything", next: "__ai_mode__" },
@@ -47,7 +47,7 @@ const TREE: Record<string, TreeNode> = {
   /* --- Website branch --- */
   website: {
     message:
-      "Great choice! We build blazing-fast, AI-powered websites for small businesses. What's most important to you?",
+      "Good. We build premium, fast websites for service businesses — the kind that actually gets people to book or call. What matters most to you?",
     options: [
       { label: "Speed & performance", next: "web_speed" },
       { label: "Beautiful design", next: "web_design" },
@@ -57,16 +57,16 @@ const TREE: Record<string, TreeNode> = {
   },
   web_speed: {
     message:
-      "We use Next.js and edge delivery to ship sites that score 95+ on Lighthouse. Most load in under 1 second. Want to see what we can do for your business?",
+      "We build on Next.js with edge hosting, so pages load fast on a phone — not just on a designer's monitor. Fast sites keep visitors around long enough to book. Want to talk about yours?",
     options: [
-      { label: "Yes, let's chat!", next: "capture_name" },
+      { label: "Yes, let's talk", next: "capture_name" },
       { label: "Tell me about pricing", next: "pricing" },
       { label: "Start over", next: "start" },
     ],
   },
   web_design: {
     message:
-      "Our designs are custom — no templates, no cookie-cutter layouts. Each site is crafted to match your brand's personality and convert visitors into customers.",
+      "Custom design, no templates. Pretty is the floor, though — every page leads somewhere: a booking, a form, a call.",
     options: [
       { label: "I'd love a custom design", next: "capture_name" },
       { label: "What's the timeline?", next: "timeline" },
@@ -75,7 +75,7 @@ const TREE: Record<string, TreeNode> = {
   },
   web_seo: {
     message:
-      "Every site comes SEO-optimised out of the box — structured data, fast Core Web Vitals, local schema, and meta tags that actually rank. Hamilton businesses love us.",
+      "SEO basics are done properly on every build — structured data, local schema, fast Core Web Vitals, real meta tags. If you want to go further, we also offer standalone local SEO from $1,499.",
     options: [
       { label: "Let's get started", next: "capture_name" },
       { label: "What about pricing?", next: "pricing" },
@@ -84,9 +84,9 @@ const TREE: Record<string, TreeNode> = {
   },
   web_all: {
     message:
-      "You've got great taste! Speed, design, and SEO work together — and that's exactly what we deliver. Ready to see a proposal?",
+      "Fair — they work together. Speed keeps people on the page, design makes you the credible choice, SEO gets them there in the first place. Want to start with a quick discovery call?",
     options: [
-      { label: "Absolutely!", next: "capture_name" },
+      { label: "Sure, let's do it", next: "capture_name" },
       { label: "How long does it take?", next: "timeline" },
       { label: "Start over", next: "start" },
     ],
@@ -95,7 +95,7 @@ const TREE: Record<string, TreeNode> = {
   /* --- Chatbot branch --- */
   chatbot: {
     message:
-      "AI chatbots are our specialty! They handle customer questions 24/7, capture leads while you sleep, and never call in sick. What's your use case?",
+      "An AI assistant answers the questions you're tired of answering, captures the lead, and hands off the booking — 24/7. We add one when it actually helps, not as decoration. What would yours do?",
     options: [
       { label: "Customer support", next: "chat_support" },
       { label: "Lead capture & booking", next: "chat_leads" },
@@ -104,7 +104,7 @@ const TREE: Record<string, TreeNode> = {
   },
   chat_support: {
     message:
-      "A support chatbot can answer FAQs, route complex issues, and free up your time for higher-value work. We train it on your actual business data.",
+      "A support assistant answers FAQs, routes anything complicated to a human, and gives you your evenings back. It's trained on your actual business information.",
     options: [
       { label: "That sounds perfect", next: "capture_name" },
       { label: "What does it cost?", next: "pricing" },
@@ -113,16 +113,16 @@ const TREE: Record<string, TreeNode> = {
   },
   chat_leads: {
     message:
-      "Our lead-capture bots qualify prospects, book appointments, and pipe the data straight to your CRM or inbox. It's like a sales rep that never sleeps.",
+      "A lead-capture assistant qualifies the visitor, books the appointment, and sends the details straight to your inbox or CRM. Like this chat, but for your business.",
     options: [
-      { label: "I want one!", next: "capture_name" },
+      { label: "I want one", next: "capture_name" },
       { label: "Show me pricing", next: "pricing" },
       { label: "Start over", next: "start" },
     ],
   },
   chat_how: {
     message:
-      "We build custom AI chatbots using cutting-edge language models, trained specifically on your products, services, and FAQs. They integrate right into your site.",
+      "It's a language model trained on your products, services, and FAQs, and it's built into your site rather than bolted on. Included from the Growth tier ($1,800) up.",
     options: [
       { label: "Impressive — let's talk", next: "capture_name" },
       { label: "Back to options", next: "start" },
@@ -150,7 +150,7 @@ const TREE: Record<string, TreeNode> = {
   },
   pricing_link: {
     message:
-      "Check out our pricing page for the full breakdown. Or I can get you a custom quote tailored to your needs — just say the word!",
+      "The pricing page has the full breakdown. Or I can get you a custom quote — just say the word.",
     options: [
       { label: "Get me a custom quote", next: "capture_name" },
       { label: "Back to start", next: "start" },
@@ -169,7 +169,7 @@ const TREE: Record<string, TreeNode> = {
   /* --- Timeline --- */
   timeline: {
     message:
-      "Most websites launch within 2–4 days. We work fast — Day 1 is discovery, Days 2-3 are build, and Day 4 you're live. Chatbots can be added during the build sprint.",
+      "Days, not months — once we have your content. Starter and Growth sites are usually ready to review within days of kickoff; Smart AI builds with payments or integrations take longer. You get a real date on the discovery call, not a blanket promise.",
     options: [
       { label: "That works for me", next: "capture_name" },
       { label: "See our work", next: "portfolio" },
@@ -191,7 +191,7 @@ const TREE: Record<string, TreeNode> = {
   /* --- Browsing --- */
   browsing: {
     message:
-      "No worries! Feel free to explore. If you have any questions, I'm right here. Want me to point you somewhere specific?",
+      "No problem. Have a look around — I'm right here if a question comes up. Want me to point you somewhere?",
     options: [
       { label: "Tell me about your services", next: "website" },
       { label: "Show me pricing", next: "pricing" },
@@ -201,17 +201,17 @@ const TREE: Record<string, TreeNode> = {
   },
   bye_browse: {
     message:
-      "Enjoy exploring! Click my icon any time if you need help. We're always here.",
+      "Enjoy. Click my icon any time if you need a hand.",
     options: [{ label: "Start over", next: "start" }],
   },
 
   /* --- Lead capture funnel --- */
   capture_name: {
-    message: "Awesome! Let's get you connected with our team. What's your name?",
+    message: "Great. Let's get Sheldon the basics so he can come back with something useful. What's your name?",
     input: { placeholder: "Your name", next: "capture_email", field: "name" },
   },
   capture_email: {
-    message: "Nice to meet you! What's the best email to reach you at?",
+    message: "Nice to meet you. What's the best email to reach you at?",
     input: { placeholder: "you@email.com", next: "capture_biz", field: "email" },
   },
   capture_biz: {
@@ -296,19 +296,19 @@ const TREE: Record<string, TreeNode> = {
     message: "Last question — what budget range feels realistic right now?",
     options: [
       {
-        label: "$500-$1,500",
+        label: "$800-$1,800",
         next: "captured",
-        capture: { field: "budgetRange", value: "$500-$1,500" },
+        capture: { field: "budgetRange", value: "$800-$1,800" },
       },
       {
-        label: "$1,500-$3,000",
+        label: "$1,800-$3,500",
         next: "captured",
-        capture: { field: "budgetRange", value: "$1,500-$3,000" },
+        capture: { field: "budgetRange", value: "$1,800-$3,500" },
       },
       {
-        label: "$3,000+",
+        label: "$3,500+",
         next: "captured",
-        capture: { field: "budgetRange", value: "$3,000+" },
+        capture: { field: "budgetRange", value: "$3,500+" },
       },
       {
         label: "Not sure yet",
@@ -319,7 +319,7 @@ const TREE: Record<string, TreeNode> = {
   },
   captured: {
     message:
-      "You're all set! I sent those details into ZailaOS so Sheldon can follow up with a cleaner plan. You'll hear back within 24 hours.",
+      "You're all set. I've passed those details to Sheldon so he can follow up with a simple plan and a clear price. You'll hear back within 24 hours.",
     options: [
       { label: "See your work", next: "portfolio" },
       { label: "Start over", next: "start" },
@@ -748,7 +748,7 @@ export function ChatWidget() {
         });
 
         const data = await res.json();
-        const reply = data.reply || data.error || "Sorry, something went wrong. Try again!";
+        const reply = data.reply || data.error || "Sorry, something went wrong on my end. Try again in a moment.";
 
         setAiHistory([...newHistory, { role: "assistant", content: reply }]);
 
@@ -774,7 +774,7 @@ export function ChatWidget() {
       } catch {
         setMessages((prev) => [
           ...prev,
-          { from: "bot", text: "Oops — I had trouble connecting. Try again in a moment!" },
+          { from: "bot", text: "Oops — I had trouble connecting. Try again in a moment." },
         ]);
         setIsTyping(false);
         setAvatarState("idle");
@@ -833,7 +833,7 @@ export function ChatWidget() {
       if (option.next === "__ai_mode__") {
         setChatMode("ai");
         setAvatarState("typing");
-        const msg = "Ask me anything about our services, pricing, process, or how we can help your business!";
+        const msg = "Ask me anything about our services, pricing, or process — or what a site like yours usually needs.";
         let i = 0;
         const partial: Message = { from: "bot", text: "" };
         setMessages((prev) => [...prev, partial]);
