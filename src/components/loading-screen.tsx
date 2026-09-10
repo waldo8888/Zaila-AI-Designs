@@ -113,11 +113,21 @@ export function LoadingScreen() {
 
         // Lower DPR cap on mobile for performance
         const dpr = Math.min(window.devicePixelRatio, isMobile ? 1.25 : 1.5);
-        const renderer = new THREE.WebGLRenderer({
-            antialias: !isSmallMobile, // Skip AA on very small screens
-            alpha: true,
-            powerPreference: isMobile ? "low-power" : "high-performance",
-        });
+        // WebGL can be unavailable: blocklisted GPU driver, disabled in settings,
+        // some in-app browsers. Without this guard the constructor throws, the
+        // effect never reaches startFadeOut, and the overlay hides the site.
+        let renderer: THREE.WebGLRenderer;
+        try {
+            renderer = new THREE.WebGLRenderer({
+                antialias: !isSmallMobile, // Skip AA on very small screens
+                alpha: true,
+                powerPreference: isMobile ? "low-power" : "high-performance",
+            });
+        } catch {
+            // Deferred: setState synchronously in an effect body cascades renders.
+            const skipTimer = window.setTimeout(startFadeOut, 0);
+            return () => clearTimeout(skipTimer);
+        }
         Object.assign(renderer.domElement.style, {
             position: "absolute",
             inset: "0",
@@ -141,6 +151,15 @@ export function LoadingScreen() {
         let material: THREE.ShaderMaterial | null = null;
         let points: THREE.Points | null = null;
         let removeResizeListener: (() => void) | null = null;
+
+        // Safety net: the overlay must never outlive the intro. If the logo
+        // request fails, or anything below stalls, dismiss and show the site.
+        img.onerror = () => {
+            if (!disposed) startFadeOut();
+        };
+        const safetyTimer = window.setTimeout(() => {
+            if (!disposed) startFadeOut();
+        }, 5000);
 
         img.onload = () => {
             if (disposed) return;
@@ -345,6 +364,8 @@ export function LoadingScreen() {
         return () => {
             disposed = true;
             img.onload = null;
+            img.onerror = null;
+            clearTimeout(safetyTimer);
             cancelAnimationFrame(animationId);
             removeResizeListener?.();
             if (points) {

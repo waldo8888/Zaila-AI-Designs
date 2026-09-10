@@ -190,6 +190,7 @@ export function TestimonialsSection() {
                 onClick={() =>
                   goTo((active - 1 + principles.length) % principles.length)
                 }
+                aria-label="Previous principle"
                 className="h-12 w-12 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:border-white/20 transition-colors"
               >
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -198,6 +199,7 @@ export function TestimonialsSection() {
               </button>
               <button
                 onClick={() => goTo((active + 1) % principles.length)}
+                aria-label="Next principle"
                 className="h-12 w-12 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:border-white/20 transition-colors"
               >
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">

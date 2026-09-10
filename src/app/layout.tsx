@@ -26,10 +26,6 @@ export const metadata: Metadata = {
   title: "Zaila AI Designs — Premium websites for service businesses",
   description:
     "Premium websites, booking and lead systems, and AI support when it actually helps — for Hamilton service businesses. Launch in days, not months.",
-  icons: {
-    icon: "/logo.png",
-    apple: "/logo.png",
-  },
   openGraph: {
     title: "Zaila AI Designs — Premium websites for service businesses",
     description:
