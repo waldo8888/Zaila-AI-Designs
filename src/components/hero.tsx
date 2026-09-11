@@ -73,7 +73,7 @@ export function Hero() {
             onClick={() => scrollTo("contact")}
             className="group relative overflow-hidden rounded-full bg-white px-10 py-4 text-[15px] font-medium text-black transition-all duration-500 hover:shadow-[0_20px_60px_-15px_rgba(255,255,255,0.3)]"
           >
-            <span className="relative z-10">Start your project</span>
+            <span className="relative z-10">Start Your Project</span>
             <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-200 to-violet-200 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
           </motion.button>
           <Link
