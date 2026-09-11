@@ -189,7 +189,7 @@ export default async function BlogPostPage({
           href="/contact"
           className="mt-6 inline-block rounded-full bg-white px-7 py-3 text-sm font-semibold text-black transition-all hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.3)]"
         >
-          Start your project
+          Start Your Project
         </Link>
       </div>
     </article>
