@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Manrope } from "next/font/google";
 import "lenis/dist/lenis.css";
 import "./globals.css";
 import { Navbar } from "@/components/navbar-new";
@@ -11,14 +11,18 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { DeferredChatWidget } from "@/components/deferred-chat-widget";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Brand type (spec §6): Manrope for display and headings, Inter for body.
+// The variables live on <html> so Tailwind's :root theme variables can use them.
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -170,7 +174,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${manrope.variable}`}>
       <head>
         <script
           type="application/ld+json"
@@ -178,7 +182,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-dvh bg-black text-zinc-100 antialiased`}
+        className="min-h-dvh bg-night text-zinc-100 antialiased"
       >
         <SmoothScroll>
           <CustomCursor />

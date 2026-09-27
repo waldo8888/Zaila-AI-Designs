@@ -1,10 +1,11 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #000000;
+  --color-background: #07060b;
   --color-foreground: #f4f4f5;
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-manrope);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --color-fuchsia-400: #e879f9;
   --color-fuchsia-500: #d946ef;
   --color-violet-300: #c4b5fd;
@@ -12,6 +13,41 @@
   --color-violet-500: #8b5cf6;
   --color-violet-600: #7c3aed;
   --color-purple-400: #c084fc;
+}
+
+/* Night-into-day tokens (spec §6). */
+@theme {
+  --color-night: #07060b;
+  --color-night-raise: #0e0c15;
+  --color-night-text: #f4f4f5;
+  --color-night-muted: #a1a1aa;
+  --color-night-dim: #8a8a93;
+  --color-night-line: rgb(255 255 255 / 0.08);
+  --color-day: #f1f3f7;
+  --color-day-raise: #ffffff;
+  --color-day-text: #0f172a;
+  --color-day-muted: #475569;
+  --color-day-dim: #56637a;
+  --color-day-line: #e2e8f0;
+  --color-brand: #7c3aed;
+  --color-brand-glow: #a855f7;
+  --color-brand-ink: #6d28d9;
+  --color-lavender: #ede9fe;
+  --color-quiet: #7b8698;
+
+  --radius-card: 20px;
+
+  --text-hero: clamp(2.625rem, 5.85vw, 5.25rem);
+  --text-hero--line-height: 0.95;
+  --text-hero--letter-spacing: -0.045em;
+  --text-chapter: clamp(2.375rem, 4.45vw, 4rem);
+  --text-chapter--line-height: 0.96;
+  --text-chapter--letter-spacing: -0.045em;
+  --text-statement: clamp(1.875rem, 3.5vw, 3.125rem);
+  --text-statement--line-height: 1.14;
+  --text-statement--letter-spacing: -0.03em;
+  --text-label: 0.8125rem;
+  --text-label--letter-spacing: 0.04em;
 }
 
 html {
