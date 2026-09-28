@@ -31,6 +31,7 @@ export type StageFrame = {
 
 export type StageScene = {
   resize(size: StageSize): void;
-  update(frame: StageFrame): void;
+  /** Return false to skip drawing this frame (the story sleeps through the day). */
+  update(frame: StageFrame): boolean | void;
   dispose(): void;
 };

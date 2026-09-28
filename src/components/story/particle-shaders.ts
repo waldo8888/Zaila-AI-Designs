@@ -142,6 +142,7 @@ export const PARTICLE_FRAGMENT = /* glsl */ `
 export const DUST_VERTEX = /* glsl */ `
   uniform float uTime;
   uniform float uPixelRatio;
+  uniform float uOpacity;
 
   varying float vAlpha;
 
@@ -154,7 +155,7 @@ export const DUST_VERTEX = /* glsl */ `
     gl_PointSize = (4.0 + sin(uTime * 2.0 + position.x) * 2.0) * uPixelRatio * (1.0 / -mvPosition.z);
     gl_Position = projectionMatrix * mvPosition;
 
-    vAlpha = 0.08 + 0.06 * sin(uTime + position.x * 5.0);
+    vAlpha = (0.08 + 0.06 * sin(uTime + position.x * 5.0)) * uOpacity;
   }
 `;
 
@@ -180,6 +181,8 @@ export const STORY_VERTEX = /* glsl */ `
   attribute vec3 aStart;
   attribute vec3 aLogo;
   attribute vec4 aLeak;
+  attribute vec3 aHorizon;
+  attribute vec2 aLand;
   attribute float aRandom;
 
   uniform float uTime;
@@ -189,6 +192,10 @@ export const STORY_VERTEX = /* glsl */ `
   uniform float uLeak;
   uniform float uExitX;
   uniform float uLogoScale;
+  uniform float uHorizon;
+  uniform float uLanding;
+  uniform vec3 uHorizonFrame; // half width, horizon height, half height (world units)
+  uniform vec4 uLandRect;     // left, top, right, bottom of the sample site (world units, z = 0)
   uniform vec3 uMouse;
   uniform float uMouseInfluence;
 
@@ -229,6 +236,23 @@ export const STORY_VERTEX = /* glsl */ `
     world = mix(world, vec3(uExitX + aLeak.w, aLeak.y, aLeak.z), leak);
     world.y += flight * 0.3 * sign(aLeak.y);
 
+    // Sunrise: the particles still in the orb fall into a horizon...
+    float stay = 1.0 - leak;
+    float fall = clamp((uHorizon - aRandom * 0.3) / 0.7, 0.0, 1.0);
+    fall = fall * fall * (3.0 - 2.0 * fall);
+    vec3 horizon = vec3(
+      aHorizon.x * uHorizonFrame.x,
+      uHorizonFrame.y + aHorizon.y * uHorizonFrame.z + sin(aHorizon.x * 3.0 + uTime * 0.6) * 0.06,
+      aHorizon.z
+    );
+    world = mix(world, horizon, fall * stay);
+
+    // ...then land on the sample site, fading as it appears
+    float land = clamp((uLanding - aRandom * 0.3) / 0.7, 0.0, 1.0);
+    land = land * land * (3.0 - 2.0 * land);
+    vec3 site = vec3(mix(uLandRect.x, uLandRect.z, aLand.x), mix(uLandRect.y, uLandRect.w, aLand.y), 0.0);
+    world = mix(world, site, land * stay);
+
     // Particles near the cursor push away (the orb's, not the logo's)
     vec3 toMouse = world - uMouse;
     float repulsion = smoothstep(1.5, 0.0, length(toMouse.xy)) * uMouseInfluence * stream;
@@ -246,7 +270,7 @@ export const STORY_VERTEX = /* glsl */ `
 
     float orbAlpha = (0.35 + 0.35 * (1.0 - smoothstep(0.0, 8.0, length(orbLocal)))) * (0.4 + aRandom * 0.3);
     float logoAlpha = 0.75 + aRandom * 0.25;
-    vAlpha = mix(logoAlpha, orbAlpha, stream) + vMouseProximity * 0.2 + flight * 0.35;
+    vAlpha = (mix(logoAlpha, orbAlpha, stream) + vMouseProximity * 0.2 + flight * 0.35) * (1.0 - land);
 
     // The orb's depth tint; the logo keeps its light lilac and pink
     vPos = mix(vec3(0.0, 0.0, -2.0), orbLocal, stream);

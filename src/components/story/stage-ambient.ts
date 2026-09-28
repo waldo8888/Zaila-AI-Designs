@@ -72,6 +72,7 @@ export function createAmbientScene(
     uniforms: {
       uTime: material.uniforms.uTime,
       uPixelRatio: material.uniforms.uPixelRatio,
+      uOpacity: { value: 1 },
       uColor: { value: new THREE.Color("#d946ef") },
     },
     vertexShader: DUST_VERTEX,

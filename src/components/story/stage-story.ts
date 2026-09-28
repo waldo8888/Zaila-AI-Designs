@@ -3,6 +3,8 @@ import { LOGO_POINTS } from "./logo-points";
 import {
   decodeLogoPoints,
   generateDust,
+  generateHorizon,
+  generateLanding,
   generateLeak,
   generateLogo,
   generateRandoms,
@@ -11,7 +13,13 @@ import {
 } from "./particle-shapes";
 import { DUST_FRAGMENT, DUST_VERTEX, PARTICLE_FRAGMENT, STORY_VERTEX } from "./particle-shaders";
 import type { StageFrame, StageScene, StageSetup, StageSize } from "./stage-scene";
-import { directStage, introPhase, type IntroPhase } from "./story-director";
+import {
+  directSky,
+  directStage,
+  introPhase,
+  type IntroPhase,
+  type SkyState,
+} from "./story-director";
 import { storyProgress } from "./story-progress";
 
 type IntroWindow = Window & typeof globalThis & { __zailaIntroStarted?: boolean };
@@ -21,9 +29,10 @@ const LEAK_FRACTION = 0.45;
 
 /**
  * Story mode, the homepage (spec §8). The intro draws the logo above the
- * curtain and streams it into the orb; the reality chapter then leaks about
- * 45% of the orb off the right edge. The story director turns progress into
- * positions, so scrolling back reverses every scene exactly.
+ * curtain and streams it into the orb; the reality leaks about 45% of the orb
+ * off the right edge; at sunrise the rest fall into a horizon and land on the
+ * fix's sample site, and then the stage sleeps. The director turns progress
+ * into positions and the sky, so scrolling back reverses every scene exactly.
  */
 export function createStoryScene({ scene, camera, rng, size }: StageSetup): StageScene {
   const html = document.documentElement;
@@ -53,6 +62,10 @@ export function createStoryScene({ scene, camera, rng, size }: StageSetup): Stag
       uLeak: { value: 0 },
       uExitX: { value: 4 },
       uLogoScale: { value: 2 },
+      uHorizon: { value: 0 },
+      uLanding: { value: 0 },
+      uHorizonFrame: { value: new THREE.Vector3(3, -0.2, 1.9) },
+      uLandRect: { value: new THREE.Vector4(0, 0, 0, 0) },
       uMouse: { value: new THREE.Vector3() },
       uMouseInfluence: { value: 0 },
       uColor1: { value: new THREE.Color("#c084fc") },
@@ -68,7 +81,7 @@ export function createStoryScene({ scene, camera, rng, size }: StageSetup): Stag
 
   const particles = new THREE.Points(geometry, material);
   // The shader moves particles far from their sphere positions (the logo, the
-  // leak), so the sphere's bounds can't be used to cull them.
+  // leak, the horizon, the landing), so the sphere's bounds can't cull them.
   particles.frustumCulled = false;
   scene.add(particles);
 
@@ -81,6 +94,7 @@ export function createStoryScene({ scene, camera, rng, size }: StageSetup): Stag
     uniforms: {
       uTime: material.uniforms.uTime,
       uPixelRatio: material.uniforms.uPixelRatio,
+      uOpacity: { value: 1 },
       uColor: { value: new THREE.Color("#d946ef") },
     },
     vertexShader: DUST_VERTEX,
@@ -92,8 +106,13 @@ export function createStoryScene({ scene, camera, rng, size }: StageSetup): Stag
   const dust = new THREE.Points(dustGeometry, dustMaterial);
   scene.add(dust);
 
-  // World units covered by the pointer's -1 to 1 at z = 0, and the viewport height
+  // Generated last, so the intro, the orb, the leak and the dust keep their seeded look
+  geometry.setAttribute("aHorizon", new THREE.BufferAttribute(generateHorizon(count, rng), 3));
+  geometry.setAttribute("aLand", new THREE.BufferAttribute(generateLanding(count, rng), 2));
+
+  // World units covered by the pointer's -1 to 1 at z = 0, and the viewport
   const reach = { x: 1, y: 1 };
+  let viewportWidth = size.width;
   let viewportHeight = size.height;
 
   function resize(next: StageSize) {
@@ -101,16 +120,42 @@ export function createStoryScene({ scene, camera, rng, size }: StageSetup): Stag
     const aspect = next.width / next.height;
     reach.y = camera.position.z * tanHalf;
     reach.x = reach.y * aspect;
+    viewportWidth = next.width;
     viewportHeight = next.height;
     material.uniforms.uPixelRatio.value = next.pixelRatio;
     // Just past the right edge, even for the deepest exit point (z = -1)
     material.uniforms.uExitX.value = (camera.position.z + 1) * tanHalf * aspect + 0.3;
     // The logo takes 58% of the height, or 72% of the width on narrow screens
     material.uniforms.uLogoScale.value = Math.min(reach.y * 2 * 0.58, reach.x * 2 * 0.72);
+    // The horizon runs a little past both edges, just below the middle
+    material.uniforms.uHorizonFrame.value.set(reach.x * 1.15, -0.1 * reach.y, reach.y);
     // Right of centre, behind the end of the headline; centred on phones
     particles.position.x = next.width < 1024 ? 0 : 1.5;
   }
   resize(size);
+
+  // The sample site's box on screen, in world units at z = 0
+  function aimLanding() {
+    const target = storyProgress.landingTarget;
+    if (!target) return;
+    const box = target.getBoundingClientRect();
+    const x = (px: number) => ((px / viewportWidth) * 2 - 1) * reach.x;
+    const y = (px: number) => (1 - (px / viewportHeight) * 2) * reach.y;
+    material.uniforms.uLandRect.value.set(x(box.left), y(box.top), x(box.right), y(box.bottom));
+  }
+
+  // The sky and the nav theme, written to <html> only when they change
+  let painted = "";
+  function paintSky(sky: SkyState) {
+    const key = `${sky.top}${sky.mid}${sky.bottom}${sky.glow.toFixed(3)}${sky.nav}`;
+    if (key === painted) return;
+    painted = key;
+    html.style.setProperty("--sky-top", sky.top);
+    html.style.setProperty("--sky-mid", sky.mid);
+    html.style.setProperty("--sky-bottom", sky.bottom);
+    html.style.setProperty("--sky-glow", sky.glow.toFixed(3));
+    html.dataset.navTheme = sky.nav;
+  }
 
   // The intro gate (intro-gate.ts) decided before first paint whether this visit gets the intro
   let introPending = html.dataset.intro === "play";
@@ -146,8 +191,10 @@ export function createStoryScene({ scene, camera, rng, size }: StageSetup): Stag
       introSeconds,
       heroExit: scrollY / viewportHeight,
       reality: storyProgress.reality,
-      sunrise: 0,
+      sunrise: storyProgress.sunrise,
     });
+    const sky = directSky({ sunrise: storyProgress.sunrise, dusk: storyProgress.dusk });
+    paintSky(sky);
 
     if (!still) {
       baseRotationY += delta * 0.05;
@@ -161,17 +208,28 @@ export function createStoryScene({ scene, camera, rng, size }: StageSetup): Stag
     uniforms.uFly.value = state.fly;
     uniforms.uStream.value = state.stream;
     uniforms.uLeak.value = state.leak;
+    uniforms.uHorizon.value = state.horizon;
+    uniforms.uLanding.value = state.landing;
     uniforms.uMouseInfluence.value = influence;
     if (influence > 0.001) uniforms.uMouse.value.set(mouse.x * reach.x, mouse.y * reach.y, 0);
+    if (state.landing > 0 && state.landing < 1) aimLanding();
+    dustMaterial.uniforms.uOpacity.value = sky.glow;
 
     particles.rotation.y = baseRotationY + state.spin + mouse.x * 0.2 * influence;
     particles.rotation.x = Math.sin(baseTimeX) * 0.1 + mouse.y * 0.15 * influence;
     dust.rotation.y = dustTimeY;
+
+    return state.running;
   }
 
   function dispose() {
     // Leaving mid-intro (a route change) must never leave the curtain up
     if (introPending || introStart !== null) html.dataset.intro = "done";
+    // Other pages keep the night sky and the night nav
+    for (const name of ["--sky-top", "--sky-mid", "--sky-bottom", "--sky-glow"]) {
+      html.style.removeProperty(name);
+    }
+    delete html.dataset.navTheme;
     scene.remove(particles, dust);
     geometry.dispose();
     material.dispose();

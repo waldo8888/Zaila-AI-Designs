@@ -147,6 +147,13 @@ export function ParticleStage() {
 
       const clock = new THREE.Clock();
       let animationId = 0;
+      // The scene can ask not to draw: the story sleeps through the day (spec §8)
+      let drawing = true;
+      const setDrawing = (value: boolean) => {
+        drawing = value;
+        container.dataset.drawing = String(value);
+      };
+      setDrawing(true);
       let isDocumentVisible = document.visibilityState === "visible";
 
       function handleVisibilityChange() {
@@ -164,8 +171,16 @@ export function ParticleStage() {
         mouse.y += (targetMouse.y - mouse.y) * 0.08;
         mouseInfluence += ((mouseActive ? 1 : 0) - mouseInfluence) * 0.05;
 
-        stageScene.update({ delta, elapsed: clock.elapsedTime, scrollY, mouse, mouseInfluence });
-        renderer.render(scene, camera);
+        const draw =
+          stageScene.update({ delta, elapsed: clock.elapsedTime, scrollY, mouse, mouseInfluence }) !==
+          false;
+        if (draw) {
+          renderer.render(scene, camera);
+        } else if (drawing) {
+          // Falling asleep: clear what's left once, then draw nothing
+          renderer.clear();
+        }
+        if (draw !== drawing) setDrawing(draw);
       }
 
       animate();
@@ -184,6 +199,7 @@ export function ParticleStage() {
           document.removeEventListener("mouseleave", handleMouseLeave);
         }
         stageScene.dispose();
+        delete container.dataset.drawing;
         renderer.dispose();
         if (container.contains(renderer.domElement)) {
           container.removeChild(renderer.domElement);

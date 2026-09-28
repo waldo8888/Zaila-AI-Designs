@@ -94,6 +94,15 @@ test("the sky is night, then day after the sunrise, then night again after dusk"
   assert.deepEqual([night.glow, day.glow, dusk.glow], [1, 0, 1]);
 });
 
+test("the night glow only shows while the middle of the sky is still night", () => {
+  const glow = (sunrise: number, dusk: number) => directSky({ sunrise, dusk }).glow;
+  assert.equal(glow(0.25, 0), 1);
+  // Mid-sunrise and mid-dusk the middle is violet, where the glow reads as a smudge
+  assert.equal(glow(0.5, 0), 0);
+  assert.equal(glow(1, 0.5), 0);
+  assert.equal(glow(1, 0.75), 1);
+});
+
 test("in both transitions the bottom of the sky leads", () => {
   const rising = directSky({ sunrise: 0.5, dusk: 0 });
   assert.equal(rising.top, NIGHT);

@@ -1,6 +1,7 @@
 import { Hero } from "@/components/hero";
 import { RealitySection } from "@/components/reality-section";
 import { FixSection } from "@/components/fix-section";
+import { InterimDusk } from "@/components/story/interim-dusk";
 import { ProcessSection } from "@/components/process-section";
 import { TestimonialsSection } from "@/components/testimonials-section";
 import { SocialProofStrip } from "@/components/social-proof-strip";
@@ -13,6 +14,7 @@ export default function Home() {
       <Hero />
       <RealitySection />
       <FixSection />
+      <InterimDusk />
       <ProcessSection />
       <TestimonialsSection />
       <SocialProofStrip />

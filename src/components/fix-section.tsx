@@ -42,7 +42,7 @@ export function FixSection() {
     <section
       id="services"
       aria-labelledby="fix-title"
-      className="relative bg-day text-day-text motion-safe:h-[200vh] lg:motion-safe:h-[250vh]"
+      className="relative text-day-text motion-reduce:bg-day motion-safe:h-[200vh] lg:motion-safe:h-[250vh]"
     >
       <div className="fix-stage mx-auto flex w-full max-w-[1440px] flex-col px-5 py-20 motion-safe:sticky motion-safe:top-0 motion-safe:min-h-svh motion-safe:justify-center motion-safe:pb-4 motion-safe:pt-20 lg:grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:content-center lg:items-center lg:gap-[60px] lg:px-20 lg:py-32 lg:motion-safe:pb-6 lg:motion-safe:pt-24">
         {/* On phones this column dissolves so the pricing link can follow the site, as in the phone frame */}

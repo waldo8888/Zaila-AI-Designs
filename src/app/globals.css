@@ -348,6 +348,7 @@ img[src] {
 /* Sky backdrop (spec §4). The story director scrubs these on <html>. */
 :root {
   --sky-top: #07060b;
+  --sky-mid: #07060b;
   --sky-bottom: #07060b;
   --sky-glow: 1;
 }
@@ -357,7 +358,7 @@ img[src] {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: linear-gradient(180deg, var(--sky-top), var(--sky-bottom));
+  background: linear-gradient(180deg, var(--sky-top), var(--sky-mid), var(--sky-bottom));
 }
 
 .sky::after,

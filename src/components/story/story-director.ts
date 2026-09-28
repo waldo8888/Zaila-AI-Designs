@@ -94,11 +94,14 @@ export function directSky({ sunrise, dusk }: SkyInput): SkyState {
   const stops = d > 0 ? DUSK : SUNRISE;
   const t = d > 0 ? d : s;
   const top = sampleStops(stops, t * 2 - 1);
+  const midAt = t * 2 - 0.5;
   return {
     top,
-    mid: sampleStops(stops, t * 2 - 0.5),
+    mid: sampleStops(stops, midAt),
     bottom: sampleStops(stops, t * 2),
-    glow: d > 0 ? d : 1 - s,
+    // The glow sits in the middle of the screen and is only lighter than night,
+    // so it shows while the middle is still night-dark and is gone as it lightens
+    glow: d > 0 ? clamp01((midAt - 0.85) / 0.15) : 1 - clamp01(midAt / 0.15),
     nav: luminance(top) > 0.3 ? "day" : "night",
   };
 }

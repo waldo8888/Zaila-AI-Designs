@@ -2474,8 +2474,14 @@ with:
       let animationId = 0;
       // The scene can ask not to draw: the story sleeps through the day (spec §8)
       let drawing = true;
-      container.dataset.drawing = "true";
+      const setDrawing = (value: boolean) => {
+        drawing = value;
+        container.dataset.drawing = String(value);
+      };
+      setDrawing(true);
 ```
+
+The helper is an arrow function because TypeScript can't narrow `container` inside the hoisted `function animate()`.
 
 2. Replace:
 
@@ -2496,10 +2502,7 @@ with:
           // Falling asleep: clear what's left once, then draw nothing
           renderer.clear();
         }
-        if (draw !== drawing) {
-          drawing = draw;
-          container.dataset.drawing = String(draw);
-        }
+        if (draw !== drawing) setDrawing(draw);
 ```
 
 3. In `innerCleanup`, after `stageScene.dispose();`, add `delete container.dataset.drawing;`.
@@ -2616,7 +2619,7 @@ In `src/components/fix-section.tsx`, in the `<section>`'s class list, replace `r
 - [ ] **Step 9: Run the checks**
 
 Run: `npm test && npx tsc --noEmit && npm run lint && npm run build`
-Expected: `ℹ pass 44`, and everything else exits 0.
+Expected: `ℹ pass 44` (45 with the glow test in the note under Step 11), and everything else exits 0.
 
 - [ ] **Step 10: Watch the sunrise**
 
@@ -2663,14 +2666,43 @@ REDUCED=1 node scripts/cdp.mjs "http://localhost:3100/" 3000 "(async () => { doc
 
 Expected:
 - Phone: `mid` violet (mid-sunrise) and drawing `true`. The frame shows the horizon across the phone and the fix arriving.
-- Reduced motion: `bg` `rgb(241, 243, 247)` and the sky at its default (night). The frame shows the finished fix on its own day panel: all four rows open, the full site.
+- Reduced motion: `bg` `rgb(241, 243, 247)` and the sky night (`#07060B`: the stage still paints it, with no sunrise). The frame shows the finished fix on its own day panel: all four rows open, the full site.
 
 Stop the server.
+
+> **Found while executing (2026-09-28):** at `2.25` the first frames had a dark smudge in the middle of the sunrise, and the canvas Sunrise frame has none. The cause was the night glow (`.sky::after`, a radial `#0f0b18`). That colour is only lighter than night, so over violet and mist it reads as a dark blotch. Task 2's `glow: d > 0 ? d : 1 - s` still had it at 50% mid-sunrise. The glow now belongs to the night-dark middle of the sky: full until the middle starts to lighten, gone by 15% of the way along its stops, and back in the dusk only over the last 15%. This also takes it off the middle of the dusk. In `story-director.ts`, `directSky`:
+>
+> ```ts
+>   const top = sampleStops(stops, t * 2 - 1);
+>   const midAt = t * 2 - 0.5;
+>   return {
+>     top,
+>     mid: sampleStops(stops, midAt),
+>     bottom: sampleStops(stops, t * 2),
+>     // The glow sits in the middle of the screen and is only lighter than night,
+>     // so it shows while the middle is still night-dark and is gone as it lightens
+>     glow: d > 0 ? clamp01((midAt - 0.85) / 0.15) : 1 - clamp01(midAt / 0.15),
+> ```
+>
+> with a new test before "in both transitions the bottom of the sky leads" (`ℹ pass 44` before it, 45 with it):
+>
+> ```ts
+> test("the night glow only shows while the middle of the sky is still night", () => {
+>   const glow = (sunrise: number, dusk: number) => directSky({ sunrise, dusk }).glow;
+>   assert.equal(glow(0.25, 0), 1);
+>   // Mid-sunrise and mid-dusk the middle is violet, where the glow reads as a smudge
+>   assert.equal(glow(0.5, 0), 0);
+>   assert.equal(glow(1, 0.5), 0);
+>   assert.equal(glow(1, 0.75), 1);
+> });
+> ```
+>
+> Known interim limitation: mid-dusk (`4.6`), the dark front passes the fix's pricing link as the chapter leaves, so for a moment it's violet on dark violet. Plan 5 replaces this stopgap dusk with the marquee's, which it can tie to the section boundary.
 
 - [ ] **Step 12: Commit**
 
 ```bash
-git add src/components/story/particle-shaders.ts src/components/story/stage-ambient.ts src/components/story/stage-scene.ts src/components/story/stage-story.ts src/components/story/particle-stage.tsx src/app/globals.css src/components/story/interim-dusk.tsx src/app/page.tsx src/components/fix-section.tsx
+git add src/components/story/particle-shaders.ts src/components/story/stage-ambient.ts src/components/story/stage-scene.ts src/components/story/stage-story.ts src/components/story/particle-stage.tsx src/app/globals.css src/components/story/interim-dusk.tsx src/app/page.tsx src/components/fix-section.tsx src/components/story/story-director.ts src/components/story/story-director.test.ts docs/superpowers/plans/2026-09-28-night-into-day-plan-3-sunrise-and-fix.md
 git commit -m "feat(story): sunrise into the fix; the stage lands the particles and sleeps"
 ```
 
