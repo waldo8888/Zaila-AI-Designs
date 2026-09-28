@@ -367,3 +367,25 @@ img[src] {
   background: radial-gradient(circle at center, #0f0b18 0%, rgb(15 11 24 / 0) 70%);
   opacity: var(--sky-glow);
 }
+
+/* Route fade-in: CSS only, so it plays at first paint (spec §7). */
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.page-in {
+  animation: page-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-in {
+    animation: none;
+  }
+}
