@@ -96,3 +96,61 @@ The runs gave LCP 3.49, 3.56, 3.55, 2.37 and 3.56 s.
 - **Intro hydration mismatch.** `loading-screen.tsx` decides whether to show in its `useState` initializer, using `sessionStorage`, so every reload within a session throws a React hydration mismatch. This is in plan 2's scope, since plan 2 replaces the intro.
 - **Phone layout viewport.** At a 390 px phone emulation the page lays out at 406 px, so something is about 16 px too wide. Plan 1 didn't change layout, so this is probably older. It's for plan 6 (phones).
 - **Dev server cache.** A CSS append made while `next dev` was running never reached the dev server's cached CSS, even across restarts, until `.next/dev` was cleared. If dev CSS looks stale, check the served chunk before debugging the code.
+
+## After plan 2 (night)
+
+Commit `5c4bc8c`, measured 2026-09-28. Same methods as above.
+
+**Applied throttling (3 runs), the gate:**
+
+| Metric | Value |
+|---|---|
+| Lighthouse version | 12.8.2 |
+| Runs | 3 |
+| Performance | 89 |
+| LCP (s) | 1.70 |
+| FCP (s) | 1.70 |
+| TBT (ms) | 354 |
+| CLS | 0.000 |
+| Script transfer (KB) | 488 |
+
+The runs gave Performance 85, 89 and 92, LCP 1.79, 1.70 and 1.66 s, and TBT 451, 354 and 252 ms.
+
+**Simulated (5 runs), recorded alongside:**
+
+| Metric | Value |
+|---|---|
+| Lighthouse version | 12.8.2 |
+| Runs | 5 |
+| Performance | 96 |
+| LCP (s) | 2.42 |
+| FCP (s) | 0.92 |
+| TBT (ms) | 128 |
+| CLS | 0.000 |
+| Accessibility | 100 |
+| Best practices | 96 |
+| SEO | 100 |
+| Script transfer (KB) | 488 |
+
+The runs gave LCP 3.38, 2.42, 3.03, 2.29 and 2.42 s.
+
+- **Verdict: passes the gate.**
+  - Applied throttling: Performance 89 against the baseline's 87 (at least 84 required), LCP 1.70 s against 1.72 s (1.92 s or less required), and CLS 0.
+  - Simulated: Accessibility 100, SEO 100 and Best practices 96, all on target.
+- **LCP element:** `<h1 class="font-display text-hero font-extrabold text-night-text">` in all three applied runs. Plan 1's was the navbar logo image. The night nav draws the chip inline, so the hero headline is now the largest element. It paints at first paint, under the intro's curtain, and the homepage skips the route fade so the fade can't hold it back.
+- **What changed:**
+  - The intro runs in the one particle stage: one WebGL context, and no `logo.png` fetch or canvas sampling.
+  - The hero's entrance is CSS.
+  - Manrope is preloaded again.
+  - The reality chapter's GSAP loads after first paint.
+  - Phones draw 5,000 particles.
+- **Script transfer rose by 61 KB (427 to 488).** On Lighthouse's emulated phone, the reality chapter now loads GSAP (about 45 KB). Plan 1's smooth scroll skips GSAP on touch, so plan 1's runs never loaded it. The homepage-only story chunk adds the logo points (about 16 KB). Both load after first paint.
+- **TBT is higher than plan 1 under applied throttling** (354 against 218 ms, baseline 304) but lower under simulation (128 against 153). The extra work is the story stage's set-up and GSAP's parse, both after first paint. Plan 6's speed pass looks at it.
+- **Best practices 96:** the only failing audit is `errors-in-console`: the Vercel Analytics and Speed Insights scripts return 404 on localhost. The baseline had the same two errors, and they don't happen on Vercel.
+- **Hydration:** a second load in the same session no longer throws a React hydration error (checked with `LOADS=2` in `scripts/cdp.mjs`).
+
+**Found along the way:**
+- **Phones never showed the particles**, before or after plan 1. `custom-cursor.tsx` decided "touch" in a `useState` initializer and returned `null` on the client, while the server rendered its two divs. React then attached the sky and the particle stage to those divs, so the stage's canvas went into the hidden 6 px cursor dot. Fixed in `3d11f6a`: the cursor checks for touch in its effect instead.
+- **The 16 px phone overflow from plan 1 is gone.** The new hero and reality chapter fit 390 px exactly, so it came from the old hero or story section.
+- **The chat launcher overlaps the hero's bottom-left corner.** It's fixed bottom-left, 80 px wide. The hero's meta row now starts just past it.
+- **three.js warns that `THREE.Clock` is deprecated** (use `THREE.Timer`), four times per page load. It's harmless and older than this work; plan 6's cleanup can switch it.
