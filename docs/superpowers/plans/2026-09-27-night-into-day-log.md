@@ -154,3 +154,69 @@ The runs gave LCP 3.38, 2.42, 3.03, 2.29 and 2.42 s.
 - **The 16 px phone overflow from plan 1 is gone.** The new hero and reality chapter fit 390 px exactly, so it came from the old hero or story section.
 - **The chat launcher overlaps the hero's bottom-left corner.** It's fixed bottom-left, 80 px wide. The hero's meta row now starts just past it.
 - **three.js warns that `THREE.Clock` is deprecated** (use `THREE.Timer`), four times per page load. It's harmless and older than this work; plan 6's cleanup can switch it.
+
+## After plan 3 (sunrise and the fix)
+
+Commit `7a6708b`, measured 2026-09-28. Same methods as above.
+
+**Applied throttling (3 runs), the gate:**
+
+| Metric | Value |
+|---|---|
+| Lighthouse version | 12.8.2 |
+| Runs | 3 |
+| Performance | 94 |
+| LCP (s) | 1.67 |
+| FCP (s) | 1.67 |
+| TBT (ms) | 208 |
+| CLS | 0.000 |
+| Script transfer (KB) | 489 |
+
+The runs gave Performance 94, 93 and 94, LCP 1.67, 1.67 and 1.66 s, and TBT 206, 210 and 208 ms.
+
+**Simulated (5 runs), recorded alongside:**
+
+| Metric | Value |
+|---|---|
+| Lighthouse version | 12.8.2 |
+| Runs | 5 |
+| Performance | 87 |
+| LCP (s) | 3.76 |
+| FCP (s) | 1.21 |
+| TBT (ms) | 106 |
+| CLS | 0.000 |
+| Accessibility | 100 |
+| Best practices | 96 |
+| SEO | 100 |
+| Script transfer (KB) | 489 |
+
+The runs gave LCP 3.76, 3.76, 3.62, 3.77 and 3.61 s.
+
+- **Verdict: passes the gate.**
+  - Applied throttling: Performance 94 against the baseline's 87 (at least 84 required), LCP 1.67 s against 1.72 s (1.92 s or less required), and CLS 0.
+  - Simulated: Accessibility 100, SEO 100 and Best practices 96, all on target.
+- **LCP element:** `<h1 class="font-display text-hero font-extrabold text-night-text">` in all three applied runs, as in plan 2.
+- **What changed:**
+  - The fix replaces the old services grid. The sample salon site builds itself across a 1.5-screen pin (1 screen on phones).
+  - The sky scrubs from night to mist through a middle colour.
+  - The stage lands the particles on the sample site, then stops drawing (`data-drawing="false"`) through the day.
+  - The nav has a day theme and marks the section in view.
+  - The sample site's Fraunces font isn't preloaded, and its `@font-face` rules sit in the main stylesheet.
+- **TBT is down under applied throttling:** 208 ms, against plan 2's 354 and the baseline's 304.
+- **Simulated sits in the slow cluster.** All five runs landed near 3.7 s, where plan 1's median was (3.55 s). Plan 2 got three of its five runs in the fast cluster (median 2.42 s). As the baseline notes explain, the estimate is modelled render delay: the observed paint is 83 ms, earlier than plan 2's 120–154 ms.
+  - One real cause turned up and was fixed. The sample site's font had given the homepage a second, render-blocking stylesheet. Moving Fraunces into `layout.tsx` removed it, and simulated FCP went from 1.36 to 1.21 s.
+- **Best practices 96:** the same `errors-in-console` as before, from the Vercel scripts returning 404 on localhost.
+- **G2:** the fix's top sits at 2.75 screens, so services arrive from about screen 1.75. **G3:** one pin before services (the reality).
+- **Interim, until plan 5:** the sky turns back to night after the fix, because the sections below are still the dark originals. Mid-dusk, the fix's pricing link is briefly violet on dark violet as the chapter leaves.
+
+**Found along the way:**
+- **Short screens clipped the pinned fix.** The stage was exactly one screen tall with its content centred, so on shorter screens the content spilled off both edges:
+  - 1440×900 cut the discovery line.
+  - 1366×768 also lost the label off the top.
+
+  Three changes fix it:
+  - The stage is now at least a screen tall.
+  - Below 900 px of height, the description and the discovery line give way while pinned, as on phones.
+  - The pricing link lines up with the service names, clear of the chat launcher, which had covered its first letter for the whole pin.
+- **The night glow smudged the sunrise.** It's a radial that's only lighter than night, and at 50% over the violet middle it read as a dark blotch the Sunrise frame doesn't have. It now shows only while the middle of the sky is night-dark (a new director test).
+- **One build failed** fetching a font from Google (`next/font` downloads them at build time), and a retry built. That dependency predates this work, since Inter and Manrope load the same way, and Fraunces adds one more fetch.
