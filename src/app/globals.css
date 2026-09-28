@@ -382,6 +382,35 @@ img[src] {
   transition: opacity 0.8s ease-out, filter 0.6s ease-out;
 }
 
+/* Nav themes (spec §5). Night by default; the story director sets
+   <html data-nav-theme="day"> over the day chapters. The open phone menu is
+   dark, so the header keeps its night colours while it's open. */
+.site-nav {
+  --nav-text: var(--color-night-text);
+  --nav-muted: var(--color-night-muted);
+  --nav-mark: var(--color-brand-glow);
+  --nav-cta-bg: var(--color-night-text);
+  --nav-cta-text: var(--color-night);
+  --nav-cta-hover: #ffffff;
+  --nav-scrolled: rgb(7 6 11 / 0.8);
+  --nav-toggle-border: rgb(255 255 255 / 0.14);
+  --nav-toggle-bg: rgb(255 255 255 / 0.04);
+  --nav-toggle-bar: #ffffff;
+}
+
+html[data-nav-theme="day"] .site-nav:not([data-menu-open]) {
+  --nav-text: var(--color-day-text);
+  --nav-muted: var(--color-day-muted);
+  --nav-mark: var(--color-brand);
+  --nav-cta-bg: var(--color-brand);
+  --nav-cta-text: #ffffff;
+  --nav-cta-hover: var(--color-brand-ink);
+  --nav-scrolled: rgb(241 243 247 / 0.85);
+  --nav-toggle-border: rgb(15 23 42 / 0.14);
+  --nav-toggle-bg: #ffffff;
+  --nav-toggle-bar: var(--color-day-text);
+}
+
 /* Intro curtain (spec §5). The intro gate (intro-gate.ts) sets <html data-intro>
    before first paint: "play" shows the curtain, "reveal" fades it out while the
    hero's entrance plays, "done" and "skip" remove it. It paints exactly like the

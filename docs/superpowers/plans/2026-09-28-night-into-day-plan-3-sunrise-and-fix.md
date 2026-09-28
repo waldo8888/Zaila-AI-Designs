@@ -1767,7 +1767,7 @@ Expected: `ℹ pass 44`, and everything else exits 0.
 Start `npm run start -- -p 3100` in the background. The stage doesn't set the theme until Task 6, so set it by hand:
 
 ```bash
-node scripts/cdp.mjs "http://localhost:3100/" 6000 "(async () => { const s = document.getElementById('services'); window.__lenis ? window.__lenis.scrollTo(s.offsetTop + 200, { immediate: true }) : scrollTo(0, s.offsetTop + 200); await new Promise((r) => setTimeout(r, 1200)); document.documentElement.dataset.navTheme = 'day'; await new Promise((r) => setTimeout(r, 800)); return { current: document.querySelector('.site-nav [aria-current=\"true\"]')?.textContent ?? null }; })()" .lighthouse/shots/plan3-nav-day-1440.png 1440 900
+node scripts/cdp.mjs "http://localhost:3100/" 6000 "(async () => { const s = document.getElementById('services'); const go = (y) => window.__lenis ? window.__lenis.scrollTo(y, { immediate: true }) : scrollTo(0, y); go(s.offsetTop + 260); await new Promise((r) => setTimeout(r, 900)); go(s.offsetTop + 200); await new Promise((r) => setTimeout(r, 900)); document.documentElement.dataset.navTheme = 'day'; await new Promise((r) => setTimeout(r, 800)); return { current: document.querySelector('.site-nav [aria-current=\"true\"]')?.textContent ?? null }; })()" .lighthouse/shots/plan3-nav-day-1440.png 1440 900
 bash scripts/shot.sh "http://localhost:3100/" .lighthouse/shots/plan3-nav-night-1440.png 1440 900
 ```
 
@@ -1781,6 +1781,8 @@ Expected:
 - `plan3-nav-night-1440.png` is the night nav, unchanged from plan 2.
 
 Stop the server.
+
+> **Found while executing (2026-09-28):** the first version of this command jumped straight down to the fix, and the nav hides on a downward scroll, so the shot had no nav in it. The command above now lands a little lower and scrolls back up 60 px, which shows the nav. A phone check also confirmed the open menu keeps the night colours in the day theme (toggle bars `rgb(15, 23, 42)` closed, white open).
 
 - [ ] **Step 5: Commit**
 
