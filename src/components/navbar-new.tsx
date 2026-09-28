@@ -1,16 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { useSmoothScroll } from "@/components/smooth-scroll";
+import { ChipMark } from "@/components/ui/chip-mark";
 
 type NavItem =
   | { type: "section"; label: string; id: string }
   | { type: "link"; label: string; href: string };
 
+/** The nav in its night theme (spec §5): chip mark and wordmark, quiet links, a light pill. */
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -85,38 +86,30 @@ export function Navbar() {
         animate={{ y: hidden ? -100 : 0 }}
         transition={{ duration: 0.3, ease: [0.25, 0.1, 0, 1] }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
-          ? "py-3"
+          ? "py-3 bg-night/80 backdrop-blur-xl"
           : "py-5"
           }`}
       >
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6">
+        <div className="mx-auto flex max-w-[1440px] items-center justify-between px-5 lg:px-20">
           {/* Logo */}
           <Link href="/" className="group relative z-10">
             <motion.div
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 font-display text-[15px] font-extrabold tracking-[-0.02em] text-night-text lg:gap-2.5 lg:text-[17px]"
             >
-              <Image
-                src="/logo.png"
-                alt="Zaila AI Designs"
-                width={80}
-                height={80}
-                className="w-20 h-16 md:h-20 object-contain drop-shadow-[0_0_12px_rgba(217,70,239,0.3)]"
-                priority
-              />
+              <ChipMark className="size-6 text-brand-glow lg:size-7" />
+              <span>Zaila AI Designs</span>
             </motion.div>
           </Link>
 
-          {/* Desktop nav - pill style */}
+          {/* Desktop nav */}
           <motion.nav
+            aria-label="Main"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
-            className={`hidden md:flex items-center gap-1 rounded-full px-2 py-1.5 transition-all duration-500 ${scrolled
-              ? "bg-white/[0.03] backdrop-blur-2xl border border-white/[0.06]"
-              : "bg-transparent"
-              }`}
+            className="hidden items-center gap-8 lg:flex"
           >
             {navItems.map((item, i) => (
               <DesktopNavItem key={item.label} item={item} i={i} handleNav={handleNav} />
@@ -126,23 +119,20 @@ export function Navbar() {
           {/* CTA Button */}
           <motion.button
             onClick={() => handleNav("contact")}
-            className="hidden md:flex items-center gap-2 rounded-full bg-white px-6 py-2.5 text-[13px] font-medium text-black transition-all hover:shadow-[0_10px_40px_-10px_rgba(255,255,255,0.3)]"
+            className="hidden h-11 items-center rounded-full bg-night-text px-[22px] text-sm font-semibold text-night transition-colors hover:bg-white lg:inline-flex"
             whileHover={{ scale: 1.02, y: -1 }}
             whileTap={{ scale: 0.98 }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            <span>Start Project</span>
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="transition-transform group-hover:translate-x-0.5">
-              <path d="M2 7H12M12 7L7 2M12 7L7 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+            Start Your Project
           </motion.button>
 
           {/* Mobile toggle */}
           <motion.button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-white/[0.05] md:hidden"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-white/[0.14] bg-white/[0.04] lg:hidden"
             aria-label="Toggle menu"
             whileTap={{ scale: 0.95 }}
           >
@@ -183,28 +173,25 @@ export function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-40 bg-black/95 backdrop-blur-2xl md:hidden"
+            className="fixed inset-0 z-40 bg-night/95 backdrop-blur-2xl lg:hidden"
           >
-            <nav className="flex flex-col items-center justify-center h-full gap-8 px-6">
-              <Image
-                src="/logo.png"
-                alt="Zaila AI Designs"
-                width={280}
-                height={84}
-                className="h-20 md:h-24 w-auto object-contain drop-shadow-[0_0_12px_rgba(217,70,239,0.3)] mb-4"
-              />
+            <nav aria-label="Main" className="flex flex-col items-center justify-center h-full gap-8 px-6">
+              <div className="mb-4 flex items-center gap-3 font-display text-2xl font-extrabold tracking-[-0.02em] text-night-text">
+                <ChipMark className="size-10 text-brand-glow" />
+                <span>Zaila AI Designs</span>
+              </div>
               {navItems.map((item, i) => (
                 <MobileNavItem key={item.label} item={item} i={i} handleNav={handleNav} setMobileOpen={setMobileOpen} />
               ))}
               <motion.button
                 onClick={() => handleNav("contact")}
-                className="mt-8 rounded-full bg-white px-10 py-4 text-[16px] font-medium text-black"
+                className="mt-8 rounded-full bg-night-text px-10 py-4 text-[16px] font-semibold text-night"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ delay: 0.3 }}
               >
-                Start a Project
+                Start Your Project
               </motion.button>
             </nav>
           </motion.div>
@@ -214,38 +201,26 @@ export function Navbar() {
   );
 }
 
+const desktopLinkClass = "text-sm text-night-muted transition-colors hover:text-night-text";
+
 function DesktopNavItem({ item, i, handleNav }: { item: NavItem; i: number; handleNav: (id: string) => void }) {
+  const entrance = {
+    initial: { opacity: 0, y: -10 },
+    animate: { opacity: 1, y: 0 },
+    transition: { delay: 0.3 + i * 0.05 },
+  };
   if (item.type === "link") {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 + i * 0.05 }}
-      >
-        <Link
-          href={item.href}
-          className="group relative px-5 py-2 text-[13px] text-zinc-400 transition-colors hover:text-white"
-        >
-          <span className="relative z-10">{item.label}</span>
+      <motion.div {...entrance}>
+        <Link href={item.href} className={desktopLinkClass}>
+          {item.label}
         </Link>
       </motion.div>
     );
   }
   return (
-    <motion.button
-      onClick={() => handleNav(item.id)}
-      className="group relative px-5 py-2 text-[13px] text-zinc-400 transition-colors hover:text-white"
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.3 + i * 0.05 }}
-    >
-      <span className="relative z-10">{item.label}</span>
-      <motion.div
-        className="absolute inset-0 rounded-full bg-white/[0.06] opacity-0 group-hover:opacity-100 transition-opacity"
-        layoutId="nav-hover"
-      />
+    <motion.button {...entrance} onClick={() => handleNav(item.id)} className={desktopLinkClass}>
+      {item.label}
     </motion.button>
   );
 }
