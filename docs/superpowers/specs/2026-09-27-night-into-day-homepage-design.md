@@ -1,7 +1,7 @@
 # Night into day — zailaai.com homepage revamp
 
 - **Date:** 2026-09-27
-- **Status:** design approved in chat, section by section. This written spec is awaiting Waldo's review.
+- **Status:** design approved in chat, section by section, and this spec approved on 2026-09-27. On 2026-09-28 Waldo delegated the open copy decisions and questions to Claude; the decisions are recorded in §10 and §15.
 - **Branch:** `feat/night-into-day-2026-09` (off `main` at `fd390eb`). Never pushed by Claude. Merging to `main` deploys production.
 - **Design canvas:** https://claude.ai/artifact/RkjEadVhEvTnBaqsVRSpzz. It has 13 frames (desktop, a storyboard and phones) plus motion notes. It's private, so share it from its Share menu if anyone else needs it.
 - **Inputs:** `04_Review/Zaila_Site_Audit_2026-09-05.md`, `02_Research/Site_Audits/zailaai/zailaai_SiteAudit_2026-09-27.md`, business `CLAUDE.md` §1–§8.
@@ -231,6 +231,10 @@ Frames on the canvas are named in brackets.
 
 Draft copy follows the house voice: sentence case, no exclamation marks, one joke at most, no invented metrics or testimonials.
 
+**Decided 2026-09-28 (Waldo delegated these to Claude):** all the draft copy above is approved, and all the dropped copy stays dropped. Two limits apply:
+- Each project's meta line and two points (Work chapter) must come from the client's profile in the business folder, not from invention.
+- On The Snap's card says "What we built": its profile says "Zaila built and now maintains the website".
+
 ## 11. Performance budget
 
 - **Baseline first.** Before any change, run `next build && next start` on `main` and take Lighthouse mobile ×3 (median), plus the homepage's first-load JS from the build output.
@@ -282,9 +286,9 @@ Draft copy follows the house voice: sentence case, no exclamation marks, one jok
 | D1 | Confirm Pub 36, 100 Men and On The Snap are happy to be shown | Waldo | merge |
 | D2 | Fix On The Snap's "(Copy)" tournament listing and stale March events (OnTheSnap repo) | separate task | On The Snap's `enabled` flag |
 | D3 | Point `100menhamilton-wentworth.com` at the new build (Vercel domain / DNS) | Waldo | 100 Men's `linkEnabled` |
-| Q1 | On The Snap: did Zaila build the site or only maintain it? Current draft: "We look after the site every month." | Waldo | its copy |
-| Q2 | Discovery call length: the site says 20 minutes, ZailaOS booking says 30 | Waldo | process step 01 copy |
-| Q3 | Approve the draft copy and the dropped copy (§10) | Waldo | merge |
+| Q1 | On The Snap: did Zaila build the site or only maintain it? **Answered 2026-09-28:** both ("Zaila built and now maintains the website", `08_Clients/OnTheSnap/CLIENT_PROFILE.md`). Its card says "What we built". | — | — |
+| Q2 | Discovery call length: the site said 20 minutes, ZailaOS booking says 30. **Decided 2026-09-28:** 30 minutes, matching the booking system (ZailaOS migration 071 seeds a 30-minute discovery type). The site copy changed in `964e0f2`: the process step, the /pricing intro and the chatbot. | — | — |
+| Q3 | Approve the draft copy and the dropped copy (§10). **Decided 2026-09-28:** approved (see §10). | — | — |
 
 ## 16. Out of scope (noted, untouched)
 
