@@ -1545,16 +1545,17 @@ export const STORY_VERTEX = /* glsl */ `
     vec4 mvPosition = viewMatrix * vec4(world, 1.0);
 
     // Finer points while they draw the logo, the orb's soft glow once they arrive
-    float size = mix(10.0 + aRandom * 12.0, 20.0 + aRandom * 25.0, stream);
+    float size = mix(14.0 + aRandom * 14.0, 20.0 + aRandom * 25.0, stream);
     size *= uPixelRatio * (1.0 + vMouseProximity * 0.5);
     gl_PointSize = size * (1.0 / -mvPosition.z);
     gl_Position = projectionMatrix * mvPosition;
 
     float orbAlpha = (0.35 + 0.35 * (1.0 - smoothstep(0.0, 8.0, length(orbLocal)))) * (0.4 + aRandom * 0.3);
-    float logoAlpha = 0.55 + aRandom * 0.3;
+    float logoAlpha = 0.75 + aRandom * 0.25;
     vAlpha = mix(logoAlpha, orbAlpha, stream) + vMouseProximity * 0.2;
 
-    vPos = orbLocal;
+    // The orb's depth tint; the logo keeps its light lilac and pink
+    vPos = mix(vec3(0.0, 0.0, -2.0), orbLocal, stream);
     vColorMix = fract(aRandom + sin(orbLocal.y * 2.0 + uTime) * 0.1);
   }
 `;
@@ -2206,12 +2207,14 @@ Expected:
   - `1600-390`: the whole logo fits the phone's width.
 - The stage starts after hydration, so if a frame misses its moment, adjust its wait by ±300 ms and retake it.
 
+> **Tuned while executing (2026-09-28):** the first logo frames read dim. The logo points were finer than the old intro's, and they picked up the orb's dark-violet depth tint. `STORY_VERTEX` above now draws the logo with slightly larger points (14 + 14r), alpha 0.75–1.0 and no depth tint.
+
 Stop the server.
 
 - [ ] **Step 9: Commit**
 
 ```bash
-git add src/components/story/intro-curtain.tsx src/app/globals.css src/app/layout.tsx src/app/page.tsx archive/2026-09-night-into-day/src/components/loading-screen.tsx src/components/loading-screen.tsx
+git add src/components/story/intro-curtain.tsx src/app/globals.css src/app/layout.tsx src/app/page.tsx archive/2026-09-night-into-day/src/components/loading-screen.tsx
 git commit -m "feat(story): the intro runs in the one stage; no more hydration error"
 ```
 
@@ -3095,7 +3098,7 @@ Stop the server.
 - [ ] **Step 6: Commit**
 
 ```bash
-git add src/components/reality-section.tsx src/app/page.tsx archive/2026-09-night-into-day/src/components/story-section.tsx src/components/story-section.tsx
+git add src/components/reality-section.tsx src/app/page.tsx archive/2026-09-night-into-day/src/components/story-section.tsx
 git commit -m "feat(story): 01 The reality, a pinned word fill with a reversible leak"
 ```
 

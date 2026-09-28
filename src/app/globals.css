@@ -360,7 +360,8 @@ img[src] {
   background: linear-gradient(180deg, var(--sky-top), var(--sky-bottom));
 }
 
-.sky::after {
+.sky::after,
+.intro-curtain::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -378,7 +379,40 @@ img[src] {
   contain: layout paint size;
   /* Soften particles so foreground text stays easy to read */
   filter: blur(1px) brightness(0.92);
-  transition: opacity 0.8s ease-out;
+  transition: opacity 0.8s ease-out, filter 0.6s ease-out;
+}
+
+/* Intro curtain (spec §5). The intro gate (intro-gate.ts) sets <html data-intro>
+   before first paint: "play" shows the curtain, "reveal" fades it out while the
+   hero's entrance plays, "done" and "skip" remove it. It paints exactly like the
+   sky, so lifting it reveals only the page. */
+.intro-curtain {
+  display: none;
+}
+
+html[data-intro="play"] .intro-curtain,
+html[data-intro="reveal"] .intro-curtain {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: linear-gradient(180deg, var(--sky-top), var(--sky-bottom));
+  transition: opacity 0.6s ease-out;
+}
+
+html[data-intro="reveal"] .intro-curtain {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* During the intro the stage draws above the curtain, sharp, then drops back. */
+html[data-intro="play"] .particle-stage,
+html[data-intro="reveal"] .particle-stage {
+  z-index: 9001;
+}
+
+html[data-intro="play"] .particle-stage {
+  filter: none;
 }
 
 /* Route fade-in: CSS only, so it plays at first paint (spec §7). */

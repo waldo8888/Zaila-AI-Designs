@@ -6,6 +6,8 @@ import { Navbar } from "@/components/navbar-new";
 import { FooterNew } from "@/components/footer-new";
 import { ParticleStage } from "@/components/story/particle-stage";
 import { Sky } from "@/components/story/sky";
+import { IntroCurtain } from "@/components/story/intro-curtain";
+import { INTRO_GATE_SCRIPT } from "@/components/story/intro-gate";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { CustomCursor } from "@/components/custom-cursor";
 import { Analytics } from "@vercel/analytics/next";
@@ -177,9 +179,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // The intro gate sets data-intro on <html> before React hydrates, hence
+  // suppressHydrationWarning (it only covers <html>'s own attributes).
   return (
-    <html lang="en" className={`${inter.variable} ${manrope.variable}`}>
+    <html lang="en" className={`${inter.variable} ${manrope.variable}`} suppressHydrationWarning>
       <head>
+        {/* Decides before first paint whether this visit gets the intro (intro-gate.ts) */}
+        <script dangerouslySetInnerHTML={{ __html: INTRO_GATE_SCRIPT }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -195,6 +201,7 @@ export default function RootLayout({
           <Navbar />
           <main className="relative z-10">{children}</main>
           <FooterNew />
+          <IntroCurtain />
         </SmoothScroll>
         <Analytics />
         <SpeedInsights />

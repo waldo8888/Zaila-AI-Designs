@@ -6,12 +6,10 @@ import { TestimonialsSection } from "@/components/testimonials-section";
 import { SocialProofStrip } from "@/components/social-proof-strip";
 import { ContactSection } from "@/components/contact-section";
 import { BackToTop } from "@/components/back-to-top";
-import { LoadingScreen } from "@/components/loading-screen";
 
 export default function Home() {
   return (
     <>
-      <LoadingScreen />
       <Hero />
       <StorySection />
       <ServicesSection />

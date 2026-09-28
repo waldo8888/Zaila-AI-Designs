@@ -237,16 +237,17 @@ export const STORY_VERTEX = /* glsl */ `
     vec4 mvPosition = viewMatrix * vec4(world, 1.0);
 
     // Finer points while they draw the logo, the orb's soft glow once they arrive
-    float size = mix(10.0 + aRandom * 12.0, 20.0 + aRandom * 25.0, stream);
+    float size = mix(14.0 + aRandom * 14.0, 20.0 + aRandom * 25.0, stream);
     size *= uPixelRatio * (1.0 + vMouseProximity * 0.5);
     gl_PointSize = size * (1.0 / -mvPosition.z);
     gl_Position = projectionMatrix * mvPosition;
 
     float orbAlpha = (0.35 + 0.35 * (1.0 - smoothstep(0.0, 8.0, length(orbLocal)))) * (0.4 + aRandom * 0.3);
-    float logoAlpha = 0.55 + aRandom * 0.3;
+    float logoAlpha = 0.75 + aRandom * 0.25;
     vAlpha = mix(logoAlpha, orbAlpha, stream) + vMouseProximity * 0.2;
 
-    vPos = orbLocal;
+    // The orb's depth tint; the logo keeps its light lilac and pink
+    vPos = mix(vec3(0.0, 0.0, -2.0), orbLocal, stream);
     vColorMix = fract(aRandom + sin(orbLocal.y * 2.0 + uTime) * 0.1);
   }
 `;
