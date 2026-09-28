@@ -86,7 +86,7 @@ Each later plan gets written once the previous one lands:
 
 | Plan | Scope |
 |---|---|
-| 2, Night | Refined intro (precomputed logo points, `intro-curtain.tsx`, logo → orb handoff, `loading-screen.tsx` archived); new hero with a CSS entrance, night nav theme and live Hamilton time; 01 The reality (sticky pin, SplitText word fill, reversible leak); story director v1 and its tests; phone particle budget down to about 5,000 (plan 1 keeps today's 7,000 for parity) |
+| 2, Night | Refined intro (precomputed logo points, `intro-curtain.tsx`, logo → orb handoff, `loading-screen.tsx` archived); new hero with a CSS entrance, night nav theme and live Hamilton time; 01 The reality (sticky pin, SplitText word fill, reversible leak); story director v1 and its tests; phone particle budget down to about 5,000 (plan 1 keeps today's 7,000 for parity); the intro decides whether to show after mount, never during the first render (today's `loading-screen.tsx` reads `sessionStorage` in its `useState` initializer, which causes a hydration mismatch on every reload within a session) |
 | 3, Sunrise and the fix | Sky scrub; horizon and landing; `fix-section.tsx` with the four-step site build and expanding rows; day nav theme; stage sleep |
 | 4, Selected work | Captures, `src/lib/work.ts` with `enabled`/`linkEnabled`, frame opening, scroll-linked captures, "Work" in nav and footer |
 | 5, The rest of the day | Process, how we work, marquee, dusk contact with the logo bookend, footer; remaining old sections archived |

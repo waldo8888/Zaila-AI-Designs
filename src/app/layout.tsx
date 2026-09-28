@@ -4,7 +4,8 @@ import "lenis/dist/lenis.css";
 import "./globals.css";
 import { Navbar } from "@/components/navbar-new";
 import { FooterNew } from "@/components/footer-new";
-import { SphereBackground } from "@/components/sphere-background";
+import { ParticleStage } from "@/components/story/particle-stage";
+import { Sky } from "@/components/story/sky";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { CustomCursor } from "@/components/custom-cursor";
 import { Analytics } from "@vercel/analytics/next";
@@ -186,7 +187,8 @@ export default function RootLayout({
       >
         <SmoothScroll>
           <CustomCursor />
-          <SphereBackground />
+          <Sky />
+          <ParticleStage />
           <Navbar />
           <main className="relative z-10">{children}</main>
           <FooterNew />

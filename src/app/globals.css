@@ -344,3 +344,26 @@ img[src] {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Sky backdrop (spec §4). The story director scrubs these on <html>. */
+:root {
+  --sky-top: #07060b;
+  --sky-bottom: #07060b;
+  --sky-glow: 1;
+}
+
+.sky {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, var(--sky-top), var(--sky-bottom));
+}
+
+.sky::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, #0f0b18 0%, rgb(15 11 24 / 0) 70%);
+  opacity: var(--sky-glow);
+}
