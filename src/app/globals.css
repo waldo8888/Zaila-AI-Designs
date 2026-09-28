@@ -509,3 +509,571 @@ html[data-intro="play"] .particle-stage {
     animation-delay: 0.45s;
   }
 }
+
+/* 02 The fix (fix-section.tsx): the four services. The server HTML has every
+   row "open". With motion, fix-scenes.tsx moves them through "upcoming",
+   "active" and "done" as the sample site builds. Phones show them as chips. */
+.fix-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 11px;
+  border: 1px solid var(--color-day-line);
+  border-radius: 999px;
+  font-size: 12px;
+  color: var(--color-day-dim);
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.fix-step[data-state="open"],
+.fix-step[data-state="done"] {
+  border-color: transparent;
+  background: var(--color-lavender);
+  color: #5b21b6;
+}
+
+.fix-step[data-state="active"] {
+  border-color: transparent;
+  background: var(--color-brand);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.fix-step-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fix-step-check {
+  display: none;
+  width: 12px;
+  height: 12px;
+}
+
+.fix-step[data-state="open"] .fix-step-check,
+.fix-step[data-state="done"] .fix-step-check {
+  display: block;
+}
+
+.fix-step[data-state="open"] .fix-step-num,
+.fix-step[data-state="done"] .fix-step-num {
+  display: none;
+}
+
+.fix-step-name {
+  margin: 0;
+  font: inherit;
+}
+
+/* Phones: the feature line and the description stay in the page for screen readers */
+.fix-step-features,
+.fix-step-more {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (min-width: 1024px) {
+  .fix-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: clamp(6px, 1.2vh, 11px) 16px;
+    border-color: transparent;
+    border-radius: 16px;
+    font-size: inherit;
+    color: inherit;
+  }
+
+  .fix-step[data-state="open"],
+  .fix-step[data-state="done"],
+  .fix-step[data-state="active"] {
+    background: transparent;
+    color: inherit;
+    font-weight: inherit;
+  }
+
+  .fix-step[data-state="active"] {
+    border-color: rgb(15 23 42 / 0.06);
+    background: #ffffff;
+    box-shadow: 0 14px 34px -20px rgb(15 23 42 / 0.4);
+  }
+
+  .fix-step-badge {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--color-day-line);
+    border-radius: 50%;
+    font-family: var(--font-manrope), sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--color-day-dim);
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  }
+
+  .fix-step[data-state="open"] .fix-step-badge,
+  .fix-step[data-state="done"] .fix-step-badge {
+    border-color: transparent;
+    background: var(--color-lavender);
+    color: var(--color-brand-ink);
+  }
+
+  .fix-step[data-state="active"] .fix-step-badge {
+    border-color: transparent;
+    background: var(--color-brand);
+    color: #ffffff;
+  }
+
+  .fix-step-check {
+    width: 16px;
+    height: 16px;
+  }
+
+  .fix-step-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-top: 2px;
+  }
+
+  .fix-step-name {
+    font-family: var(--font-manrope), sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--color-day-text);
+  }
+
+  .fix-step-features,
+  .fix-step-more {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+    white-space: normal;
+  }
+
+  .fix-step-features {
+    margin: 0;
+    font-size: 13px;
+    color: var(--color-day-dim);
+  }
+
+  .fix-step[data-state="active"] .fix-step-features {
+    color: var(--color-day-muted);
+  }
+
+  /* An open or active row shows its full description */
+  .fix-step-more {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .fix-step-more > div {
+    overflow: hidden;
+  }
+
+  .fix-step-more p {
+    margin: 0;
+    padding-top: 8px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-day-muted);
+  }
+
+  .fix-step[data-state="open"] .fix-step-more,
+  .fix-step[data-state="active"] .fix-step-more {
+    grid-template-rows: 1fr;
+  }
+}
+
+/* The sample salon site (sample-site.tsx). Sized in container units off the
+   figure's width (the design is 710 px wide), so it scales as one picture.
+   It's the made-up client's own brand: cream, forest green and terracotta. */
+.fix-frame-wrap {
+  position: relative;
+  margin: 0;
+  container-type: inline-size;
+}
+
+.fix-frame {
+  overflow: hidden;
+  border: 1px solid rgb(15 23 42 / 0.08);
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 44px 90px -44px rgb(15 23 42 / 0.5);
+}
+
+.ss-chrome {
+  display: flex;
+  align-items: center;
+  gap: 0.99cqw;
+  height: 5.35cqw;
+  padding: 0 1.97cqw;
+  border-bottom: 1px solid rgb(15 23 42 / 0.06);
+  background: #f4f4f5;
+}
+
+.ss-dot {
+  width: 1.41cqw;
+  height: 1.41cqw;
+  border-radius: 50%;
+  background: #d4d4d8;
+}
+
+.ss-url {
+  margin: 0 auto;
+  padding: 0.56cqw 2.25cqw;
+  border-radius: 0.85cqw;
+  background: #ffffff;
+  font-size: 1.69cqw;
+  color: #71717a;
+}
+
+.ss-page {
+  position: relative;
+  padding: 3.66cqw 4.51cqw 4.23cqw;
+  background: #f7f2ea;
+  color: #1e3b2f;
+}
+
+.ss-nav {
+  display: flex;
+  align-items: center;
+  gap: 3.1cqw;
+  font-size: 1.69cqw;
+  color: #4b5e55;
+}
+
+.ss-brand,
+.ss-headline {
+  font-family: var(--font-fraunces), Georgia, serif;
+}
+
+.ss-brand {
+  margin-right: auto;
+  font-size: 2.82cqw;
+  font-weight: 600;
+  color: #1e3b2f;
+}
+
+.ss-book,
+.ss-cta,
+.ss-openings {
+  border: 1.5px solid transparent;
+}
+
+.ss-book {
+  padding: 1.13cqw 2.11cqw;
+  border-radius: 999px;
+  background: #1e3b2f;
+  color: #f7f2ea;
+  font-weight: 600;
+}
+
+.ss-hero {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4.23cqw;
+  align-items: end;
+  margin-top: 4.23cqw;
+}
+
+.ss-headline {
+  margin: 0;
+  font-size: 5.92cqw;
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+}
+
+.ss-sub {
+  margin: 1.97cqw 0 0;
+  font-size: 1.83cqw;
+  line-height: 1.5;
+  color: #4b5e55;
+}
+
+.ss-cta {
+  display: inline-block;
+  margin-top: 2.54cqw;
+  padding: 1.69cqw 3.1cqw;
+  border-radius: 999px;
+  background: #c8643b;
+  color: #ffffff;
+  font-size: 1.83cqw;
+  font-weight: 600;
+  box-shadow: 0 0 0 0.85cqw rgb(200 100 59 / 0.18);
+}
+
+.ss-photo {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 42.25cqw;
+  padding-bottom: 1.97cqw;
+  border-radius: 999px 999px 2.54cqw 2.54cqw;
+  background: linear-gradient(170deg, #e6bd98 0%, #c98d63 55%, #9a5b38 100%);
+}
+
+.ss-photo-label {
+  font-size: 1.55cqw;
+  letter-spacing: 0.04em;
+  color: rgb(255 255 255 / 0.85);
+}
+
+.ss-chat {
+  position: absolute;
+  left: -13.8cqw;
+  bottom: 7.3cqw;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.13cqw;
+  padding: 0.85cqw;
+  border-radius: 2.25cqw;
+}
+
+.ss-bubble {
+  padding: 1.41cqw 1.97cqw;
+  border-radius: 1.97cqw 1.97cqw 1.97cqw 0.56cqw;
+  background: #ffffff;
+  color: #1e3b2f;
+  font-size: 1.69cqw;
+  white-space: nowrap;
+  box-shadow: 0 1.69cqw 3.94cqw -1.97cqw rgb(0 0 0 / 0.4);
+}
+
+.ss-reply {
+  margin-left: 3.66cqw;
+  border-radius: 1.97cqw 1.97cqw 0.56cqw 1.97cqw;
+  background: #1e3b2f;
+  color: #f7f2ea;
+}
+
+.ss-openings {
+  display: flex;
+  align-items: center;
+  gap: 1.41cqw;
+  width: fit-content;
+  margin-top: 3.1cqw;
+  padding: 0.56cqw;
+  border-radius: 999px;
+  font-size: 1.69cqw;
+}
+
+.ss-openings-label {
+  margin: 0 0.56cqw;
+  color: #4b5e55;
+}
+
+.ss-slot {
+  padding: 0.99cqw 1.83cqw;
+  border: 1px solid rgb(30 59 47 / 0.25);
+  border-radius: 999px;
+}
+
+.ss-slot-picked {
+  border-color: #1e3b2f;
+  background: #1e3b2f;
+  color: #f7f2ea;
+}
+
+.ss-care {
+  position: absolute;
+  top: -6.48cqw;
+  right: -2.54cqw;
+  width: 32.1cqw;
+  padding: 2.54cqw 2.82cqw;
+  border: 1px solid rgb(15 23 42 / 0.06);
+  border-radius: 2.82cqw;
+  background: #ffffff;
+  box-shadow: 0 3.66cqw 8.45cqw -3.66cqw rgb(15 23 42 / 0.45);
+}
+
+.ss-care-kicker {
+  display: flex;
+  align-items: center;
+  gap: 1.13cqw;
+  margin: 0;
+  font-size: 1.69cqw;
+  font-weight: 600;
+  color: #6d28d9;
+}
+
+.ss-care-dot {
+  width: 1.13cqw;
+  height: 1.13cqw;
+  border-radius: 50%;
+  background: #7c3aed;
+}
+
+.ss-care-title {
+  margin: 1.13cqw 0 0;
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 2.25cqw;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.ss-care-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.13cqw;
+  margin: 1.69cqw 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 1.83cqw;
+  color: #334155;
+}
+
+.ss-care-list li {
+  display: flex;
+  align-items: center;
+  gap: 1.13cqw;
+}
+
+.ss-care-list svg {
+  width: 2.25cqw;
+  height: 2.25cqw;
+  color: #047857;
+}
+
+/* The build (fix-scenes.tsx sets data-build to 1–4). In step 1 the booking
+   pieces are dashed outlines of what's coming; each later step fades its
+   pieces in, and the newest gets a violet ring. */
+.ss-2,
+.ss-3,
+.ss-4 {
+  transition: opacity 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease, background-color 0.35s ease, border-color 0.35s ease;
+}
+
+.fix-frame-wrap[data-build="1"] .ss-2 {
+  border-style: dashed;
+  border-color: rgb(30 59 47 / 0.3);
+  background: transparent;
+  box-shadow: none;
+}
+
+.fix-frame-wrap[data-build="1"] .ss-2 > * {
+  visibility: hidden;
+}
+
+.fix-frame-wrap[data-build="1"] .ss-3,
+.fix-frame-wrap[data-build="2"] .ss-3,
+.fix-frame-wrap[data-build="1"] .ss-4,
+.fix-frame-wrap[data-build="2"] .ss-4,
+.fix-frame-wrap[data-build="3"] .ss-4 {
+  opacity: 0;
+  transform: translateY(1.41cqw);
+}
+
+.fix-frame-wrap[data-build="2"] .ss-2,
+.fix-frame-wrap[data-build="3"] .ss-3,
+.fix-frame-wrap[data-build="4"] .ss-4 {
+  box-shadow: 0 0 0 0.42cqw #f7f2ea, 0 0 0 0.7cqw rgb(124 58 237 / 0.55);
+}
+
+/* Phones: one column, photo first, bigger small print (the phone frame is 350 px) */
+@container (max-width: 520px) {
+  .ss-chrome {
+    gap: 1.43cqw;
+    height: 8cqw;
+    padding: 0 2.86cqw;
+  }
+
+  .ss-dot {
+    width: 2cqw;
+    height: 2cqw;
+  }
+
+  .ss-url {
+    padding: 0.86cqw 2.86cqw;
+    font-size: 2.86cqw;
+  }
+
+  .ss-page {
+    padding: 4.57cqw 5.14cqw 5.14cqw;
+  }
+
+  .ss-nav {
+    font-size: 2.86cqw;
+  }
+
+  .ss-link,
+  .ss-sub,
+  .ss-openings-label {
+    display: none;
+  }
+
+  .ss-brand {
+    font-size: 4cqw;
+  }
+
+  .ss-book {
+    padding: 1.43cqw 2.86cqw;
+  }
+
+  .ss-hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4cqw;
+    margin-top: 4cqw;
+  }
+
+  .ss-photo {
+    order: -1;
+    height: 37.14cqw;
+  }
+
+  .ss-headline {
+    font-size: 7.43cqw;
+  }
+
+  .ss-cta {
+    margin-top: 3.43cqw;
+    padding: 2.57cqw 4.57cqw;
+    font-size: 3.14cqw;
+  }
+
+  .ss-chat {
+    left: auto;
+    right: 2.29cqw;
+    bottom: 7cqw;
+    align-items: flex-end;
+    gap: 1.43cqw;
+    padding: 1.14cqw;
+  }
+
+  .ss-bubble {
+    padding: 2cqw 2.86cqw;
+    font-size: 2.86cqw;
+  }
+
+  .ss-reply {
+    margin-left: 0;
+  }
+
+  .ss-openings {
+    flex-wrap: wrap;
+    gap: 1.71cqw;
+    margin-top: 4cqw;
+    padding: 0.86cqw;
+    font-size: 2.86cqw;
+  }
+
+  .ss-slot {
+    padding: 1.14cqw 2.57cqw;
+  }
+
+  /* The phone frame has no care card: step 4 shows on the "Care plans" chip */
+  .ss-care {
+    display: none;
+  }
+}

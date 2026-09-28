@@ -689,13 +689,16 @@ export function FixSection() {
   return (
     <section id="services" aria-labelledby="fix-title" className="relative bg-day text-day-text">
       <div className="fix-stage mx-auto flex w-full max-w-[1440px] flex-col px-5 py-20 lg:grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:content-center lg:items-center lg:gap-[60px] lg:px-20 lg:py-32">
-        <div>
+        {/* On phones this column dissolves so the pricing link can follow the site, as in the phone frame */}
+        <div className="max-lg:contents">
           <p className="text-xs text-day-muted lg:text-label">02 / The fix</p>
           <h2
             id="fix-title"
             className="mt-2.5 font-display text-[38px] leading-[0.98] font-extrabold tracking-[-0.045em] lg:mt-4 lg:text-[length:clamp(2.5rem,min(4.45vw,7.2vh),4rem)] lg:leading-[0.96]"
           >
-            A premium site, live in days.
+            A premium site,{" "}
+            <br className="max-lg:hidden" />
+            live in days.
           </h2>
           <p className="max-lg:sr-only lg:mt-5 lg:text-base lg:leading-[1.65] lg:text-day-muted">
             We figure out what&apos;s actually losing you leads, then design and build for that.
@@ -733,7 +736,7 @@ export function FixSection() {
           </ol>
           <Link
             href="/pricing"
-            className="mt-5 inline-block text-sm font-semibold text-brand-ink transition-colors hover:text-brand lg:mt-6 lg:text-[15px]"
+            className="mt-6 inline-block self-start text-sm font-semibold text-brand-ink transition-colors hover:text-brand max-lg:order-2 lg:mt-6 lg:text-[15px]"
           >
             See pricing — builds from $800 →
           </Link>
@@ -742,7 +745,7 @@ export function FixSection() {
             overbuying.
           </p>
         </div>
-        <div className="mt-8 lg:mt-0">
+        <div className="mt-8 max-lg:order-1 lg:mt-0">
           <SampleSite />
         </div>
       </div>
@@ -1301,7 +1304,7 @@ add (Edit tool):
   .ss-chat {
     left: auto;
     right: 2.29cqw;
-    bottom: 2.29cqw;
+    bottom: 7cqw;
     align-items: flex-end;
     gap: 1.43cqw;
     padding: 1.14cqw;
@@ -1328,37 +1331,9 @@ add (Edit tool):
     padding: 1.14cqw 2.57cqw;
   }
 
+  /* The phone frame has no care card: step 4 shows on the "Care plans" chip */
   .ss-care {
-    top: auto;
-    right: 2.86cqw;
-    bottom: 4cqw;
-    width: 48cqw;
-    padding: 3.43cqw 4cqw;
-    border-radius: 4cqw;
-  }
-
-  .ss-care-kicker {
-    gap: 1.71cqw;
-    font-size: 2.86cqw;
-  }
-
-  .ss-care-dot {
-    width: 1.71cqw;
-    height: 1.71cqw;
-  }
-
-  .ss-care-title {
-    font-size: 3.71cqw;
-  }
-
-  .ss-care-list {
-    gap: 1.43cqw;
-    font-size: 3.14cqw;
-  }
-
-  .ss-care-list svg {
-    width: 3.43cqw;
-    height: 3.43cqw;
+    display: none;
   }
 }
 ```
@@ -1395,14 +1370,16 @@ Expected:
   - On the right, the browser frame with "Your Salon" fully built: the Book now pill, the headline, "Book an appointment", the arch photo labelled "[Salon photo]", the two chat bubbles and the next-openings row.
   - The care card overlapping the frame's top-right corner.
   - All on the mist day panel.
-- `plan3-fix-static-390.png`: the label and heading, four lavender chips, then the frame in one column (photo first) with the care card at its lower right.
+- `plan3-fix-static-390.png`: the label and heading, four lavender chips, the frame in one column (photo first, both chat bubbles over the photo), then the pricing link. No care card on phones.
 
 Stop the server.
+
+> **Tuned while executing (2026-09-28):** checked against the rendered canvas frames. The desktop heading breaks after "site," as the frame does (the `<br>` is desktop-only). On phones the left column dissolves (`max-lg:contents`), so the pricing link can follow the frame as it does in the phone frame. The phone frame has no care card, so phones hide it (step 4 still shows on the "Care plans" chip), and the chat bubbles sit higher on the photo (`bottom: 7cqw`), clear of the "[Salon photo]" label. The code above includes all of this.
 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/components/sample-site.tsx src/components/fix-section.tsx src/app/globals.css src/app/page.tsx archive/2026-09-night-into-day/src/components/services-section.tsx
+git add src/components/sample-site.tsx src/components/fix-section.tsx src/app/globals.css src/app/page.tsx archive/2026-09-night-into-day/src/components/services-section.tsx docs/superpowers/plans/2026-09-28-night-into-day-plan-3-sunrise-and-fix.md
 git commit -m "feat(fix): 02 The fix with the sample salon site, in its finished state"
 ```
 

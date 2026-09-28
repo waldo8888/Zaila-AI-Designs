@@ -1,6 +1,6 @@
 import { Hero } from "@/components/hero";
 import { RealitySection } from "@/components/reality-section";
-import { ServicesSection } from "@/components/services-section";
+import { FixSection } from "@/components/fix-section";
 import { ProcessSection } from "@/components/process-section";
 import { TestimonialsSection } from "@/components/testimonials-section";
 import { SocialProofStrip } from "@/components/social-proof-strip";
@@ -12,7 +12,7 @@ export default function Home() {
     <>
       <Hero />
       <RealitySection />
-      <ServicesSection />
+      <FixSection />
       <ProcessSection />
       <TestimonialsSection />
       <SocialProofStrip />
