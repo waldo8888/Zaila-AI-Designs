@@ -1,24 +1,42 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Fraunces, Inter, Manrope } from "next/font/google";
 import "lenis/dist/lenis.css";
 import "./globals.css";
 import { Navbar } from "@/components/navbar-new";
 import { FooterNew } from "@/components/footer-new";
-import { SphereBackground } from "@/components/sphere-background";
+import { ParticleStage } from "@/components/story/particle-stage";
+import { Sky } from "@/components/story/sky";
+import { IntroCurtain } from "@/components/story/intro-curtain";
+import { INTRO_GATE_SCRIPT } from "@/components/story/intro-gate";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { CustomCursor } from "@/components/custom-cursor";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { DeferredChatWidget } from "@/components/deferred-chat-widget";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Brand type (spec §6): Manrope for display and headings, Inter for body.
+// The variables live on <html> so Tailwind's :root theme variables can use them.
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
+  display: "swap",
+});
+
+// The sample site's own typeface (sample-site.tsx). Defined here so its
+// @font-face joins the main stylesheet rather than adding a render-blocking one;
+// the file itself isn't preloaded and only loads where the sample site uses it.
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  weight: ["500", "600"],
+  display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -169,23 +187,33 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // The intro gate sets data-intro on <html> before React hydrates, hence
+  // suppressHydrationWarning (it only covers <html>'s own attributes).
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      className={`${inter.variable} ${manrope.variable} ${fraunces.variable}`}
+      suppressHydrationWarning
+    >
       <head>
+        {/* Decides before first paint whether this visit gets the intro (intro-gate.ts) */}
+        <script dangerouslySetInnerHTML={{ __html: INTRO_GATE_SCRIPT }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-dvh bg-black text-zinc-100 antialiased`}
+        className="min-h-dvh bg-night text-zinc-100 antialiased"
       >
         <SmoothScroll>
           <CustomCursor />
-          <SphereBackground />
+          <Sky />
+          <ParticleStage />
           <Navbar />
           <main className="relative z-10">{children}</main>
           <FooterNew />
+          <IntroCurtain />
         </SmoothScroll>
         <Analytics />
         <SpeedInsights />
