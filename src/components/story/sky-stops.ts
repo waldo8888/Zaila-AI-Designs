@@ -68,3 +68,13 @@ export function sampleStops(stops: Stop[], t: number): string {
   }
   return stops[stops.length - 1].color.toUpperCase();
 }
+
+/** WCAG relative luminance of a #RRGGBB colour: 0 for black to 1 for white. */
+export function luminance(hex: string): number {
+  const channel = (value: number) => {
+    const c = value / 255;
+    return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  };
+  const [r, g, b] = hexToRgb(hex);
+  return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+}

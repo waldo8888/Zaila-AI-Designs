@@ -7,6 +7,7 @@ import {
   SUNRISE,
   clamp01,
   hexToRgb,
+  luminance,
   mixHex,
   rgbToHex,
   sampleStops,
@@ -64,4 +65,11 @@ test("the sunrise only ever gets lighter", () => {
     assert.ok(current >= previous);
     previous = current;
   }
+});
+
+test("luminance runs from 0 for black to 1 for white", () => {
+  assert.equal(luminance("#000000"), 0);
+  assert.ok(Math.abs(luminance("#FFFFFF") - 1) < 1e-9);
+  assert.ok(luminance(NIGHT) < 0.01);
+  assert.ok(luminance(DAY) > 0.85);
 });

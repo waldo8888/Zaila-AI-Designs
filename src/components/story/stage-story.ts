@@ -146,6 +146,7 @@ export function createStoryScene({ scene, camera, rng, size }: StageSetup): Stag
       introSeconds,
       heroExit: scrollY / viewportHeight,
       reality: storyProgress.reality,
+      sunrise: 0,
     });
 
     if (!still) {
