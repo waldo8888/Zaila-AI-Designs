@@ -1532,8 +1532,10 @@ export const STORY_VERTEX = /* glsl */ `
 
     // The leak: once in the orb, some particles peel away past the right edge
     float leak = smoothstep(aLeak.x, aLeak.x + 0.25, uLeak) * stream;
+    // Brightest and biggest mid-flight, so the peel reads as a stream
+    float flight = sin(leak * 3.14159);
     world = mix(world, vec3(uExitX + aLeak.w, aLeak.y, aLeak.z), leak);
-    world.y += sin(leak * 3.14159) * 0.3 * sign(aLeak.y);
+    world.y += flight * 0.3 * sign(aLeak.y);
 
     // Particles near the cursor push away (the orb's, not the logo's)
     vec3 toMouse = world - uMouse;
@@ -1546,13 +1548,13 @@ export const STORY_VERTEX = /* glsl */ `
 
     // Finer points while they draw the logo, the orb's soft glow once they arrive
     float size = mix(14.0 + aRandom * 14.0, 20.0 + aRandom * 25.0, stream);
-    size *= uPixelRatio * (1.0 + vMouseProximity * 0.5);
+    size *= uPixelRatio * (1.0 + vMouseProximity * 0.5) * (1.0 + flight * 0.5);
     gl_PointSize = size * (1.0 / -mvPosition.z);
     gl_Position = projectionMatrix * mvPosition;
 
     float orbAlpha = (0.35 + 0.35 * (1.0 - smoothstep(0.0, 8.0, length(orbLocal)))) * (0.4 + aRandom * 0.3);
     float logoAlpha = 0.75 + aRandom * 0.25;
-    vAlpha = mix(logoAlpha, orbAlpha, stream) + vMouseProximity * 0.2;
+    vAlpha = mix(logoAlpha, orbAlpha, stream) + vMouseProximity * 0.2 + flight * 0.35;
 
     // The orb's depth tint; the logo keeps its light lilac and pink
     vPos = mix(vec3(0.0, 0.0, -2.0), orbLocal, stream);
@@ -3077,13 +3079,15 @@ node scripts/cdp.mjs "http://localhost:3100/" 6000 "(() => { const services = do
 Expected:
 The timeline's progress is (scrollY − 0.45 × innerHeight) / (1.3 × innerHeight). Words fill from 0 to 0.66, "You never hear about it." rises from 0.70 to 0.82, "That's the leak we fix." from 0.84 to 0.96, and the leak runs from 0.10 to 0.90.
 
-- `0.9` (progress ≈ 0.35): `sectionTop` ≈ 90 (not pinned yet), `filled` between 6 and 13 of 21, `punch` `"0"`. The frame shows the label, the sentence part-filled, and the progress line about a third drawn.
+- `0.9` (progress ≈ 0.35): `sectionTop` ≈ 90 (not pinned yet), `filled` between 6 and 13 of 22, `punch` `"0"`. The frame shows the label, the sentence part-filled, and the progress line about a third drawn.
 - `1.2` (≈ 0.58): `sectionTop` below 0 (pinned), `filled` between 15 and 20, `punch` `"0"`. Particles are peeling off the orb toward the right edge.
-- `1.5` (≈ 0.81): pinned, `filled` 21, `punch` above `0.8` ("You never hear about it." in violet).
+- `1.5` (≈ 0.81): pinned, `filled` 22, `punch` above `0.8` ("You never hear about it." in violet).
 - `1.75` (1.0): the end of the pin, with "That's the leak we fix." visible. About 45% of the orb has streamed off the right edge.
 - The back run prints the same `filled` count as `0.9` (±2). `plan2-reality-back-1440.png` matches `plan2-reality-0.9-1440.png`: the particles are back in the orb.
 - The last command prints `1`: the reality's pin is the only sticky element before services (G3).
 - Compare `plan2-reality-1.2-1440.png` with the canvas frame "01 The reality".
+
+> **Tuned while executing (2026-09-28):** the orb already sits at the screen's right edge, so the peeling particles travel a short way, and at first they only read as the orb thinning out. `STORY_VERTEX` above now makes particles brighter (+0.35 alpha) and larger (×1.5) mid-flight, so the leak reads as a stream.
 
 - [ ] **Step 5: Phones and reduced motion**
 
@@ -3093,8 +3097,8 @@ REDUCED=1 node scripts/cdp.mjs "http://localhost:3100/" 3000 "(() => { const sto
 ```
 
 Expected:
-- Phone: `height` well under 1.75 × `viewport` (no pin), with some words filled. The frame shows the label, the sentence at 30 px and "You never hear about it." below it.
-- Reduced motion: `intro` `"skip"`, `height` under 1.75 × `viewport`, `filled` 21, `punch` and `coda` `"1"`, `sticky` `"static"`.
+- Phone: `height` well under 1.75 × `viewport` (no pin). At this scroll point the chapter's progress is about 0.77, so all 22 words are filled. The frame shows the label, the sentence at 30 px and "You never hear about it." below it.
+- Reduced motion: `intro` `"skip"`, `height` under 1.75 × `viewport`, `filled` 22, `punch` and `coda` `"1"`, `sticky` `"static"`.
 
 Stop the server.
 

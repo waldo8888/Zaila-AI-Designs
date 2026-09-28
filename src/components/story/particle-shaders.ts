@@ -224,8 +224,10 @@ export const STORY_VERTEX = /* glsl */ `
 
     // The leak: once in the orb, some particles peel away past the right edge
     float leak = smoothstep(aLeak.x, aLeak.x + 0.25, uLeak) * stream;
+    // Brightest and biggest mid-flight, so the peel reads as a stream
+    float flight = sin(leak * 3.14159);
     world = mix(world, vec3(uExitX + aLeak.w, aLeak.y, aLeak.z), leak);
-    world.y += sin(leak * 3.14159) * 0.3 * sign(aLeak.y);
+    world.y += flight * 0.3 * sign(aLeak.y);
 
     // Particles near the cursor push away (the orb's, not the logo's)
     vec3 toMouse = world - uMouse;
@@ -238,13 +240,13 @@ export const STORY_VERTEX = /* glsl */ `
 
     // Finer points while they draw the logo, the orb's soft glow once they arrive
     float size = mix(14.0 + aRandom * 14.0, 20.0 + aRandom * 25.0, stream);
-    size *= uPixelRatio * (1.0 + vMouseProximity * 0.5);
+    size *= uPixelRatio * (1.0 + vMouseProximity * 0.5) * (1.0 + flight * 0.5);
     gl_PointSize = size * (1.0 / -mvPosition.z);
     gl_Position = projectionMatrix * mvPosition;
 
     float orbAlpha = (0.35 + 0.35 * (1.0 - smoothstep(0.0, 8.0, length(orbLocal)))) * (0.4 + aRandom * 0.3);
     float logoAlpha = 0.75 + aRandom * 0.25;
-    vAlpha = mix(logoAlpha, orbAlpha, stream) + vMouseProximity * 0.2;
+    vAlpha = mix(logoAlpha, orbAlpha, stream) + vMouseProximity * 0.2 + flight * 0.35;
 
     // The orb's depth tint; the logo keeps its light lilac and pink
     vPos = mix(vec3(0.0, 0.0, -2.0), orbLocal, stream);
