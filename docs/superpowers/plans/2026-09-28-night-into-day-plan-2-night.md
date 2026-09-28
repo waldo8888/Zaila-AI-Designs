@@ -1993,6 +1993,8 @@ Expected:
 
 Stop the server.
 
+> **Found while executing (2026-09-28):** under touch emulation the stage never showed, on `/` or `/pricing`, and plan 1's phone frames had the same problem. `custom-cursor.tsx` decided "touch" in a `useState` initializer and returned `null` on the client, while the server rendered its two divs. React then attached the next elements (the sky and the particle stage) to those two divs, so the canvas went into the hidden 6 px cursor dot. The fix moves the touch check into the cursor's effect, so both sides render the same markup. It's committed on its own, before this task: `fix(cursor): same markup on server and client, so phones get the particles`.
+
 - [ ] **Step 7: Commit**
 
 ```bash

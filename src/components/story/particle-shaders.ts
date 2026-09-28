@@ -1,4 +1,8 @@
-/** GLSL for the particle stage, moved verbatim from the old sphere-background.tsx. */
+/**
+ * GLSL for the particle stage. The ambient shaders moved verbatim from the old
+ * sphere-background.tsx; STORY_VERTEX drives the homepage and shares
+ * PARTICLE_FRAGMENT with them.
+ */
 
 export const PARTICLE_VERTEX = /* glsl */ `
   attribute vec3 aTarget1;
@@ -163,5 +167,86 @@ export const DUST_FRAGMENT = /* glsl */ `
     if (d > 0.5) discard;
     float strength = pow(1.0 - d * 2.0, 1.5);
     gl_FragColor = vec4(uColor, strength * vAlpha);
+  }
+`;
+
+/**
+ * The homepage story (stage-story.ts). Positions are worked out in world space
+ * so the logo faces the camera and the leak heads for the screen's right edge
+ * while the orb itself turns. Every term is a function of the uniforms, so
+ * scrolling back reverses each scene exactly.
+ */
+export const STORY_VERTEX = /* glsl */ `
+  attribute vec3 aStart;
+  attribute vec3 aLogo;
+  attribute vec4 aLeak;
+  attribute float aRandom;
+
+  uniform float uTime;
+  uniform float uPixelRatio;
+  uniform float uFly;
+  uniform float uStream;
+  uniform float uLeak;
+  uniform float uExitX;
+  uniform float uLogoScale;
+  uniform vec3 uMouse;
+  uniform float uMouseInfluence;
+
+  varying float vAlpha;
+  varying float vColorMix;
+  varying vec3 vPos;
+  varying float vMouseProximity;
+
+  void main() {
+    // The orb: the sphere in position, turned and placed by the model matrix
+    vec3 orbLocal = position;
+    float floatSpeed = 0.5 + aRandom * 0.5;
+    orbLocal.x += sin(uTime * floatSpeed + aRandom * 6.28) * 0.05;
+    orbLocal.y += cos(uTime * floatSpeed * 0.7 + aRandom * 6.28) * 0.05;
+    orbLocal.z += sin(uTime * floatSpeed * 0.5 + aRandom * 3.14) * 0.05;
+    vec3 orb = (modelMatrix * vec4(orbLocal, 1.0)).xyz;
+
+    // Intro: fly from the scatter into the logo, which shimmers while it holds...
+    float delay = aRandom * 0.35;
+    float fly = clamp((uFly - delay) / (1.0 - delay), 0.0, 1.0);
+    fly = 1.0 - pow(1.0 - fly, 3.0);
+    vec3 logo = aLogo * uLogoScale;
+    logo.x += sin(uTime * 3.0 + aRandom * 6.28) * 0.006;
+    logo.y += cos(uTime * 2.5 + aRandom * 3.14) * 0.006;
+    vec3 intro = mix(aStart, logo, fly);
+    float spiral = (1.0 - fly) * 6.28318 * aRandom;
+    intro.xy += vec2(cos(spiral), sin(spiral)) * (1.0 - fly) * 0.3;
+
+    // ...then stream into the orb
+    float stream = clamp((uStream - delay) / (1.0 - delay), 0.0, 1.0);
+    stream = stream * stream * (3.0 - 2.0 * stream);
+    vec3 world = mix(intro, orb, stream);
+
+    // The leak: once in the orb, some particles peel away past the right edge
+    float leak = smoothstep(aLeak.x, aLeak.x + 0.25, uLeak) * stream;
+    world = mix(world, vec3(uExitX + aLeak.w, aLeak.y, aLeak.z), leak);
+    world.y += sin(leak * 3.14159) * 0.3 * sign(aLeak.y);
+
+    // Particles near the cursor push away (the orb's, not the logo's)
+    vec3 toMouse = world - uMouse;
+    float repulsion = smoothstep(1.5, 0.0, length(toMouse.xy)) * uMouseInfluence * stream;
+    world += normalize(toMouse + vec3(0.001)) * repulsion * 0.8;
+    world.z += repulsion * 0.5;
+    vMouseProximity = repulsion;
+
+    vec4 mvPosition = viewMatrix * vec4(world, 1.0);
+
+    // Finer points while they draw the logo, the orb's soft glow once they arrive
+    float size = mix(10.0 + aRandom * 12.0, 20.0 + aRandom * 25.0, stream);
+    size *= uPixelRatio * (1.0 + vMouseProximity * 0.5);
+    gl_PointSize = size * (1.0 / -mvPosition.z);
+    gl_Position = projectionMatrix * mvPosition;
+
+    float orbAlpha = (0.35 + 0.35 * (1.0 - smoothstep(0.0, 8.0, length(orbLocal)))) * (0.4 + aRandom * 0.3);
+    float logoAlpha = 0.55 + aRandom * 0.3;
+    vAlpha = mix(logoAlpha, orbAlpha, stream) + vMouseProximity * 0.2;
+
+    vPos = orbLocal;
+    vColorMix = fract(aRandom + sin(orbLocal.y * 2.0 + uTime) * 0.1);
   }
 `;

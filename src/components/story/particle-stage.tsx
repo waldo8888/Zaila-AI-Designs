@@ -13,37 +13,54 @@ const SEED = 20260927;
 /**
  * The single WebGL layer behind the site (spec §8). This shell owns the
  * renderer, the camera and the inputs (scroll, pointer, resize, tab
- * visibility). A scene owns the particles: every page runs the ambient scene
- * for now, and the homepage gets its story scene next.
+ * visibility). A scene owns the particles: the homepage runs the story
+ * (stage-story.ts), every other page the ambient field (stage-ambient.ts).
  */
 export function ParticleStage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const [visible, setVisible] = useState(false);
-
-  // Smaller particle budget on subpages for smooth performance
   const isHomepage = pathname === "/";
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
+    const html = document.documentElement;
+
+    // Never leave the intro's curtain up when there's nothing to draw (intro-gate.ts)
+    const liftCurtain = () => {
+      if (html.dataset.intro === "play" || html.dataset.intro === "reveal") {
+        html.dataset.intro = "done";
+      }
+    };
+
+    // The homepage's story is its own chunk, so other pages never download it
+    const story = isHomepage ? import("./stage-story") : null;
+    story?.catch(() => undefined);
 
     // Track the inner cleanup so it runs even if the timer fires after unmount
     let innerCleanup: (() => void) | null = null;
     let destroyed = false;
 
     // Defer heavy WebGL set-up so the page can paint first
-    const initTimer = setTimeout(() => {
+    const initTimer = setTimeout(async () => {
+      let createScene: (setup: StageSetup) => StageScene;
+      if (story) {
+        try {
+          createScene = (await story).createStoryScene;
+        } catch {
+          // The story didn't load: the sky alone is fine
+          liftCurtain();
+          return;
+        }
+      } else {
+        // Only the homepage has an intro
+        liftCurtain();
+        const isMobileViewport = window.innerWidth < 768;
+        createScene = (setup) =>
+          createAmbientScene(setup, { particles: isMobileViewport ? 3000 : 4500, dust: 300 });
+      }
       if (destroyed) return;
-
-      const isMobileViewport = window.innerWidth < 768;
-      const createScene = (setup: StageSetup) =>
-        createAmbientScene(
-          setup,
-          isHomepage
-            ? { particles: isMobileViewport ? 7000 : 9000, dust: isMobileViewport ? 400 : 650 }
-            : { particles: isMobileViewport ? 3000 : 4500, dust: 300 }
-        );
 
       let renderer: THREE.WebGLRenderer;
       try {
@@ -54,6 +71,7 @@ export function ParticleStage() {
         });
       } catch {
         // No WebGL (blocklisted GPU, some in-app browsers): the sky alone is fine.
+        liftCurtain();
         return;
       }
 
