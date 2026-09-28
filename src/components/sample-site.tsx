@@ -1,14 +1,3 @@
-import { Fraunces } from "next/font/google";
-
-// The made-up client's own typeface. Not preloaded: the site sits below the fold.
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
-  subsets: ["latin"],
-  weight: ["500", "600"],
-  display: "swap",
-  preload: false,
-});
-
 const check = (
   <svg
     viewBox="0 0 24 24"
@@ -27,13 +16,13 @@ const check = (
  * The made-up salon site that builds itself in 02 The fix (spec §5). It's
  * plainly a sample: a placeholder domain and a labelled photo placeholder.
  * data-build says how far the build has got: "all" in the server HTML, then
- * 1 to 4 while the chapter plays (fix-scenes.tsx). Styles: globals.css,
- * "The sample salon site".
+ * 1 to 4 while the chapter plays (fix-scenes.tsx). Its typeface, Fraunces, is
+ * defined in layout.tsx. Styles: globals.css, "The sample salon site".
  */
 export function SampleSite() {
   return (
     <figure
-      className={`fix-frame-wrap ${fraunces.variable}`}
+      className="fix-frame-wrap"
       data-build="all"
       role="img"
       aria-label="A sample site for a made-up salon, built one service at a time: the page, then a booking button and next openings, then a chat reply offering a time, then a monthly care plan check-in."

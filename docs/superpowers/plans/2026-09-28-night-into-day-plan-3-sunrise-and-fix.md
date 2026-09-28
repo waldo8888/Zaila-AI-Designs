@@ -2751,6 +2751,23 @@ node -e 'const r = require("./.lighthouse/sim-plan3-1.json"); for (const cat of 
 
 Expected: Accessibility 100, SEO 100, Best practices ≥ 96. The only failing audit expected is `errors-in-console`, from the Vercel scripts returning 404 on localhost, as in the baseline. Fix anything else and re-run.
 
+> **Found while executing (2026-09-28):** the first simulated runs (Performance 87, LCP 3.76 s, FCP 1.36 s) sat in the slow cluster the log describes after plan 1. Plan 2 got three of five runs in the fast cluster. One cause was new, though: the sample site's `next/font` Fraunces gave the homepage its first page-level stylesheet. That 1 KB file is render-blocking and held only the `@font-face` rules. Fraunces is now defined in `layout.tsx` next to Inter and Manrope, still `preload: false`, so its rules join the main stylesheet and the homepage loads one stylesheet again. Simulated FCP went from 1.36 to 1.21 s, and the applied gate was re-run on the final code. In `src/app/layout.tsx`, the import becomes `import { Fraunces, Inter, Manrope } from "next/font/google";`, and after the `manrope` constant add:
+>
+> ```ts
+> // The sample site's own typeface (sample-site.tsx). Defined here so its
+> // @font-face joins the main stylesheet rather than adding a render-blocking one;
+> // the file itself isn't preloaded and only loads where the sample site uses it.
+> const fraunces = Fraunces({
+>   variable: "--font-fraunces",
+>   subsets: ["latin"],
+>   weight: ["500", "600"],
+>   display: "swap",
+>   preload: false,
+> });
+> ```
+>
+> Then add `${fraunces.variable}` to `<html>`'s class list. In `sample-site.tsx`, remove the `Fraunces` import and constant and set the figure's class to `"fix-frame-wrap"`. The doc comment now ends with "Its typeface, Fraunces, is defined in layout.tsx. Styles: globals.css, "The sample salon site"."
+
 - [ ] **Step 4: G2 and G3**
 
 ```bash

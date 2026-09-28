@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Manrope } from "next/font/google";
+import { Fraunces, Inter, Manrope } from "next/font/google";
 import "lenis/dist/lenis.css";
 import "./globals.css";
 import { Navbar } from "@/components/navbar-new";
@@ -26,6 +26,17 @@ const manrope = Manrope({
   variable: "--font-manrope",
   subsets: ["latin"],
   display: "swap",
+});
+
+// The sample site's own typeface (sample-site.tsx). Defined here so its
+// @font-face joins the main stylesheet rather than adding a render-blocking one;
+// the file itself isn't preloaded and only loads where the sample site uses it.
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  weight: ["500", "600"],
+  display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -179,7 +190,11 @@ export default function RootLayout({
   // The intro gate sets data-intro on <html> before React hydrates, hence
   // suppressHydrationWarning (it only covers <html>'s own attributes).
   return (
-    <html lang="en" className={`${inter.variable} ${manrope.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${inter.variable} ${manrope.variable} ${fraunces.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         {/* Decides before first paint whether this visit gets the intro (intro-gate.ts) */}
         <script dangerouslySetInnerHTML={{ __html: INTRO_GATE_SCRIPT }} />
