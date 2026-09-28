@@ -3,32 +3,18 @@
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import * as THREE from "three";
-import {
-  generateCube,
-  generateDust,
-  generateHelix,
-  generatePlane,
-  generateRandoms,
-  generateSphere,
-  generateTorus,
-  mulberry32,
-} from "./particle-shapes";
-import {
-  DUST_FRAGMENT,
-  DUST_VERTEX,
-  PARTICLE_FRAGMENT,
-  PARTICLE_VERTEX,
-} from "./particle-shaders";
+import { mulberry32 } from "./particle-shapes";
+import { createAmbientScene } from "./stage-ambient";
+import type { StageScene, StageSetup, StageSize } from "./stage-scene";
 
 /** Fixed seed, so the particle field looks the same on every visit. */
 const SEED = 20260927;
 
 /**
- * The single WebGL layer behind the site (spec §8).
- *
- * Plan 1 ports the old sphere-background.tsx like-for-like as "ambient" mode:
- * the sphere morphs through torus, helix, cube and terrain across the page's
- * scroll. The homepage's story beats arrive in plan 2.
+ * The single WebGL layer behind the site (spec §8). This shell owns the
+ * renderer, the camera and the inputs (scroll, pointer, resize, tab
+ * visibility). A scene owns the particles: every page runs the ambient scene
+ * for now, and the homepage gets its story scene next.
  */
 export function ParticleStage() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -42,16 +28,6 @@ export function ParticleStage() {
     const container = containerRef.current;
     if (!container) return;
 
-    const isMobileViewport = window.innerWidth < 768;
-    const PARTICLE_COUNT = isHomepage
-      ? isMobileViewport
-        ? 7000
-        : 9000
-      : isMobileViewport
-        ? 3000
-        : 4500;
-    const DUST_COUNT = isHomepage ? (isMobileViewport ? 400 : 650) : 300;
-
     // Track the inner cleanup so it runs even if the timer fires after unmount
     let innerCleanup: (() => void) | null = null;
     let destroyed = false;
@@ -59,6 +35,15 @@ export function ParticleStage() {
     // Defer heavy WebGL set-up so the page can paint first
     const initTimer = setTimeout(() => {
       if (destroyed) return;
+
+      const isMobileViewport = window.innerWidth < 768;
+      const createScene = (setup: StageSetup) =>
+        createAmbientScene(
+          setup,
+          isHomepage
+            ? { particles: isMobileViewport ? 7000 : 9000, dust: isMobileViewport ? 400 : 650 }
+            : { particles: isMobileViewport ? 3000 : 4500, dust: 300 }
+        );
 
       let renderer: THREE.WebGLRenderer;
       try {
@@ -72,21 +57,16 @@ export function ParticleStage() {
         return;
       }
 
-      const rng = mulberry32(SEED);
-      const mouse = { x: 0, y: 0 };
-      const targetMouse = { x: 0, y: 0 };
+      const measure = (): StageSize => ({
+        width: window.innerWidth,
+        height: window.innerHeight,
+        pixelRatio: Math.min(window.devicePixelRatio, window.innerWidth < 768 ? 1 : 1.25),
+      });
+      const size = measure();
 
       const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(
-        45,
-        window.innerWidth / window.innerHeight,
-        0.1,
-        1000
-      );
+      const camera = new THREE.PerspectiveCamera(45, size.width / size.height, 0.1, 1000);
       camera.position.z = 4.5;
-
-      const pixelRatioCap = isMobileViewport ? 1 : 1.25;
-      const currentPixelRatio = Math.min(window.devicePixelRatio, pixelRatioCap);
 
       Object.assign(renderer.domElement.style, {
         position: "absolute",
@@ -95,79 +75,15 @@ export function ParticleStage() {
         height: "100%",
         display: "block",
       });
-      renderer.setSize(window.innerWidth, window.innerHeight, false);
-      renderer.setPixelRatio(currentPixelRatio);
+      renderer.setSize(size.width, size.height, false);
+      renderer.setPixelRatio(size.pixelRatio);
       container.appendChild(renderer.domElement);
 
-      const shapes = [
-        generateSphere(PARTICLE_COUNT, 2.5, rng),
-        generateTorus(PARTICLE_COUNT, 1.8, 0.8, rng),
-        generateHelix(PARTICLE_COUNT, 1.5, 4.5, 5, rng),
-        generateCube(PARTICLE_COUNT, 3.5, rng),
-        generatePlane(PARTICLE_COUNT, 3.0, rng),
-      ];
-
-      const geometry = new THREE.BufferGeometry();
-      geometry.setAttribute("position", new THREE.BufferAttribute(shapes[0], 3));
-      geometry.setAttribute("aTarget1", new THREE.BufferAttribute(shapes[1], 3));
-      geometry.setAttribute("aTarget2", new THREE.BufferAttribute(shapes[2], 3));
-      geometry.setAttribute("aTarget3", new THREE.BufferAttribute(shapes[3], 3));
-      geometry.setAttribute("aTarget4", new THREE.BufferAttribute(shapes[4], 3));
-      geometry.setAttribute(
-        "aRandom",
-        new THREE.BufferAttribute(generateRandoms(PARTICLE_COUNT, rng), 1)
-      );
-
-      const material = new THREE.ShaderMaterial({
-        uniforms: {
-          uTime: { value: 0 },
-          uMorph: { value: 0 },
-          uPixelRatio: { value: currentPixelRatio },
-          uMouse: { value: new THREE.Vector3(0, 0, 0) },
-          uMouseInfluence: { value: 0 },
-          uColor1: { value: new THREE.Color("#c084fc") },
-          uColor2: { value: new THREE.Color("#e879f9") },
-          uColor3: { value: new THREE.Color("#6d28d9") },
-        },
-        vertexShader: PARTICLE_VERTEX,
-        fragmentShader: PARTICLE_FRAGMENT,
-        transparent: true,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending,
-      });
-
-      const particles = new THREE.Points(geometry, material);
-      // Sit right of centre so it balances the text on the left
-      particles.position.set(1.5, 0, 0);
-      scene.add(particles);
-
-      const dustGeometry = new THREE.BufferGeometry();
-      dustGeometry.setAttribute(
-        "position",
-        new THREE.BufferAttribute(generateDust(DUST_COUNT, rng), 3)
-      );
-
-      const dustMaterial = new THREE.ShaderMaterial({
-        uniforms: {
-          uTime: material.uniforms.uTime,
-          uPixelRatio: material.uniforms.uPixelRatio,
-          uColor: { value: new THREE.Color("#d946ef") },
-        },
-        vertexShader: DUST_VERTEX,
-        fragmentShader: DUST_FRAGMENT,
-        transparent: true,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending,
-      });
-
-      const dust = new THREE.Points(dustGeometry, dustMaterial);
-      scene.add(dust);
+      const stageScene: StageScene = createScene({ scene, camera, rng: mulberry32(SEED), size });
 
       // Scroll tracking
       let scrollY = 0;
       let targetScroll = 0;
-      let maxScroll = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
-      let startX = window.innerWidth < 768 ? 0 : 1.5;
       function handleScroll() {
         targetScroll = window.scrollY;
       }
@@ -175,7 +91,10 @@ export function ParticleStage() {
       handleScroll();
 
       // Mouse tracking (window-level, so it never blocks other interactions)
+      const mouse = { x: 0, y: 0 };
+      const targetMouse = { x: 0, y: 0 };
       let mouseActive = false;
+      let mouseInfluence = 0;
       let mouseTimeout: ReturnType<typeof setTimeout> | undefined;
       const supportsHover = window.matchMedia("(hover: hover)").matches;
 
@@ -199,15 +118,11 @@ export function ParticleStage() {
       }
 
       function handleResize() {
-        camera.aspect = window.innerWidth / window.innerHeight;
+        const next = measure();
+        camera.aspect = next.width / next.height;
         camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight, false);
-        material.uniforms.uPixelRatio.value = Math.min(
-          window.devicePixelRatio,
-          window.innerWidth < 768 ? 1 : 1.25
-        );
-        maxScroll = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
-        startX = window.innerWidth < 768 ? 0 : 1.5;
+        renderer.setSize(next.width, next.height, false);
+        stageScene.resize(next);
       }
       window.addEventListener("resize", handleResize);
       handleResize();
@@ -221,71 +136,17 @@ export function ParticleStage() {
       }
       document.addEventListener("visibilitychange", handleVisibilityChange);
 
-      let baseRotationY = 0;
-      let baseTimeX = 0;
-      let dustTimeY = 0;
-      let currentMouseInfluence = 0;
-
-      // Reused vectors for mouse unprojection
-      const mouseWorldPos = new THREE.Vector3();
-      const mouseLocalPos = new THREE.Vector3();
-      const inverseMatrix = new THREE.Matrix4();
-
       function animate() {
         animationId = requestAnimationFrame(animate);
         if (!isDocumentVisible) return;
 
         const delta = Math.min(clock.getDelta(), 0.033);
-        const elapsed = clock.elapsedTime;
-
-        baseRotationY += delta * 0.05;
-        baseTimeX += delta * 0.02;
-        dustTimeY += delta * 0.02;
-
         scrollY += (targetScroll - scrollY) * 0.08;
         mouse.x += (targetMouse.x - mouse.x) * 0.08;
         mouse.y += (targetMouse.y - mouse.y) * 0.08;
+        mouseInfluence += ((mouseActive ? 1 : 0) - mouseInfluence) * 0.05;
 
-        const targetInfluence = mouseActive ? 1.0 : 0.0;
-        currentMouseInfluence += (targetInfluence - currentMouseInfluence) * 0.05;
-
-        if (currentMouseInfluence > 0.001) {
-          // Mouse position in particle space, only while the effect is visible
-          const fovRad = (camera.fov * Math.PI) / 180;
-          const halfHeight = camera.position.z * Math.tan(fovRad / 2);
-          const halfWidth = halfHeight * camera.aspect;
-          mouseWorldPos.set(mouse.x * halfWidth, mouse.y * halfHeight, 0);
-          particles.updateMatrixWorld();
-          inverseMatrix.copy(particles.matrixWorld).invert();
-          mouseLocalPos.copy(mouseWorldPos).applyMatrix4(inverseMatrix);
-          material.uniforms.uMouse.value.copy(mouseLocalPos);
-        }
-
-        material.uniforms.uTime.value = elapsed;
-        material.uniforms.uMouseInfluence.value = currentMouseInfluence;
-
-        const scrollProgress = scrollY / maxScroll;
-
-        // 5 shapes = 4 transitions; 4.5 lets delayed particles reach the last shape
-        material.uniforms.uMorph.value = scrollProgress * 4.5;
-
-        // Slide from right of centre to the middle as you scroll
-        particles.position.x = startX - scrollProgress * startX;
-
-        const mouseRotationX = mouse.y * 0.15 * currentMouseInfluence;
-        const mouseRotationY = mouse.x * 0.2 * currentMouseInfluence;
-
-        particles.rotation.y = baseRotationY + scrollProgress * Math.PI * 2.0 + mouseRotationY;
-        particles.rotation.x = Math.sin(baseTimeX) * 0.1 + scrollProgress * 1.55 + mouseRotationX;
-        particles.rotation.z = scrollProgress * 0.2;
-
-        // Lift the terrain so it sits behind the footer
-        particles.position.y = -(scrollProgress * 1.2);
-        particles.position.z = -(scrollProgress * 3.5);
-
-        dust.rotation.y = dustTimeY + scrollProgress * Math.PI;
-        dust.position.y = -(scrollProgress * 2.0);
-
+        stageScene.update({ delta, elapsed: clock.elapsedTime, scrollY, mouse, mouseInfluence });
         renderer.render(scene, camera);
       }
 
@@ -304,11 +165,8 @@ export function ParticleStage() {
           window.removeEventListener("mousemove", handleMouseMove);
           document.removeEventListener("mouseleave", handleMouseLeave);
         }
+        stageScene.dispose();
         renderer.dispose();
-        geometry.dispose();
-        material.dispose();
-        dustGeometry.dispose();
-        dustMaterial.dispose();
         if (container.contains(renderer.domElement)) {
           container.removeChild(renderer.domElement);
         }
@@ -326,16 +184,9 @@ export function ParticleStage() {
   return (
     <div
       ref={containerRef}
-      className="pointer-events-none fixed inset-0 z-0"
+      className="particle-stage"
       aria-hidden="true"
-      style={{
-        // Soften particles so foreground text stays easy to read
-        filter: "blur(1px) brightness(0.92)",
-        opacity: visible ? 1 : 0,
-        transition: "opacity 0.8s ease-out",
-        contain: "layout paint size",
-        overflow: "hidden",
-      }}
+      style={{ opacity: visible ? 1 : 0 }}
     />
   );
 }

@@ -3,7 +3,11 @@
 // and optionally save a screenshot. Headless Chrome produces real animation frames,
 // unlike a hidden browser pane, so scroll scenes and WebGL behave as they would live.
 // Usage: node scripts/cdp.mjs <url> <waitMs> <expression> [screenshot.png] [width] [height]
-// MOBILE=1 emulates a phone (touch, device pixel ratio 2) at the given width and height.
+// Env:
+//   MOBILE=1   emulate a phone (touch, device pixel ratio 2) at the given width and height
+//   REDUCED=1  emulate prefers-reduced-motion: reduce
+//   LOADS=n    load the URL n times in the same tab, so sessionStorage carries over
+// Console errors and warnings, and uncaught exceptions, print as they happen.
 import { spawn } from "node:child_process";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -71,6 +75,16 @@ try {
       ws.send(JSON.stringify({ id, method, params }));
     });
 
+  listeners.push((m) => {
+    if (m.method === "Runtime.consoleAPICalled" && (m.params.type === "error" || m.params.type === "warning")) {
+      const text = m.params.args.map((a) => a.value ?? a.description ?? "").join(" ");
+      console.log(`console.${m.params.type}: ${text}`);
+    } else if (m.method === "Runtime.exceptionThrown") {
+      const details = m.params.exceptionDetails;
+      console.log(`exception: ${details.exception?.description ?? details.text}`);
+    }
+  });
+
   await send("Page.enable");
   await send("Runtime.enable");
   if (process.env.MOBILE === "1") {
@@ -83,12 +97,20 @@ try {
     });
     await send("Emulation.setTouchEmulationEnabled", { enabled: true, maxTouchPoints: 5 });
   }
-  const loaded = new Promise((resolve) =>
-    listeners.push((m) => { if (m.method === "Page.loadEventFired") resolve(); })
-  );
-  await send("Page.navigate", { url });
-  await Promise.race([loaded, sleep(20000)]);
-  await sleep(Number(waitMs));
+  if (process.env.REDUCED === "1") {
+    await send("Emulation.setEmulatedMedia", {
+      features: [{ name: "prefers-reduced-motion", value: "reduce" }],
+    });
+  }
+  const loads = Math.max(1, Number(process.env.LOADS ?? 1));
+  for (let i = 0; i < loads; i++) {
+    const loaded = new Promise((resolve) =>
+      listeners.push((m) => { if (m.method === "Page.loadEventFired") resolve(); })
+    );
+    await send("Page.navigate", { url });
+    await Promise.race([loaded, sleep(20000)]);
+    await sleep(Number(waitMs));
+  }
 
   const result = await send("Runtime.evaluate", { expression, awaitPromise: true, returnByValue: true });
   if (result.result?.exceptionDetails) {
