@@ -2716,7 +2716,8 @@ export function Hero() {
 
       <div className="hero-fade hero-fade-late absolute inset-x-0 bottom-5 lg:bottom-[30px]">
         <div className="mx-auto grid max-w-[1440px] grid-cols-[1fr_auto] items-center px-5 text-xs text-night-dim lg:grid-cols-[1fr_auto_1fr] lg:px-20 lg:text-[13px] lg:tracking-[0.02em]">
-          <span>
+          {/* Starts past the chat launcher (chat-widget.tsx: 80px wide, 24px from the left) */}
+          <span className="pl-[100px] lg:pl-12">
             Hamilton, ON
             <HamiltonTime />
           </span>
@@ -2886,6 +2887,8 @@ Expected:
   - the orb behind the end of the headline.
 - `plan2-hero-390.png`: the headline, subhead, full-width pill and "See pricing — from $800 →" in the lower part of the screen; "Hamilton, ON · …" and "Available" along the bottom.
 - `plan2-hero-entrance-1440.png`: taken just after a repeat load (no intro). The headline lines are part-way through rising, or finished, and never clipped once at rest.
+
+> **Found while executing (2026-09-28):** the chat launcher (fixed bottom-left, 80 px wide, 24 px in, `z-[9999]`) covered "Hamilton, ON" in the meta row on every size. The canvas frame didn't include the launcher. The row's first item now starts just past it (`pl-[100px] lg:pl-12`, shown in the code above), and everything else stays on the gutter.
 
 Stop the server.
 

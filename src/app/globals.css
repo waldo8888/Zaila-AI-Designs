@@ -436,3 +436,76 @@ html[data-intro="play"] .particle-stage {
     animation: none;
   }
 }
+
+/* The homepage skips the route fade: its hero has its own entrance, and the
+   fade would hold back the headline that counts as the page's LCP. */
+.page-in:has(> .hero) {
+  animation: none;
+}
+
+/* Hero entrance (spec §7). CSS only, so it starts at first paint. While the
+   intro's curtain is up (data-intro="play") the hero waits, fully drawn, so it
+   still counts for LCP; the entrance then plays as the curtain lifts. */
+@keyframes hero-rise {
+  from {
+    transform: translateY(125%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes hero-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Desktop: each headline line rises out of its own mask. The mask reaches a
+   little past the tight line box, so ascenders and descenders aren't cut. */
+@media (min-width: 1024px) {
+  .hero-line {
+    display: block;
+    clip-path: inset(-0.15em -0.5em -0.2em -0.5em);
+  }
+
+  .hero-line > span {
+    display: block;
+  }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  html:not([data-intro="play"]) .hero-line > span {
+    animation: hero-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  html:not([data-intro="play"]) .hero-line:nth-child(2) > span {
+    animation-delay: 0.08s;
+  }
+
+  html:not([data-intro="play"]) .hero-line:nth-child(3) > span {
+    animation-delay: 0.16s;
+  }
+}
+
+/* Phones: the headline wraps freely, so it fades up as one piece. */
+@media (max-width: 1023.98px) and (prefers-reduced-motion: no-preference) {
+  html:not([data-intro="play"]) .hero h1 {
+    animation: hero-fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-intro="play"]) .hero-fade {
+    animation: hero-fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+  }
+
+  html:not([data-intro="play"]) .hero-fade-late {
+    animation-delay: 0.45s;
+  }
+}

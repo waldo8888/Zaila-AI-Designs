@@ -26,9 +26,6 @@ const manrope = Manrope({
   variable: "--font-manrope",
   subsets: ["latin"],
   display: "swap",
-  // Nothing above the fold uses Manrope yet, so don't spend early bandwidth on it.
-  // Plan 2 turns preloading back on when the hero headline switches to Manrope.
-  preload: false,
 });
 
 export const metadata: Metadata = {
