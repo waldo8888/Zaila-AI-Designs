@@ -5,6 +5,8 @@ import {
   generateCube,
   generateDust,
   generateHelix,
+  generateHorizon,
+  generateLanding,
   generateLeak,
   generateLogo,
   generatePlane,
@@ -161,4 +163,21 @@ test("the leak sends about the given share of particles past the edge", () => {
     assert.ok(leak[i * 4 + 3] >= 0 && leak[i * 4 + 3] <= 1.5);
   }
   assert.ok(Math.abs(leavers / count - 0.45) < 0.03);
+});
+
+test("the horizon spans the width in a thin band", () => {
+  const horizon = generateHorizon(N, mulberry32(6));
+  assert.equal(horizon.length, N * 3);
+  assert.deepEqual(horizon, generateHorizon(N, mulberry32(6)));
+  eachPoint(horizon, (x, y, z) => {
+    assert.ok(x >= -1 && x <= 1);
+    assert.ok(Math.abs(y) <= 0.08 + 1e-6);
+    assert.ok(z >= -1.2 && z <= 0.6);
+  });
+});
+
+test("landing spots fall inside the sample site's box", () => {
+  const spots = generateLanding(N, mulberry32(7));
+  assert.equal(spots.length, N * 2);
+  for (const value of spots) assert.ok(value >= 0 && value < 1);
 });

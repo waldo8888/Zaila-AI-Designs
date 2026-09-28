@@ -181,3 +181,25 @@ export function generateLeak(count: number, fraction: number, rng: Rng): Float32
   }
   return values;
 }
+
+/**
+ * The horizon the orb's particles settle into at sunrise (spec §5): x across
+ * the width in half-widths (-1 to 1), a thin band in y in half-heights, and a
+ * little depth. The stage scales it to the screen.
+ */
+export function generateHorizon(count: number, rng: Rng): Float32Array {
+  const positions = new Float32Array(count * 3);
+  for (let i = 0; i < count; i++) {
+    positions[i * 3] = rng() * 2 - 1;
+    positions[i * 3 + 1] = (rng() + rng() - 1) * 0.08;
+    positions[i * 3 + 2] = rng() * 1.8 - 1.2;
+  }
+  return positions;
+}
+
+/** Where each particle lands on the sample site: u,v from 0 to 1 across its box. */
+export function generateLanding(count: number, rng: Rng): Float32Array {
+  const values = new Float32Array(count * 2);
+  for (let i = 0; i < values.length; i++) values[i] = rng();
+  return values;
+}
