@@ -1942,7 +1942,19 @@ with:
     >
 ```
 
-3. In the `fix-stage` div's class list, replace `py-20` with `py-20 motion-safe:sticky motion-safe:top-0 motion-safe:h-svh motion-safe:justify-center motion-safe:pb-4 motion-safe:pt-20`, and `lg:py-32` with `lg:py-32 lg:motion-safe:pb-6 lg:motion-safe:pt-24`.
+3. In the `fix-stage` div's class list, replace `py-20` with `py-20 motion-safe:sticky motion-safe:top-0 motion-safe:min-h-svh motion-safe:justify-center motion-safe:pb-4 motion-safe:pt-20`, and `lg:py-32` with `lg:py-32 lg:motion-safe:pb-6 lg:motion-safe:pt-24`.
+
+   On shorter desktop screens the description and the discovery line give way while pinned, as they do on phones. Put this comment above the description `<p>`:
+
+```tsx
+          {/* This and the discovery line give way while pinned on shorter desktop screens, as on phones */}
+```
+
+   Then add `lg:motion-safe:[@media(max-height:900px)]:sr-only` to the end of the description's class list, and add `lg:ml-16 ` before `lg:text-sm` in the discovery line's class list and the same variant to its end. On the pricing link, add `lg:ml-16 ` before `lg:text-[15px]`, and put this comment above the `<Link`:
+
+```tsx
+          {/* On desktop these line up with the service names, clear of the fixed chat launcher */}
+```
 
 4. Before `    </section>`, add `      <FixScenes />`.
 
@@ -1975,10 +1987,26 @@ Expected:
 
 Stop the server.
 
+> **Found while executing (2026-09-28):** first, the stage was exactly one screen tall (`h-svh`) with its content centred, so on shorter screens the content spilled off both edges. With the tallest step active:
+> - 1440×900 cut the discovery line.
+> - 1536×864 also cut the pricing link.
+> - 1366×768 and 1280×720 lost the label off the top too.
+>
+> Three changes fix it:
+> - The stage is now at least one screen tall (`min-h-svh`), so the top is never cut. On very short screens the bottom waits below the fold during the pin and scrolls in after.
+> - Below 900 px of height, the description and the discovery line give way while pinned. They stay available to screen readers, as on phones.
+> - The fixed chat launcher (x 24–104, bottom 104 px) then covered the pricing link's first letter for the whole pin. The link and the discovery line now line up with the service names (`lg:ml-16`, x 144).
+>
+> Measured after the fix, with the tallest step active:
+> - 1920×1080 and 1440×1000 show everything.
+> - 1440×900 and 1536×864 fit with the link in view.
+> - 1366×768 and 1280×720 keep the label at 96 px and the whole sample site in view.
+> - On a short phone (390×664) the label stays at 80 px.
+
 - [ ] **Step 6: Commit**
 
 ```bash
-git add src/components/story/story-progress.ts src/components/fix-scenes.tsx src/components/fix-section.tsx
+git add src/components/story/story-progress.ts src/components/fix-scenes.tsx src/components/fix-section.tsx docs/superpowers/plans/2026-09-28-night-into-day-plan-3-sunrise-and-fix.md
 git commit -m "feat(fix): pin the chapter and build the sample site one service at a time"
 ```
 

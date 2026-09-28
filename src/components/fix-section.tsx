@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SampleSite } from "@/components/sample-site";
+import { FixScenes } from "@/components/fix-scenes";
 
 /** The four services, in build order. Approved copy, moved from the old services section. */
 const SERVICES = [
@@ -32,12 +33,18 @@ const SERVICES = [
 /**
  * 02 The fix (spec §5): what we build. The server HTML is the finished state,
  * every service open and the sample site fully built, so it reads in full
- * without JavaScript or with reduced motion. Styles: globals.css, "02 The fix".
+ * without JavaScript or with reduced motion. With motion, the chapter pins
+ * (1.5 screens on desktop, 1 on phones) and fix-scenes.tsx builds the site one
+ * service at a time. Styles: globals.css, "02 The fix".
  */
 export function FixSection() {
   return (
-    <section id="services" aria-labelledby="fix-title" className="relative bg-day text-day-text">
-      <div className="fix-stage mx-auto flex w-full max-w-[1440px] flex-col px-5 py-20 lg:grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:content-center lg:items-center lg:gap-[60px] lg:px-20 lg:py-32">
+    <section
+      id="services"
+      aria-labelledby="fix-title"
+      className="relative bg-day text-day-text motion-safe:h-[200vh] lg:motion-safe:h-[250vh]"
+    >
+      <div className="fix-stage mx-auto flex w-full max-w-[1440px] flex-col px-5 py-20 motion-safe:sticky motion-safe:top-0 motion-safe:min-h-svh motion-safe:justify-center motion-safe:pb-4 motion-safe:pt-20 lg:grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:content-center lg:items-center lg:gap-[60px] lg:px-20 lg:py-32 lg:motion-safe:pb-6 lg:motion-safe:pt-24">
         {/* On phones this column dissolves so the pricing link can follow the site, as in the phone frame */}
         <div className="max-lg:contents">
           <p className="text-xs text-day-muted lg:text-label">02 / The fix</p>
@@ -49,7 +56,8 @@ export function FixSection() {
             <br className="max-lg:hidden" />
             live in days.
           </h2>
-          <p className="max-lg:sr-only lg:mt-5 lg:text-base lg:leading-[1.65] lg:text-day-muted">
+          {/* This and the discovery line give way while pinned on shorter desktop screens, as on phones */}
+          <p className="max-lg:sr-only lg:mt-5 lg:text-base lg:leading-[1.65] lg:text-day-muted lg:motion-safe:[@media(max-height:900px)]:sr-only">
             We figure out what&apos;s actually losing you leads, then design and build for that.
             Booking, payments, and AI support come in when they earn their spot — not because our
             name has AI in it. (Long story.)
@@ -83,13 +91,14 @@ export function FixSection() {
               </li>
             ))}
           </ol>
+          {/* On desktop these line up with the service names, clear of the fixed chat launcher */}
           <Link
             href="/pricing"
-            className="mt-6 inline-block self-start text-sm font-semibold text-brand-ink transition-colors hover:text-brand max-lg:order-2 lg:mt-6 lg:text-[15px]"
+            className="mt-6 inline-block self-start text-sm font-semibold text-brand-ink transition-colors hover:text-brand max-lg:order-2 lg:mt-6 lg:ml-16 lg:text-[15px]"
           >
             See pricing — builds from $800 →
           </Link>
-          <p className="max-lg:sr-only lg:mt-2 lg:text-sm lg:text-day-dim">
+          <p className="max-lg:sr-only lg:mt-2 lg:ml-16 lg:text-sm lg:text-day-dim lg:motion-safe:[@media(max-height:900px)]:sr-only">
             Not sure which tier? Book the discovery call. We&apos;ll tell you if you&apos;re
             overbuying.
           </p>
@@ -98,6 +107,7 @@ export function FixSection() {
           <SampleSite />
         </div>
       </div>
+      <FixScenes />
     </section>
   );
 }
