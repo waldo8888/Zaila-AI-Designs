@@ -1,15 +1,20 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
+  decodeLogoPoints,
   generateCube,
   generateDust,
   generateHelix,
+  generateLeak,
+  generateLogo,
   generatePlane,
   generateRandoms,
+  generateScatter,
   generateSphere,
   generateTorus,
   mulberry32,
 } from "./particle-shapes.ts";
+import { LOGO_POINTS } from "./logo-points.ts";
 
 const N = 400;
 
@@ -85,4 +90,75 @@ test("dust and randoms have the right size and range", () => {
   const randoms = generateRandoms(N, mulberry32(6));
   assert.equal(randoms.length, N);
   for (const value of randoms) assert.ok(value >= 0 && value < 1);
+});
+
+test("decodeLogoPoints maps little-endian uint16 pairs onto -0.5 to 0.5", () => {
+  const encoded = Buffer.from(new Uint16Array([0, 65535, 32768, 16384]).buffer).toString("base64");
+  const points = decodeLogoPoints(encoded);
+  assert.equal(points.length, 4);
+  assert.ok(Math.abs(points[0] + 0.5) < 1e-6);
+  assert.ok(Math.abs(points[1] - 0.5) < 1e-6);
+  assert.ok(Math.abs(points[2]) < 1e-4);
+  assert.ok(Math.abs(points[3] + 0.25) < 1e-4);
+});
+
+test("the logo's precomputed points fill the logo's box", () => {
+  const points = decodeLogoPoints(LOGO_POINTS);
+  assert.equal(points.length, 6000);
+  let minX = Infinity;
+  let maxX = -Infinity;
+  let minY = Infinity;
+  let maxY = -Infinity;
+  for (let i = 0; i < points.length; i += 2) {
+    minX = Math.min(minX, points[i]);
+    maxX = Math.max(maxX, points[i]);
+    minY = Math.min(minY, points[i + 1]);
+    maxY = Math.max(maxY, points[i + 1]);
+  }
+  // Normalised on the longer side (the width), so x spans almost -0.5 to 0.5
+  assert.ok(minX < -0.48 && maxX > 0.48);
+  // The logo is nearly square (632 × 601 px), so y spans a little less
+  assert.ok(minY >= -0.5 && maxY <= 0.5 && maxY - minY > 0.9);
+});
+
+test("logo targets reuse the points at the given size, with a little depth", () => {
+  const points = decodeLogoPoints(LOGO_POINTS);
+  const size = 2;
+  const logo = generateLogo(9000, points, size, mulberry32(3));
+  assert.equal(logo.length, 9000 * 3);
+  assert.deepEqual(logo, generateLogo(9000, points, size, mulberry32(3)));
+  eachPoint(logo, (x, y, z) => {
+    assert.ok(Math.abs(x) <= size * 0.51 && Math.abs(y) <= size * 0.51);
+    assert.ok(Math.abs(z) <= size * 0.025 + 1e-6);
+  });
+});
+
+test("the scatter is a ring just outside the view, in front of the camera", () => {
+  const points = generateScatter(N, 4, 8, mulberry32(4));
+  assert.equal(points.length, N * 3);
+  eachPoint(points, (x, y, z) => {
+    const r = Math.hypot(x, y);
+    assert.ok(r >= 4 - 1e-5 && r <= 8 + 1e-5);
+    assert.ok(z >= -3 && z <= 1.5);
+  });
+});
+
+test("the leak sends about the given share of particles past the edge", () => {
+  const count = 4000;
+  const leak = generateLeak(count, 0.45, mulberry32(5));
+  assert.equal(leak.length, count * 4);
+  let leavers = 0;
+  for (let i = 0; i < count; i++) {
+    const at = leak[i * 4];
+    if (at <= 1) {
+      leavers++;
+      assert.ok(at >= 0 && at <= 0.75);
+    } else {
+      assert.equal(at, 2);
+    }
+    assert.ok(Math.abs(leak[i * 4 + 1]) <= 1.6);
+    assert.ok(Math.abs(leak[i * 4 + 2]) <= 1);
+    assert.ok(leak[i * 4 + 3] >= 0 && leak[i * 4 + 3] <= 1.5);
+  }
+  assert.ok(Math.abs(leavers / count - 0.45) < 0.03);
 });
