@@ -70,7 +70,7 @@ Add-ons available anytime: payments, mini store, streaming, advanced API integra
 
 ## The Process
 
-1. **Discovery:** a 20-minute call about your business, your customers, and what's losing you leads. No pitch, no proposal until we understand the problem.
+1. **Discovery:** a 30-minute call about your business, your customers, and what's losing you leads. No pitch, no proposal until we understand the problem.
 2. **Build sprint:** design and build in fast rounds with you in the loop. Starter and Growth sites are usually ready to review within days of receiving your content.
 3. **Launch:** custom domain, SSL, analytics, and edge hosting set up and live.
 4. **Grow:** your care plan keeps the site fast, updated, and looked after, month to month.
@@ -132,7 +132,7 @@ Service businesses: photographers, med spas and clinics, salons, gyms and coache
 Yes, as a monthly retainer for existing clients. Ask on the discovery call and we'll scope it for your business.
 
 **How do I get started?**
-Email hello@zailaaidesigns.com or use the contact form on our website. We'll schedule a free 20-minute discovery call.
+Email hello@zailaaidesigns.com or use the contact form on our website. We'll schedule a free 30-minute discovery call.
 
 ## Blog Topics We Cover
 - Websites and conversion for service businesses

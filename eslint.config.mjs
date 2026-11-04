@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Files moved aside by the night-into-day revamp (never compiled).
+    "archive/**",
+    // Agent worktrees and settings (other branches, their own build output).
+    ".claude/**",
   ]),
 ]);
 

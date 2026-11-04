@@ -1,20 +1,20 @@
 import { Hero } from "@/components/hero";
-import { StorySection } from "@/components/story-section";
-import { ServicesSection } from "@/components/services-section";
+import { RealitySection } from "@/components/reality-section";
+import { FixSection } from "@/components/fix-section";
+import { InterimDusk } from "@/components/story/interim-dusk";
 import { ProcessSection } from "@/components/process-section";
 import { TestimonialsSection } from "@/components/testimonials-section";
 import { SocialProofStrip } from "@/components/social-proof-strip";
 import { ContactSection } from "@/components/contact-section";
 import { BackToTop } from "@/components/back-to-top";
-import { LoadingScreen } from "@/components/loading-screen";
 
 export default function Home() {
   return (
     <>
-      <LoadingScreen />
       <Hero />
-      <StorySection />
-      <ServicesSection />
+      <RealitySection />
+      <FixSection />
+      <InterimDusk />
       <ProcessSection />
       <TestimonialsSection />
       <SocialProofStrip />

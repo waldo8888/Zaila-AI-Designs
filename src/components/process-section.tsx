@@ -10,7 +10,7 @@ const steps = [
     title: "Discovery",
     subtitle: "Step 1",
     description:
-      "A 20-minute call about your business, your customers, and what's losing you leads. No pitch, and no proposal until we understand the problem.",
+      "A 30-minute call about your business, your customers, and what's losing you leads. No pitch, and no proposal until we understand the problem.",
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <circle cx="12" cy="12" r="10" />

@@ -8,10 +8,6 @@ type CursorMode = "default" | "hover" | "view" | "drag" | "text";
 export function CustomCursor() {
   const [mode, setMode] = useState<CursorMode>("default");
   const [isVisible, setIsVisible] = useState(false);
-  const [isTouch] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return window.matchMedia("(hover: none)").matches;
-  });
 
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
@@ -21,7 +17,11 @@ export function CustomCursor() {
   const cursorYSpring = useSpring(cursorY, springConfig);
 
   useEffect(() => {
-    if (isTouch) return;
+    // Touch screens keep their own pointer. This is checked after hydration so
+    // the server and the client render the same markup: an early `return null`
+    // on touch made React attach the next elements (the sky and the particle
+    // stage) to the two cursor divs, so phones never showed the particles.
+    if (window.matchMedia("(hover: none)").matches) return;
 
     document.body.style.cursor = "none";
 
@@ -85,9 +85,7 @@ export function CustomCursor() {
       document.body.style.cursor = "auto";
       document.head.removeChild(style);
     };
-  }, [cursorX, cursorY, isTouch, isVisible]);
-
-  if (isTouch) return null;
+  }, [cursorX, cursorY, isVisible]);
 
   const isHovered = mode !== "default";
 

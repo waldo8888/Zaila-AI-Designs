@@ -63,7 +63,7 @@ export default function PricingPage() {
         <SectionHeading
           eyebrow="Questions"
           title="The stuff people ask before they sign"
-          description="Short answers. If yours isn't here, it's a 20-minute call away."
+          description="Short answers. If yours isn't here, it's a 30-minute call away."
         />
         <div className="mt-10">
           <PricingFaq />
